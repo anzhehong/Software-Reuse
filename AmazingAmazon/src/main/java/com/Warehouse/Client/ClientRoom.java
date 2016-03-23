@@ -25,9 +25,17 @@ public class ClientRoom {
         MessageConsumer consumer = session.createConsumer(dest);
 
         Message msg = consumer.receive();
-        TextMessage txtmsg = (TextMessage) msg;
-        String txt = txtmsg.getText();
-        System.out.println("Received message from ActiveMQ: " + txt);
+//        TextMessage txtmsg = (TextMessage) msg;
+
+        String name = msg.getStringProperty("name");
+        int id = msg.getIntProperty("id");
+
+
+        System.out.println(name);
+        System.out.println(id);
+
+//        String txt = txtmsg.getText();
+//        System.out.println("Received message from ActiveMQ: " + txt);
 
         consumer.close();
         session.close();

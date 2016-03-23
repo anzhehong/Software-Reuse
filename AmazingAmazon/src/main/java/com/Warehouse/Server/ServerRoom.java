@@ -25,8 +25,11 @@ public class ServerRoom {
         Destination dest = session.createQueue("testQueue");
         MessageProducer producer = session.createProducer(dest);
 
+        Message message = session.createMessage();
+        message.setIntProperty("id",1);
+        message.setStringProperty("name","test001");
         Message msg = session.createTextMessage("MSG_" + (new Date(System.currentTimeMillis())).toLocaleString());
-        producer.send(msg);
+        producer.send(message);
 
         producer.close();
         session.close();
