@@ -35,7 +35,8 @@ public class MainController {
 
     public void test() {
         users = mainService.listAllUsers();
-
+        User user = mainService.findByName("test001");
+        System.out.println(user.getUserPassword());
 
     }
 

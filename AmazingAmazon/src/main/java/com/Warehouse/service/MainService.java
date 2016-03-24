@@ -12,4 +12,6 @@ import java.util.List;
 public interface MainService {
 
     public List<User> listAllUsers();
+    public void insertUser(User user);
+    public User findByName(String userName);
 }

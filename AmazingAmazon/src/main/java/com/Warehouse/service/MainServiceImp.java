@@ -26,4 +26,16 @@ public class MainServiceImp implements MainService {
         List<User> list = mainDAO.queryAll();
         return list;
     }
+
+    @Override
+    public void insertUser(User user) {
+        mainDAO.insert(user);
+    }
+
+    @Override
+    public User findByName(String userName){
+        User user = mainDAO.findByName(userName);
+        return user;
+
+    }
 }
