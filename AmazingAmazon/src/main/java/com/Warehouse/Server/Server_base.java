@@ -8,15 +8,15 @@ import javax.jms.*;
  * Created by MSI on 2016/3/23.
  */
 public class Server_base {
-    public Server_base(String host, String port, String queneID) {
+    public Server_base(String host, String port, String queueID) {
         this.host = host;
         this.port = port;
-        QueneID = queneID;
+        QueueID = queueID;
     }
 
     private String host;
     private String port;
-    private String QueneID;
+    private String QueueID;
     private Message message;
     private MessageProducer producer;
     private Session session;
@@ -34,8 +34,8 @@ public class Server_base {
         this.message = message;
     }
 
-    public void setQueneID(String queneID) {
-        QueneID = queneID;
+    public void setQueueID(String queueID) {
+        QueueID = queueID;
     }
 
     public void start() throws JMSException {
@@ -45,7 +45,7 @@ public class Server_base {
         this.connection = connection;
         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
         this.session = session;
-        Destination dest = session.createQueue(QueneID);
+        Destination dest = session.createQueue(QueueID);
         MessageProducer producer = session.createProducer(dest);
         this.producer = producer;
         this.message = session.createMessage();

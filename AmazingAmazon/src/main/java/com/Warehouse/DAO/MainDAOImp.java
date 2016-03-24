@@ -18,7 +18,6 @@ public class MainDAOImp extends GeneralDAOImp<User> implements MainDAO {
         super(User.class);
     }
 
-    //已验证
     public User findByName(String username){
         HibernateTemplate hibernateTemplate = new HibernateTemplate(getSessionFactory());
         return (User)hibernateTemplate.find("from User u Where u.userName = ?",username).get(0);

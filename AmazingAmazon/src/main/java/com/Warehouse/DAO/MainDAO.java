@@ -1,7 +1,6 @@
 package com.Warehouse.DAO;
 
 import com.Warehouse.entity.User;
-import org.omg.PortableInterceptor.USER_EXCEPTION;
 
 /**
  * Created by fowafolo
@@ -9,5 +8,11 @@ import org.omg.PortableInterceptor.USER_EXCEPTION;
  * Time: 14:49
  */
 public interface MainDAO extends GeneralDAO<User> {
+
+    /**
+     * 通过用户名取用户数据
+     * @param username 用户姓名
+     * @return 用户
+     */
     User findByName(String username);
 }

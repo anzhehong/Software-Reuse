@@ -11,7 +11,22 @@ import java.util.List;
  */
 public interface MainService {
 
+    /**
+     * 列出所有User
+     * @return User集合
+     */
     public List<User> listAllUsers();
+
+    /**
+     * 插入一个User
+     * @param user User类型实例
+     */
     public void insertUser(User user);
+
+    /**
+     * 通过用户名查找User
+     * @param userName 用户名
+     * @return 指定User实例
+     */
     public User findByName(String userName);
 }
