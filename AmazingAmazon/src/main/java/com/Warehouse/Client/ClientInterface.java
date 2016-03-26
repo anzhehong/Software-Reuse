@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import javax.jms.*;
 import javax.swing.*;
+import javax.xml.ws.handler.MessageContext;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,9 +16,9 @@ import java.awt.event.ActionListener;
 /**
  * Created by MSI on 2016/3/23.
  */
-public class ClientInterface  implements ActionListener {
-    private String username;
-    private String password;
+public class ClientInterface implements ActionListener {
+    public Client_base client_base;
+    private Session session;
     private ClientInterface clientInterface;
     private JFrame jFrame = new JFrame();
     private JPanel jPanel = new JPanel();
@@ -26,6 +28,10 @@ public class ClientInterface  implements ActionListener {
     private JTextField password_input = new JTextField();
     private JButton login_btn = new JButton();
     private JButton signup_btn = new JButton();
+
+    public void setSession(Session session) {
+        this.session = session;
+    }
 
     public ClientInterface() {
 
@@ -39,12 +45,11 @@ public class ClientInterface  implements ActionListener {
         return this.password_input.getText().trim();
     }
 
-    public JButton getLogin_btn() {
-        return login_btn;
-    }
 
-    public void init(){
+    public void init()throws JMSException{
 
+        client_base = new Client_base("localhost","61616","testQueue");
+        client_base.start();
 
         //窗口大小、位置
         this.jFrame.setSize(400,300);
@@ -88,37 +93,74 @@ public class ClientInterface  implements ActionListener {
     }
     @Autowired
     MainService mainService;
-    public boolean checkPassword(String username,String password)
+
+    public Session getSession() {
+        return session;
+    }
+
+    public boolean checkPassword(String username,String password)throws JMSException
     {
-        User user = mainService.findByName(username);
-        if(password.equals(user.getUserPassword()))
-            return true;
+        Message message = client_base.getSession().createMessage();
+        // 发送登录请求 type = 0 意味着登录请求
+        message.setIntProperty("type",0);
+        message.setStringProperty("username", username);
+        message.setStringProperty("password", password);
+        client_base.getProducer().send(message);
+        // 获得返回结果 type = 1 意味着返回结果
+        Message messageReceive = client_base.getConsumer().receive();
+        if(messageReceive.getIntProperty("type")==1)
+        {
+            System.out.println(messageReceive.getBooleanProperty("confirm"));
+            return messageReceive.getBooleanProperty("confirm");
+        }
         else
             return false;
     }
-    public void Signup(String username,String password) {
-        User user = new User();
-        user.setUserName(username);
-        user.setUserPassword(password);
-        mainService.insertUser(user);
+    public boolean Signup(String username,String password) throws JMSException {
+        Message message = client_base.getSession().createMessage();
+        // 发送注册请求 type = 2 意味着注册请求
+        message.setIntProperty("type",2);
+        message.setStringProperty("username", username);
+        message.setStringProperty("password", password);
+        client_base.getProducer().send(message);
+        // 获得返回结果 type = 1 意味着返回结果
+        Message messageReceive = client_base.getConsumer().receive();
+        if(messageReceive.getIntProperty("type")==1)
+        {
+            System.out.println(messageReceive.getBooleanProperty("confirm"));
+            return messageReceive.getBooleanProperty("confirm");
+        }
+        else
+            return false;
+
     }
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e){
         if(e.getSource()==login_btn){
-            ApplicationContext beanFactory;
-            beanFactory = new ClassPathXmlApplicationContext("/WEB-INF/applicationContext.xml");
-            this.clientInterface = (ClientInterface) beanFactory.getBean("client");
-            clientInterface.checkPassword(this.username_input.getText().trim(), this.password_input.getText().trim());
+
+            try {
+                checkPassword(this.username_input.getText().trim(), this.password_input.getText().trim());
+
+            } catch (JMSException e1) {
+                e1.printStackTrace();
+            }
 
         }
         if(e.getSource()==signup_btn){
-            ApplicationContext beanFactory;
-            beanFactory = new ClassPathXmlApplicationContext("/WEB-INF/applicationContext.xml");
-            this.clientInterface = (ClientInterface) beanFactory.getBean("client");
-            clientInterface.Signup(this.username_input.getText().trim(), this.password_input.getText().trim());
+            try {
+                Signup(this.username_input.getText().trim(), this.password_input.getText().trim());
+            } catch (JMSException e1) {
+                e1.printStackTrace();
+            }
 
 
         }
+
+
+    }
+    public static void main(String[] args) throws JMSException{
+        ClientInterface clientInterface1 = new ClientInterface();
+        clientInterface1.init();
 
 
     }

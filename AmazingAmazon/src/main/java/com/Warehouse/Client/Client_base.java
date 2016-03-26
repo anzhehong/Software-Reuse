@@ -12,12 +12,12 @@ public class Client_base {
         this.port = port;
         QueueID = queueID;
     }
-
     private String host;
     private String port;
     private String QueueID;
     private Message message;
     private MessageConsumer consumer;
+    private MessageProducer producer;
     private Session session;
     private Connection connection;
 
@@ -43,10 +43,29 @@ public class Client_base {
         Destination dest = session.createQueue(QueueID);
         MessageConsumer consumer = session.createConsumer(dest);
         this.consumer = consumer;
+        this.producer = session.createProducer(dest);
+    }
+
+    public MessageProducer getProducer() {
+        return producer;
+    }
+
+    public MessageConsumer getConsumer() {
+        return consumer;
+    }
+
+    public Session getSession() {
+        return session;
     }
 
     public Message getMessage()throws JMSException {
         return consumer.receive();
+    }
+
+    public void sendMessage(String mes)throws JMSException {
+        this.message.setIntProperty("id",1);
+        this.message.setStringProperty("name",mes);
+        this.producer.send(this.message);
     }
 
     public void closeConnection()throws JMSException{

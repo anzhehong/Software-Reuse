@@ -19,6 +19,7 @@ public class Server_base {
     private String QueueID;
     private Message message;
     private MessageProducer producer;
+    private MessageConsumer consumer;
     private Session session;
     private Connection connection;
 
@@ -45,20 +46,28 @@ public class Server_base {
         this.connection = connection;
         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
         this.session = session;
-        Destination dest = session.createQueue(QueueID);
-        MessageProducer producer = session.createProducer(dest);
-        this.producer = producer;
         this.message = session.createMessage();
     }
 
-    public void sendMessage()throws JMSException {
-        this.message.setIntProperty("id",1);
-        this.message.setStringProperty("name","test001");
-        this.producer.send(this.message);
+    public void sendMessage(int type,Boolean check)throws JMSException {
+        System.out.println(QueueID +" server: "+check);
+        this.message.setIntProperty("type",type);
+        this.message.setBooleanProperty("confirm", check);
+        Destination dest = session.createQueue(QueueID);
+        MessageProducer producer = session.createProducer(dest);
+        producer.send(this.message);
+    }
+
+    public String getQueueID() {
+        return QueueID;
+    }
+
+    public Message getMessage()throws JMSException {
+        Destination dest = session.createQueue(QueueID);
+        return session.createConsumer(dest).receive();
     }
 
     public void close()throws JMSException{
-        this.producer.close();
         this.session.close();
         this.connection.close();
     }
