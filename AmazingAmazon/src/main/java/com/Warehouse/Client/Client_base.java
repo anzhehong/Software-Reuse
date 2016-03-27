@@ -46,6 +46,11 @@ public class Client_base {
         this.producer = session.createProducer(dest);
     }
 
+    public void createSession(String QueueId){
+
+    }
+
+
     public MessageProducer getProducer() {
         return producer;
     }

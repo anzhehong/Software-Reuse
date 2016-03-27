@@ -12,6 +12,7 @@ import javax.xml.ws.handler.MessageContext;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 
 /**
  * Created by MSI on 2016/3/23.
@@ -28,6 +29,7 @@ public class ClientInterface implements ActionListener {
     private JTextField password_input = new JTextField();
     private JButton login_btn = new JButton();
     private JButton signup_btn = new JButton();
+
 
     public void setSession(Session session) {
         this.session = session;
@@ -46,9 +48,9 @@ public class ClientInterface implements ActionListener {
     }
 
 
-    public void init()throws JMSException{
+    public void init(String QueueId)throws JMSException{
 
-        client_base = new Client_base("localhost","61616","testQueue");
+        client_base = new Client_base("localhost","61616",QueueId);
         client_base.start();
 
 
@@ -93,6 +95,7 @@ public class ClientInterface implements ActionListener {
         this.jFrame.show();
 
     }
+
     @Autowired
     MainService mainService;
 
@@ -162,8 +165,10 @@ public class ClientInterface implements ActionListener {
     }
     public static void main(String[] args) throws JMSException{
         ClientInterface clientInterface1 = new ClientInterface();
-        clientInterface1.init();
-
+        Date now = new Date();
+        clientInterface1.init("testQueue");
 
     }
+
+
 }

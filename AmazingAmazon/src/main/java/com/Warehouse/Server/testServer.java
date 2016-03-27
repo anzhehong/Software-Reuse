@@ -30,7 +30,7 @@ public class testServer {
                 String username = mesRec.getStringProperty("username");
                 String password = mesRec.getStringProperty("password");
                 server_base.sendMessage(1,testserver.checkPassword(username, password));
-                writeLog("D:\\something\\log1.txt", "QueueID: " + server_base.getQueueID() + "  action: log in " + " result:" + testserver.checkPassword(username, password));
+                writeLog("log1.txt", "QueueID: " + server_base.getQueueID() + "  action: log in " + " result:" + testserver.checkPassword(username, password));
 
             }
             if (mesRec.getIntProperty("type") == 2) {
@@ -54,9 +54,7 @@ public class testServer {
     }
 
     public boolean insert(String username,String password)throws JMSException {
-        User user = new User();
-        user.setUserName(username);
-        user.setUserPassword(password);
+        User user = new User(username,password);
         mainService.insertUser(user);
         User user_ = mainService.findByName(username);
         if(user_.getUserPassword().equals(password))

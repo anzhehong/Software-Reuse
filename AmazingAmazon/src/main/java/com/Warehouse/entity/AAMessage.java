@@ -10,6 +10,17 @@ import java.util.Date;
  * Time: 18:12
  */
 public class AAMessage  {
+    public AAMessage(int type, User user, String content, Date createdTime) {
+        this.type = type;
+        this.user = user;
+        this.content = content;
+        this.createdTime = createdTime;
+    }
+
+    public AAMessage(int type, User user) {
+        this.type = type;
+        this.user = user;
+    }
 
     /**
      * queue消息类型
