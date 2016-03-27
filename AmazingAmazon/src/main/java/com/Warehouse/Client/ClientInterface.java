@@ -51,13 +51,7 @@ public class ClientInterface implements ActionListener {
         client_base = new Client_base("localhost","61616","testQueue");
         client_base.start();
 
-        //窗口大小、位置
-        this.jFrame.setSize(400,300);
-        this.jFrame.setResizable(false);
-        this.jFrame.setVisible(true);
-        this.jFrame.setTitle("LOG IN/UP");
-        this.jFrame.setLocation(200,100);
-        this.jFrame.show();
+
 
         //组件init
         this.username_label.setText("username:");
@@ -89,6 +83,14 @@ public class ClientInterface implements ActionListener {
         this.jPanel.add(signup_btn);
         this.jPanel.setLayout(null);
         this.jFrame.add(this.jPanel);
+
+        //窗口大小、位置
+        this.jFrame.setSize(400,300);
+        this.jFrame.setResizable(false);
+        this.jFrame.setVisible(true);
+        this.jFrame.setTitle("LOG IN/UP");
+        this.jFrame.setLocation(200,100);
+        this.jFrame.show();
 
     }
     @Autowired
