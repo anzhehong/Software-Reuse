@@ -1,12 +1,11 @@
 package com.Warehouse.Server;
 
-import com.Warehouse.Client.MQConnect;
-import com.Warehouse.factory.MQFactory;
+import com.Warehouse.MQUtil.MQConnect;
+import com.Warehouse.MQUtil.MQFactory;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
-import javax.net.ssl.SSLContext;
 
 /**
  * Created by MSI on 2016/3/27.

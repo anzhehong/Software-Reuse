@@ -1,4 +1,4 @@
-package com.Warehouse.factory;
+package com.Warehouse.MQUtil;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 

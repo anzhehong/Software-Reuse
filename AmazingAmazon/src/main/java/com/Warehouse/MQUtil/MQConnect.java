@@ -1,4 +1,4 @@
-package com.Warehouse.Client;
+package com.Warehouse.MQUtil;
 
 import javax.jms.*;
 
