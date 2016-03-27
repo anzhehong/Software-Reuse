@@ -7,6 +7,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 
+import javax.jms.JMSException;
 import java.util.List;
 
 /**
@@ -40,5 +41,11 @@ public class MainController {
 
     }
 
-
+    public boolean checkPassword(String username,String password)throws JMSException {
+        User user = mainService.findByName(username);
+        if(password.equals(user.getUserPassword()))
+            return true;
+        else
+            return false;
+    }
 }

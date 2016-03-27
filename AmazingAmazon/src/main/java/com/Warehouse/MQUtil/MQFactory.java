@@ -15,7 +15,8 @@ public class MQFactory {
             ConnectionFactory factory = new ActiveMQConnectionFactory("tcp://localhost:61616");
             Connection connection = factory.createConnection();
             connection.start();
-            Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            Session connectionSession = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            session = connectionSession;
             return session;
         }
     }
@@ -34,9 +35,9 @@ public class MQFactory {
     public static Message getMessage() throws JMSException {
         Session temSession = getSession();
         Message message = temSession.createMessage();
-        message.setIntProperty("type",0);
-        message.setStringProperty("username", "123");
-        message.setStringProperty("password", "123");
+//        message.setIntProperty("type",0);
+//        message.setStringProperty("username", "123");
+//        message.setStringProperty("password", "123");
         return message;
 
     }

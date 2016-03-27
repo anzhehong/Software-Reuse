@@ -1,24 +1,28 @@
 package com.Warehouse.Client;
 
+import com.Warehouse.MQUtil.MQFactory;
+import com.Warehouse.entity.StaticVarible;
 import com.Warehouse.entity.User;
+import com.Warehouse.Event.TestEvent;
 import com.Warehouse.service.MainService;
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import javax.jms.*;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Session;
 import javax.swing.*;
-import javax.xml.ws.handler.MessageContext;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
 
 /**
  * Created by MSI on 2016/3/23.
  */
 public class ClientInterface implements ActionListener {
-    public Client_base client_base;
+
+    private Client client;
     private Session session;
     private ClientInterface clientInterface;
     private JFrame jFrame = new JFrame();
@@ -36,7 +40,7 @@ public class ClientInterface implements ActionListener {
     }
 
     public ClientInterface() {
-
+        client = new Client();
     }
 
     public String getUsername() {
@@ -49,11 +53,6 @@ public class ClientInterface implements ActionListener {
 
 
     public void init(String QueueId)throws JMSException{
-
-        client_base = new Client_base("localhost","61616",QueueId);
-        client_base.start();
-
-
 
         //组件init
         this.username_label.setText("username:");
@@ -103,72 +102,38 @@ public class ClientInterface implements ActionListener {
         return session;
     }
 
-    public boolean checkPassword(String username,String password)throws JMSException
-    {
-        Message message = client_base.getSession().createMessage();
-        // 发送登录请求 type = 0 意味着登录请求
-        message.setIntProperty("type",0);
-        message.setStringProperty("username", username);
-        message.setStringProperty("password", password);
-        client_base.getProducer().send(message);
-        // 获得返回结果 type = 1 意味着返回结果
-        Message messageReceive = client_base.getConsumer().receive();
-        if(messageReceive.getIntProperty("type")==1)
-        {
-            System.out.println(messageReceive.getBooleanProperty("confirm"));
-            return messageReceive.getBooleanProperty("confirm");
-        }
-        else
-            return false;
-    }
-    public boolean Signup(String username,String password) throws JMSException {
-        Message message = client_base.getSession().createMessage();
-        // 发送注册请求 type = 2 意味着注册请求
-        message.setIntProperty("type",2);
-        message.setStringProperty("username", username);
-        message.setStringProperty("password", password);
-        client_base.getProducer().send(message);
-        // 获得返回结果 type = 1 意味着返回结果
-        Message messageReceive = client_base.getConsumer().receive();
-        if(messageReceive.getIntProperty("type")==1)
-        {
-            System.out.println(messageReceive.getBooleanProperty("confirm"));
-            return messageReceive.getBooleanProperty("confirm");
-        }
-        else
-            return false;
-
-    }
     @Override
     public void actionPerformed(ActionEvent e){
         if(e.getSource()==login_btn){
-
+            User user = new User(username_input.getText().trim(), password_input.getText().trim());
             try {
-                checkPassword(this.username_input.getText().trim(), this.password_input.getText().trim());
-
+                Message message = MQFactory.getMessage();
+                message.setIntProperty("type", 0);
+                message.setStringProperty("userName", user.getUserName());
+                message.setStringProperty("userPassword", user.getUserPassword());
+                System.out.println("client = new Client();");
+                System.out.println("client.Login(message);");
+                client.Login(message);
             } catch (JMSException e1) {
                 e1.printStackTrace();
             }
-
         }
         if(e.getSource()==signup_btn){
-            try {
-                Signup(this.username_input.getText().trim(), this.password_input.getText().trim());
-            } catch (JMSException e1) {
-                e1.printStackTrace();
-            }
-
 
         }
-
-
     }
+
+    @Subscribe
+    public void listenEvent(TestEvent testEvent){
+        System.out.println(testEvent.getStr().toString());
+        System.out.println("Login Success");
+    }
+
     public static void main(String[] args) throws JMSException{
         ClientInterface clientInterface1 = new ClientInterface();
-        Date now = new Date();
-        clientInterface1.init("testQueue");
-
+        clientInterface1.init(StaticVarible.baseQueueConsumer);
+        System.out.println("EventBus eventBus = EventController.eventBus;");
+        EventBus eventBus = EventController.eventBus;
+        eventBus.register(clientInterface1);
     }
-
-
 }

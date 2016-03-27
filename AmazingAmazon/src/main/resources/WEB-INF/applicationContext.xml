@@ -19,12 +19,5 @@
 
     <bean id="main" name="main" class="com.Warehouse.controller.MainController"></bean>
     <bean id="client" name="client" class="com.Warehouse.Client.ClientInterface"></bean>
-    <bean id="server" name="server" class="com.Warehouse.Server.testServer"></bean>
-
-
-
-
-
-
 
 </beans>

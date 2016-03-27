@@ -14,6 +14,10 @@ public class MQConnect {
         this.messageConsumer = messageConsumer;
     }
 
+    public MQConnect(MessageConsumer messageConsumer) {
+        this.messageConsumer = messageConsumer;
+    }
+
     public MQConnect() {
     }
 

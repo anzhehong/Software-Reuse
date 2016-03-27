@@ -2,6 +2,7 @@ package com.Warehouse.Client;
 
 import com.Warehouse.MQUtil.MQConnect;
 import com.Warehouse.MQUtil.MQFactory;
+import com.Warehouse.entity.StaticVarible;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -12,37 +13,51 @@ import javax.jms.MessageListener;
  */
 public class Client {
 
+    /**
+     * 登录等请求
+     */
     private MQConnect baseConnect;
-    private MQConnect privateConnect;
 
-    public static void main(String[] args) throws JMSException {
-        Client client = new Client();
-        Message message = MQFactory.getSession().createMessage();
-        message.setIntProperty("type",0);
-        message.setStringProperty("username", "123");
-        message.setStringProperty("password", "123");
-        client.Login(message);
-    }
+    /**
+     * 消息传送通道
+     */
+    public MQConnect privateConnect;
 
     public Client() {
         try {
-            this.baseConnect = new MQConnect(MQFactory.getproducer("testQueue"), MQFactory.getConsumer("testQueue"));
-            this.privateConnect = new MQConnect(MQFactory.getproducer("protocol1"), MQFactory.getConsumer("protocol2"));
+            this.baseConnect = new MQConnect(MQFactory.getproducer(StaticVarible.baseQueueProducer)
+                    );
         } catch (JMSException e) {
             e.printStackTrace();
         }
     }
 
     public void Login(Message message) throws JMSException {
+        System.out.println("Login");
+        String userName = message.getStringProperty("userName");
+        System.out.println(userName);
+
         baseConnect.sendMessage(message);
+        privateConnect = new MQConnect(MQFactory.getproducer("CS_" + userName),
+                MQFactory.getConsumer("SC_" +userName));
         privateConnect.addMessageHandler(new MessageListener() {
             @Override
             public void onMessage(Message message) {
+                System.out.println("client");
                 System.out.println(message);
             }
         });
+
     }
 
+    public static void main(String[] args) throws JMSException {
+        Client client = new Client();
+        Message message = MQFactory.getMessage();
+        message.setIntProperty("type", 0);
+        message.setStringProperty("userName", "abc");
+        message.setStringProperty("userPassword","abc");
+        client.Login(message);
+    }
 
 
 
