@@ -1,5 +1,6 @@
 package com.Warehouse.Client;
 
+import com.Warehouse.Event.TestEvent;
 import com.Warehouse.MQUtil.MQConnect;
 import com.Warehouse.MQUtil.MQFactory;
 import com.Warehouse.entity.StaticVarible;
@@ -43,8 +44,14 @@ public class Client {
         privateConnect.addMessageHandler(new MessageListener() {
             @Override
             public void onMessage(Message message) {
-                System.out.println("client");
-                System.out.println(message);
+                int type = 0;
+                try {
+                    type = message.getIntProperty("type");
+                } catch (JMSException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(type);
+                EventController.eventBus.post(new TestEvent("aaa"));
             }
         });
 

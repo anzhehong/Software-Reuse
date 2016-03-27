@@ -21,13 +21,12 @@ public class Server {
     /**
      * 用来存收发消息的MQConnect
      */
-    ArrayList<MQConnect> mqConnects;
+    private ArrayList<MQConnect> mqConnects = new ArrayList<MQConnect>();
 
     public MQConnect privateConnect;
 
     public static void main(String[] args) throws JMSException {
         Server server = new Server();
-        System.out.println("ok");
     }
 
     public Server() {
@@ -42,40 +41,33 @@ public class Server {
 
     public void start(){
 
-        System.out.println("------start");
         try {
             baseConnect.addMessageHandler(new MessageListener() {
                 @Override
                 public void onMessage(Message message) {
-                    System.out.println("OnMessage");
                     try {
                         String userName = message.getStringProperty("userName");
                         String userPassword = message.getStringProperty("userPassword");
 
-
                         ApplicationContext beanFactory;
                         beanFactory = new ClassPathXmlApplicationContext("/WEB-INF/applicationContext.xml");
                         MainController mainController = (MainController) beanFactory.getBean("main");
-                        System.out.println("Message resultMessage = MQFactory.getSession().createMessage();");
+                        boolean flag = mainController.checkPassword(userName, userPassword);
                         Message resultMessage = MQFactory.getSession().createMessage();
                         privateConnect = new MQConnect(MQFactory.getproducer("SC_" + userName),MQFactory.getConsumer("CS_"+userName));
-                        privateConnect.sendMessage(message);
-//                        if (flag) {
-//                            resultMessage.setIntProperty("type", 1);
-//                            //TODO: list中是否已经存在此userName的connect
-//                            System.out.println("privateConnect.sendMessage(resultMessage);");
-//                            privateConnect.sendMessage(resultMessage);
-//                            mqConnects.add(privateConnect);
-//
-//                        }else {
-//                            resultMessage.setIntProperty("type",2);
-//                            resultMessage.setStringProperty("errorMsg", "Login Failed");
-//                            System.out.println("privateConnect.sendMessage(resultMessage);");
-//                            privateConnect.sendMessage(resultMessage);
-//                            //TODO: 删掉
-//
-//                        }
 
+                        if (flag) {
+                            resultMessage.setIntProperty("type", 1);
+                            //TODO: list中是否已经存在此userName的connect
+                            privateConnect.sendMessage(resultMessage);
+                            mqConnects.add(privateConnect);
+
+                        }else {
+                            resultMessage.setIntProperty("type",2);
+                            resultMessage.setStringProperty("errorMsg", "Login Failed");
+                            privateConnect.sendMessage(resultMessage);
+                            //TODO: 删掉
+                        }
                     } catch (JMSException e) {
                         e.printStackTrace();
                     }

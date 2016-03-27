@@ -111,8 +111,6 @@ public class ClientInterface implements ActionListener {
                 message.setIntProperty("type", 0);
                 message.setStringProperty("userName", user.getUserName());
                 message.setStringProperty("userPassword", user.getUserPassword());
-                System.out.println("client = new Client();");
-                System.out.println("client.Login(message);");
                 client.Login(message);
             } catch (JMSException e1) {
                 e1.printStackTrace();
@@ -126,13 +124,11 @@ public class ClientInterface implements ActionListener {
     @Subscribe
     public void listenEvent(TestEvent testEvent){
         System.out.println(testEvent.getStr().toString());
-        System.out.println("Login Success");
     }
 
     public static void main(String[] args) throws JMSException{
         ClientInterface clientInterface1 = new ClientInterface();
         clientInterface1.init(StaticVarible.baseQueueConsumer);
-        System.out.println("EventBus eventBus = EventController.eventBus;");
         EventBus eventBus = EventController.eventBus;
         eventBus.register(clientInterface1);
     }
