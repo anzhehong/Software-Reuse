@@ -1,5 +1,7 @@
 package com.Warehouse.entity;
 
+import javax.jms.JMSException;
+import javax.jms.Message;
 import java.util.Date;
 
 /**
@@ -29,13 +31,6 @@ public class AAMessage  {
      */
     private Date createdTime;
 
-    public AAMessage(User newUser, String newContent, int newType) {
-        this.createdTime = getCurrentTime();
-        this.user = newUser;
-        this.content = newContent;
-        this.type = newType;
-    }
-
     /**
      * TODO:进行一些时间格式的处理
      * @return
@@ -44,6 +39,27 @@ public class AAMessage  {
         return new Date();
     }
 
+    /**
+     * 实例化后调用此方法，返回JMS 的 Message类型
+     * @return
+     * @throws JMSException
+     */
+    public Message getFinalMessage() throws JMSException {
+        Message message = null;
+        if (this!=null)
+        {
+            message.setIntProperty("userId", this.getUser().getId());
+            message.setIntProperty("type", this.getType());
+            message.setStringProperty("userName",this.getUser().getUserName());
+            message.setStringProperty("userPassword", this.getUser().getUserPassword());
+            message.setStringProperty("content",this.getContent());
+            /**
+             * FIXME: 不能传Date类型
+             */
+//            message.setStringProperty("createdTime",this.getCreatedTime());
+        }
+        return message;
+    }
 
     /**
      * Getter and Setter
