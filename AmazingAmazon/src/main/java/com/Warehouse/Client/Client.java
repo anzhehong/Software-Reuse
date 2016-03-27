@@ -3,6 +3,7 @@ package com.Warehouse.Client;
 import com.Warehouse.Event.TestEvent;
 import com.Warehouse.MQUtil.MQConnect;
 import com.Warehouse.MQUtil.MQFactory;
+import com.Warehouse.entity.AAMessage;
 import com.Warehouse.entity.StaticVarible;
 
 import javax.jms.JMSException;
@@ -33,17 +34,16 @@ public class Client {
         }
     }
 
-    public void Login(Message message) throws JMSException {
-        System.out.println("Login");
-        String userName = message.getStringProperty("userName");
-        System.out.println(userName);
+    public void Login(AAMessage aaMessage) throws JMSException {
+        String userName = aaMessage.getUser().getUserName();
 
-        baseConnect.sendMessage(message);
+        baseConnect.sendMessage(aaMessage.getFinalMessage());
         privateConnect = new MQConnect(MQFactory.getproducer("CS_" + userName),
                 MQFactory.getConsumer("SC_" +userName));
         privateConnect.addMessageHandler(new MessageListener() {
             @Override
             public void onMessage(Message message) {
+                System.out.println("add handler");
                 int type = 0;
                 try {
                     type = message.getIntProperty("type");
@@ -54,18 +54,5 @@ public class Client {
                 EventController.eventBus.post(new TestEvent("aaa"));
             }
         });
-
     }
-
-    public static void main(String[] args) throws JMSException {
-        Client client = new Client();
-        Message message = MQFactory.getMessage();
-        message.setIntProperty("type", 0);
-        message.setStringProperty("userName", "abc");
-        message.setStringProperty("userPassword","abc");
-        client.Login(message);
-    }
-
-
-
 }

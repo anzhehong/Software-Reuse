@@ -3,6 +3,7 @@ package com.Warehouse.Server;
 import com.Warehouse.MQUtil.MQConnect;
 import com.Warehouse.MQUtil.MQFactory;
 import com.Warehouse.controller.MainController;
+import com.Warehouse.entity.AAMessage;
 import com.Warehouse.entity.StaticVarible;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -40,7 +41,6 @@ public class Server {
     }
 
     public void start(){
-
         try {
             baseConnect.addMessageHandler(new MessageListener() {
                 @Override
@@ -53,25 +53,21 @@ public class Server {
                         beanFactory = new ClassPathXmlApplicationContext("/WEB-INF/applicationContext.xml");
                         MainController mainController = (MainController) beanFactory.getBean("main");
                         boolean flag = mainController.checkPassword(userName, userPassword);
-                        Message resultMessage = MQFactory.getSession().createMessage();
                         privateConnect = new MQConnect(MQFactory.getproducer("SC_" + userName),MQFactory.getConsumer("CS_"+userName));
 
                         if (flag) {
-                            resultMessage.setIntProperty("type", 1);
+                            AAMessage aaMessage = new AAMessage(1, "Login Successfully");
                             //TODO: list中是否已经存在此userName的connect
-                            privateConnect.sendMessage(resultMessage);
+                            privateConnect.sendMessage(aaMessage.getFinalMessage());
                             mqConnects.add(privateConnect);
-
                         }else {
-                            resultMessage.setIntProperty("type",2);
-                            resultMessage.setStringProperty("errorMsg", "Login Failed");
-                            privateConnect.sendMessage(resultMessage);
-                            //TODO: 删掉
+                            AAMessage aaMessage = new AAMessage(2, "Login Failed");
+                            privateConnect.sendMessage(aaMessage.getFinalMessage());
+                            //TODO: 删掉已有
                         }
                     } catch (JMSException e) {
                         e.printStackTrace();
                     }
-
                 }
             });
         } catch (JMSException e) {

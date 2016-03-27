@@ -1,16 +1,15 @@
 package com.Warehouse.Client;
 
-import com.Warehouse.MQUtil.MQFactory;
+import com.Warehouse.Event.TestEvent;
+import com.Warehouse.entity.AAMessage;
 import com.Warehouse.entity.StaticVarible;
 import com.Warehouse.entity.User;
-import com.Warehouse.Event.TestEvent;
 import com.Warehouse.service.MainService;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.jms.JMSException;
-import javax.jms.Message;
 import javax.jms.Session;
 import javax.swing.*;
 import java.awt.*;
@@ -107,11 +106,8 @@ public class ClientInterface implements ActionListener {
         if(e.getSource()==login_btn){
             User user = new User(username_input.getText().trim(), password_input.getText().trim());
             try {
-                Message message = MQFactory.getMessage();
-                message.setIntProperty("type", 0);
-                message.setStringProperty("userName", user.getUserName());
-                message.setStringProperty("userPassword", user.getUserPassword());
-                client.Login(message);
+                AAMessage aaMessage = new AAMessage(0, user);
+                client.Login(aaMessage);
             } catch (JMSException e1) {
                 e1.printStackTrace();
             }
