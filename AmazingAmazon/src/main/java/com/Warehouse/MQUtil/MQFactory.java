@@ -32,6 +32,21 @@ public class MQFactory {
         return tmpSession.createProducer(dest);
     }
 
+    public static MessageProducer getpublisher(String TopicID) throws JMSException{
+        Session tmpSession = getSession();
+        Topic topic = tmpSession.createTopic(TopicID);
+        MessageProducer messageProducer = tmpSession.createProducer(topic);
+        messageProducer.setDeliveryMode(DeliveryMode.PERSISTENT);
+        return messageProducer;
+    }
+
+    public static MessageConsumer getSubscriber(String TopicID) throws JMSException{
+        Session tmpSession = getSession();
+        Topic topic = tmpSession.createTopic(TopicID);
+        MessageConsumer messageConsumer = tmpSession.createConsumer(topic);
+        return messageConsumer;
+    }
+
     public static Message getMessage() throws JMSException {
         Session temSession = getSession();
         Message message = temSession.createMessage();
