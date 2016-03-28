@@ -21,13 +21,6 @@ public class ClientView extends JFrame {
     }
 
 
-    JTextField MessageShow;//消息展示区
-    JTextArea MessageEdit;//消息编辑区
-    JTextField NumberList;//当前成员
-    //JPanel BlankArea;
-    JButton ConfirmButton; //发送键
-    JButton CloseButton;//关闭键
-
     public void init() {
 
         GridBagLayout layout = new GridBagLayout();
@@ -35,7 +28,6 @@ public class ClientView extends JFrame {
 
         //MessageShow 面板
         MessageShow = new JTextField();
-       // MessageShow.setBackground(Color.green);
         MessageShow.setEnabled(false);
         this.add(MessageShow, new GBC(0, 0, 2, 1).
                 setFill(GBC.BOTH).
@@ -45,40 +37,40 @@ public class ClientView extends JFrame {
 
         //MessageEdit
         MessageEdit = new JTextArea();
-        //MessageEdit.setBackground(Color.YELLOW);
         MessageEdit.setLineWrap(true);
         this.add(MessageEdit, new GBC(0, 1, 2, 1).
                 setFill(GBC.BOTH).
                 setIpad(550,200 ).
                 setWeight(1, 1));
 
-
+/*
         //NumberList
         NumberList = new JTextField();
-        //NumberList.setBackground(Color.black);
         this.add(NumberList,new GBC(2,0,1,3).
                 setFill(GBC.BOTH).
                 setIpad(200,600).
                 setWeight(1,1));
 
-
+*/
         ConfirmButton= new JButton("exit");
-        // ConfirmButton.setBackground(Color.LIGHT_GRAY);
         this.add(ConfirmButton, new GBC(0, 2, 1, 1).
                 setFill(GBC.BOTH).
                 setIpad(225, 50).
                 setWeight(1, 1));
-        // this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 
         CloseButton=new JButton("send");
-       // CloseButton.setBackground(Color.orange);
-
         this.add(CloseButton, new GBC(1, 2, 1, 1).
                 setFill(GBC.BOTH).
                 setIpad(225, 50).
                 setWeight(1, 1));
     }
 
-}
 
+    JTextField MessageShow;//消息展示区
+    JTextArea MessageEdit;//消息编辑区
+    JTextField NumberList;//当前成员
+    JButton ConfirmButton; //发送键
+    JButton CloseButton;//关闭键
+
+}
