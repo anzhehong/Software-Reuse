@@ -1,4 +1,4 @@
-package tongji.edu;
+package com.Warehouse.GUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,6 +36,7 @@ public class ClientView extends JFrame {
         //MessageShow 面板
         MessageShow = new JTextField();
        // MessageShow.setBackground(Color.green);
+        MessageShow.setEnabled(false);
         this.add(MessageShow, new GBC(0, 0, 2, 1).
                 setFill(GBC.BOTH).
                 setIpad(550, 350).
@@ -58,7 +59,7 @@ public class ClientView extends JFrame {
         this.add(NumberList,new GBC(2,0,1,3).
                 setFill(GBC.BOTH).
                 setIpad(200,600).
-                setWeight(0,1));
+                setWeight(1,1));
 
 
         ConfirmButton= new JButton("exit");

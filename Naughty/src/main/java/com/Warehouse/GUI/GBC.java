@@ -1,4 +1,4 @@
-package tongji.edu;
+package com.Warehouse.GUI;
 
 import java.awt.*;
 
