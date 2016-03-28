@@ -159,7 +159,14 @@ public class ClientInterface implements ActionListener {
             } catch (JMSException e) {
                 e.printStackTrace();
             }
-        }else {
+        }else if (testEvent.getStr().toString().equals("inputForbidden"))       //被告知需要断开
+        {
+            //TODO: button失效
+            clientView.ConfirmButton.setVisible(false);
+        }else if (testEvent.getStr().toString().equals("LoggedAgain")) {
+            //TODO: button恢复
+            clientView.ConfirmButton.setVisible(true);
+        } else {
             String errorMsg = testEvent.getStr().toString();
             System.out.println("error: " + errorMsg);
         }

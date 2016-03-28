@@ -3,6 +3,7 @@ package com.Warehouse.Server;
 import com.Warehouse.Client.WriteLog;
 import com.Warehouse.MQUtil.MQConnect;
 import com.Warehouse.MQUtil.MQFactory;
+import com.Warehouse.MQUtil.TimeUtil;
 import com.Warehouse.controller.MainController;
 import com.Warehouse.entity.AAMessage;
 import com.Warehouse.entity.StaticVarible;
@@ -32,8 +33,7 @@ public class Server {
      * 用来存收发消息的MQConnect
      */
     private static ArrayList<MQConnect> mqConnects = new ArrayList<MQConnect>();
-    private static Map<MQConnect, ArrayList<Date>> connectArrayListMap = new HashMap<MQConnect, ArrayList<Date>>();
-    private static Map<MQConnect, Date> connectDateMap = new HashMap<MQConnect, Date>();
+    private static Map<String, ArrayList<Date>> connectArrayListMap = new HashMap<String, ArrayList<Date>>();
 
     public MQConnect privateConnect;
 
@@ -99,7 +99,7 @@ public class Server {
         }
     }
 
-    public void sendQueue(boolean flag, MQConnect connect) throws JMSException {
+    public void sendQueue(boolean flag, final MQConnect connect) throws JMSException {
         if (flag) {
             if (isConnectExist(connect)) {
                 System.out.println("already");
@@ -113,13 +113,28 @@ public class Server {
                 AAMessage aaMessage = new AAMessage(1, "Login Successfully");
                 connect.sendMessage(aaMessage.getFinalMessage());
                 mqConnects.add(connect);
+
+                connectArrayListMap.put(aaMessage.getFinalMessage().getStringProperty("userName"), new ArrayList<Date>());
                 validLoginCount += 1;
 
                 connect.addMessageHandler(new MessageListener() {
                     @Override
                     public void onMessage(Message message) {
                         try {
-                            sendTopic(message);
+                            int type = message.getIntProperty("type");
+                            if (type == 777) {
+                                //TODO: 请求重连，回复888，并且不再ignore
+                                message.setIntProperty("type", 888);
+                                connect.sendMessage(message);
+                            }else {
+                                //TODO: 做次数检测
+                                String isMessageValidStr = isMessageValid(message, connect);
+                                if (isMessageValidStr.equals("ok")) {
+                                    sendTopic(message);
+                                }else {
+                                    //TODO: invalidMessage +1
+                                }
+                            }
                         } catch (JMSException e) {
                             e.printStackTrace();
                         }
@@ -147,6 +162,43 @@ public class Server {
             }
         }
         return false;
+    }
+
+    public String isMessageValid (Message message, MQConnect connect) throws JMSException {
+        Date now = new Date();
+        String userName = message.getStringProperty("userName");
+        if (connectArrayListMap.containsKey(message.getStringProperty("userName")) ) {
+            ArrayList<Date> dates = connectArrayListMap.get(message.getStringProperty("userName"));
+//            if (dates.size() > )
+            if (dates.size() > 5) {
+                Date lastFive = dates.get(dates.size() - 5);
+                long interval = TimeUtil.getTimeInterval(now, lastFive);
+                if (interval < 1) {
+                    //TODO:ignore
+                    return "ignore";
+                }else {
+                    //TODO: 判断100
+                    if (dates.size() >= 100) {
+                        //TODO: 断掉这个链接
+                        //TODO: 发一个消息给client
+                        //TODO: ignore后面的消息
+                        message.setIntProperty("type", 999);
+                        connect.sendMessage(message);
+                        return "ignore";
+                    } else {
+                        connectArrayListMap.get(userName).add(now);
+                        return "ok";
+                    }
+                }
+            }else {
+                connectArrayListMap.get(userName).add(now);
+                return "ok";
+            }
+        }else {
+            //TODO 没有这个用户名
+            return "strange";
+        }
+
     }
 
 }
