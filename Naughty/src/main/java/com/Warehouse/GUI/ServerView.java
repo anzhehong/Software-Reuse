@@ -8,6 +8,9 @@ import java.awt.*;
  */
 public class ServerView extends JFrame {
 
+    public JTextArea StateShow;//接收信息状态；
+    public JTextField NumberList;//当前成员
+
     public static void main(String args[] )
     {
         ServerView serverView=new ServerView();
@@ -42,6 +45,5 @@ public class ServerView extends JFrame {
                 setWeight(1, 1));
 
     }
-    JTextArea StateShow;//接收信息状态；
-    JTextField NumberList;//当前成员
+
 }

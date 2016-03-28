@@ -8,6 +8,12 @@ import java.awt.*;
  */
 public class ClientView extends JFrame {
 
+    public JTextField MessageShow;//消息展示区
+    public JTextArea MessageEdit;//消息编辑区
+    public JButton ConfirmButton; //发送键
+    public JButton CloseButton;//关闭键
+
+
     public static void main(String args[] )
     {
         ClientView clientView=new ClientView();
@@ -67,10 +73,5 @@ public class ClientView extends JFrame {
     }
 
 
-    JTextField MessageShow;//消息展示区
-    JTextArea MessageEdit;//消息编辑区
-    JTextField NumberList;//当前成员
-    JButton ConfirmButton; //发送键
-    JButton CloseButton;//关闭键
 
 }
