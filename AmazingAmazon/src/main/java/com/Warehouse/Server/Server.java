@@ -18,6 +18,7 @@ import java.util.ArrayList;
  */
 public class Server {
     public  MQConnect baseConnect;
+    public MQConnect topicConnect;
 
     /**
      * 用来存收发消息的MQConnect
@@ -33,6 +34,7 @@ public class Server {
     public Server() {
         try {
             this.baseConnect = new MQConnect(MQFactory.getConsumer(StaticVarible.baseQueueConsumer));
+            this.topicConnect = new MQConnect(MQFactory.getpublisher("Topic"));
             start();
 //            receive();
         } catch (JMSException e) {
@@ -62,20 +64,16 @@ public class Server {
                             privateConnect.sendMessage(aaMessage.getFinalMessage());
                             mqConnects.add(privateConnect);
 
-                            if (privateConnect != null) {
-                                privateConnect.addMessageHandler(new MessageListener() {
-                                    @Override
-                                    public void onMessage(Message message) {
-                                        System.out.println(message);
-                                        try {
-                                            privateConnect.sendMessage(message);
-                                        } catch (JMSException e) {
-                                            e.printStackTrace();
-                                        }
+                            privateConnect.addMessageHandler(new MessageListener() {
+                                @Override
+                                public void onMessage(Message message) {
+                                    try {
+                                        topicConnect.sendMessage(message);
+                                    } catch (JMSException e) {
+                                        e.printStackTrace();
                                     }
-                                });
-                            }
-
+                                }
+                            });
                         }else {
                             AAMessage aaMessage = new AAMessage(2, "Login Failed");
                             privateConnect.sendMessage(aaMessage.getFinalMessage());

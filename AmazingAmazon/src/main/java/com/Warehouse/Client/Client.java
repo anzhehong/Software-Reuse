@@ -25,6 +25,8 @@ public class Client {
      */
     public MQConnect privateConnect;
 
+    public MQConnect topicConenct;
+
     public Client() {
         try {
             this.baseConnect = new MQConnect(MQFactory.getproducer(StaticVarible.baseQueueProducer)
@@ -34,7 +36,7 @@ public class Client {
         }
     }
 
-    public void Login(AAMessage aaMessage) throws JMSException {
+    public void Login(final AAMessage aaMessage) throws JMSException {
         String userName = aaMessage.getUser().getUserName();
 
         baseConnect.sendMessage(aaMessage.getFinalMessage());
@@ -45,8 +47,21 @@ public class Client {
             public void onMessage(Message message) {
                 System.out.println("add handler");
                 int type = 0;
+                //TODO: 收到登录验证
+
                 try {
                     type = message.getIntProperty("type");
+                    if (type == 1) {
+                        topicConenct = new MQConnect(MQFactory.getSubscriber("Topic"));
+                        topicConenct.addMessageHandler(new MessageListener() {
+                            @Override
+                            public void onMessage(Message message) {
+//                                aaMessage.setType(3);
+                                System.out.println("received topic");
+                            }
+                        });
+
+                    }
                 } catch (JMSException e) {
                     e.printStackTrace();
                 }

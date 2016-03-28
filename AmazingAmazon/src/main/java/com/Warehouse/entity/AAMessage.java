@@ -17,6 +17,8 @@ public class AAMessage {
 
     /**
      * TODO  0: 发送连接请求;  1: 返回成功连接； 2：返回失败连接
+     * TODO  3:
+     * TODO  4：client表示收到成功连接通知，订阅成功，server可以发消息。
      */
     private int type;
 
