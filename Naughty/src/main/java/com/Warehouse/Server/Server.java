@@ -36,7 +36,6 @@ public class Server {
             this.baseConnect = new MQConnect(MQFactory.getConsumer(StaticVarible.baseQueueConsumer));
             this.topicConnect = new MQConnect(MQFactory.getpublisher("Topic"));
             start();
-//            receive();
         } catch (JMSException e) {
             e.printStackTrace();
         }
@@ -48,6 +47,7 @@ public class Server {
             baseConnect.addMessageHandler(new MessageListener() {
                 @Override
                 public void onMessage(Message message) {
+                    System.out.println("start");
                     receiveQueue(message);
                 }
             });
@@ -58,23 +58,23 @@ public class Server {
 
     public void receiveQueue(Message message){
         try {
-                        String userName = message.getStringProperty("userName");
-                        String userPassword = message.getStringProperty("userPassword");
-
-                        ApplicationContext beanFactory;
-                        beanFactory = new ClassPathXmlApplicationContext("/WEB-INF/applicationContext.xml");
-                        MainController mainController = (MainController) beanFactory.getBean("main");
-                        boolean flag = mainController.checkPassword(userName, userPassword);
-                        privateConnect = new MQConnect(MQFactory.getproducer("SC_" + userName),MQFactory.getConsumer("CS_"+userName));
-
-                        
-                    } catch (JMSException e) {
-                        e.printStackTrace();
-                    }
+            System.out.println("receiveQueue");
+            String userName = message.getStringProperty("userName");
+            String userPassword = message.getStringProperty("userPassword");
+            ApplicationContext beanFactory;
+            beanFactory = new ClassPathXmlApplicationContext("/WEB-INF/applicationContext.xml");
+            MainController mainController = (MainController) beanFactory.getBean("main");
+            boolean flag = mainController.checkPassword(userName, userPassword);
+            privateConnect = new MQConnect(MQFactory.getproducer("SC_" + userName),MQFactory.getConsumer("CS_"+userName));
+            sendQueue(flag);
+        } catch (JMSException e) {
+            e.printStackTrace();
+        }
     }
 
     public void sendQueue(boolean flag) throws JMSException {
         if (flag) {
+            System.out.println("sendQueue");
             AAMessage aaMessage = new AAMessage(1, "Login Successfully");
             //TODO: list中是否已经存在此userName的connect
             privateConnect.sendMessage(aaMessage.getFinalMessage());
@@ -83,8 +83,9 @@ public class Server {
             privateConnect.addMessageHandler(new MessageListener() {
                 @Override
                 public void onMessage(Message message) {
+                    System.out.print("asasas");
                     try {
-                        System.out.print("asasas");
+                        sendTopic(message);
                     } catch (JMSException e) {
                         e.printStackTrace();
                     }
@@ -101,14 +102,4 @@ public class Server {
         topicConnect.sendMessage(message);
      }
 
-    public void receive() throws JMSException {
-        if (privateConnect != null) {
-            privateConnect.addMessageHandler(new MessageListener() {
-                @Override
-                public void onMessage(Message message) {
-                    System.out.println(message);
-                }
-            });
-        }
-    }
 }
