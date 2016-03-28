@@ -113,7 +113,13 @@ public class ClientInterface implements ActionListener {
             }
         }
         if(e.getSource()==signup_btn){
-
+            User user = new User(4, "abc", "abc");
+            AAMessage aaMessage = new AAMessage(3, "Test Sending Message", user);
+            try {
+                client.SendMessage(aaMessage);
+            } catch (JMSException e1) {
+                e1.printStackTrace();
+            }
         }
     }
 

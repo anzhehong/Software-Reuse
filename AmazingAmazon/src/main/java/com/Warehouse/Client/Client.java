@@ -55,4 +55,19 @@ public class Client {
             }
         });
     }
+
+    public void SendMessage(AAMessage aaMessage) throws JMSException {
+        if (privateConnect != null) {
+            System.out.println("Client send a message to server...");
+            privateConnect.sendMessage(aaMessage.getFinalMessage());
+            privateConnect.addMessageHandler(new MessageListener() {
+                @Override
+                public void onMessage(Message message) {
+                    System.out.println("Listen to Server for reply...");
+                }
+            });
+        }else {
+            //TODO:断开连接？
+        }
+    }
 }

@@ -34,6 +34,7 @@ public class Server {
         try {
             this.baseConnect = new MQConnect(MQFactory.getConsumer(StaticVarible.baseQueueConsumer));
             start();
+//            receive();
         } catch (JMSException e) {
             e.printStackTrace();
         }
@@ -60,6 +61,21 @@ public class Server {
                             //TODO: list中是否已经存在此userName的connect
                             privateConnect.sendMessage(aaMessage.getFinalMessage());
                             mqConnects.add(privateConnect);
+
+                            if (privateConnect != null) {
+                                privateConnect.addMessageHandler(new MessageListener() {
+                                    @Override
+                                    public void onMessage(Message message) {
+                                        System.out.println(message);
+                                        try {
+                                            privateConnect.sendMessage(message);
+                                        } catch (JMSException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+                            }
+
                         }else {
                             AAMessage aaMessage = new AAMessage(2, "Login Failed");
                             privateConnect.sendMessage(aaMessage.getFinalMessage());
@@ -72,6 +88,17 @@ public class Server {
             });
         } catch (JMSException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void receive() throws JMSException {
+        if (privateConnect != null) {
+            privateConnect.addMessageHandler(new MessageListener() {
+                @Override
+                public void onMessage(Message message) {
+                    System.out.println(message);
+                }
+            });
         }
     }
 }
