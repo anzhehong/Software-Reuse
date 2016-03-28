@@ -1,5 +1,9 @@
 package com.Warehouse.Event;
 
+import com.Warehouse.entity.AAMessage;
+
+import javax.jms.Message;
+
 /**
  * Created by fowafolo
  * Date: 16/3/27
@@ -7,10 +11,11 @@ package com.Warehouse.Event;
  */
 public class TestEvent  {
     private String str;
-
+    private Message message;
     public String getStr() {
         return str;
     }
+    public Message getMessage(){return message;}
 
     public void setStr(String str) {
         this.str = str;
@@ -19,5 +24,10 @@ public class TestEvent  {
     public TestEvent(String str) {
 
         this.str = str;
+    }
+
+    public TestEvent(String str, Message message) {
+        this.str = str;
+        this.message = message;
     }
 }
