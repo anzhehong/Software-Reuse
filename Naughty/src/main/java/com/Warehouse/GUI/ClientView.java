@@ -10,10 +10,9 @@ public class ClientView extends JFrame {
 
     public JTextField MessageShow;//消息展示区
     public JTextArea MessageEdit;//消息编辑区
+    public JTextField NumberList;//当前成员
     public JButton ConfirmButton; //发送键
     public JButton CloseButton;//关闭键
-
-
     public static void main(String args[] )
     {
         ClientView clientView=new ClientView();
@@ -21,7 +20,7 @@ public class ClientView extends JFrame {
 
     public ClientView()
     {
-        init();
+        this.init();
         this.setSize(750,600);
         this.setVisible(true);
     }
@@ -58,7 +57,7 @@ public class ClientView extends JFrame {
                 setWeight(1,1));
 
 */
-        ConfirmButton= new JButton("exit");
+        ConfirmButton = new JButton("exit");
         this.add(ConfirmButton, new GBC(0, 2, 1, 1).
                 setFill(GBC.BOTH).
                 setIpad(225, 50).
@@ -71,6 +70,7 @@ public class ClientView extends JFrame {
                 setIpad(225, 50).
                 setWeight(1, 1));
     }
+
 
 
 

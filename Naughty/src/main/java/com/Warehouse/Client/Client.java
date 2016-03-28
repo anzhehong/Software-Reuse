@@ -30,7 +30,7 @@ public class Client {
     public Client() {
         try {
             this.baseConnect = new MQConnect(MQFactory.getproducer(StaticVarible.baseQueueProducer)
-                    );
+            );
         } catch (JMSException e) {
             e.printStackTrace();
         }
@@ -57,7 +57,11 @@ public class Client {
                             @Override
                             public void onMessage(Message message) {
 //                                aaMessage.setType(3);
-                                System.out.println("received topic");
+                                try {
+                                    System.out.println(message.getStringProperty("content"));
+                                } catch (JMSException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         });
 
