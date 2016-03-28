@@ -28,8 +28,17 @@ public class MainServiceImp implements MainService {
     }
 
     @Override
-    public void insertUser(User user) {
+    public boolean insertUser(User user) {
+        List<User> list = mainDAO.queryAll();
+
+        for(int i = 0;i < list.size();i++){
+            if((user.getUserName().equals(list.get(i).getUserName())))
+            {
+                return false;
+            }
+        }
         mainDAO.insert(user);
+        return  true;
     }
 
     @Override

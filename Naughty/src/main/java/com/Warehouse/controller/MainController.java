@@ -48,4 +48,8 @@ public class MainController {
         else
             return false;
     }
+
+    public boolean registerUser(String username,String pwd){
+        return mainService.insertUser(new User(username,pwd));
+    }
 }

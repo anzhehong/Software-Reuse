@@ -21,7 +21,7 @@ public interface MainService {
      * 插入一个User
      * @param user User类型实例
      */
-    public void insertUser(User user);
+    public boolean insertUser(User user);
 
     /**
      * 通过用户名查找User
