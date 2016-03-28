@@ -48,7 +48,16 @@ public class Server {
             baseConnect.addMessageHandler(new MessageListener() {
                 @Override
                 public void onMessage(Message message) {
-                    try {
+                    receiveQueue(message);
+                }
+            });
+        } catch (JMSException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void receiveQueue(Message message){
+        try {
                         String userName = message.getStringProperty("userName");
                         String userPassword = message.getStringProperty("userPassword");
 
@@ -58,37 +67,39 @@ public class Server {
                         boolean flag = mainController.checkPassword(userName, userPassword);
                         privateConnect = new MQConnect(MQFactory.getproducer("SC_" + userName),MQFactory.getConsumer("CS_"+userName));
 
-                        if (flag) {
-                            AAMessage aaMessage = new AAMessage(1, "Login Successfully");
-                            //TODO: list中是否已经存在此userName的connect
-                            privateConnect.sendMessage(aaMessage.getFinalMessage());
-                            mqConnects.add(privateConnect);
+                        
+                    } catch (JMSException e) {
+                        e.printStackTrace();
+                    }
+    }
 
-                            privateConnect.addMessageHandler(new MessageListener() {
-                                @Override
-                                public void onMessage(Message message) {
-                                    try {
-                                        System.out.print("asasas");
-                                        topicConnect.sendMessage(message);
-                                    } catch (JMSException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            });
-                        }else {
-                            AAMessage aaMessage = new AAMessage(2, "Login Failed");
-                            privateConnect.sendMessage(aaMessage.getFinalMessage());
-                            //TODO: 删掉已有
-                        }
+    public void sendQueue(boolean flag) throws JMSException {
+        if (flag) {
+            AAMessage aaMessage = new AAMessage(1, "Login Successfully");
+            //TODO: list中是否已经存在此userName的connect
+            privateConnect.sendMessage(aaMessage.getFinalMessage());
+            mqConnects.add(privateConnect);
+
+            privateConnect.addMessageHandler(new MessageListener() {
+                @Override
+                public void onMessage(Message message) {
+                    try {
+                        System.out.print("asasas");
                     } catch (JMSException e) {
                         e.printStackTrace();
                     }
                 }
             });
-        } catch (JMSException e) {
-            e.printStackTrace();
+        }else {
+            AAMessage aaMessage = new AAMessage(2, "Login Failed");
+            privateConnect.sendMessage(aaMessage.getFinalMessage());
+            //TODO: 删掉已有
         }
-    }
+     }
+
+     public void sendTopic(Message message) throws JMSException {
+        topicConnect.sendMessage(message);
+     }
 
     public void receive() throws JMSException {
         if (privateConnect != null) {
