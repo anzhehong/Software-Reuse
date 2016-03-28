@@ -58,7 +58,10 @@ public class Client {
                             public void onMessage(Message message) {
 //                                aaMessage.setType(3);
                                 try {
+                                    EventController.eventBus.post(new TestEvent("sendMessage",message));
                                     System.out.println(message.getStringProperty("content"));
+
+
                                 } catch (JMSException e) {
                                     e.printStackTrace();
                                 }

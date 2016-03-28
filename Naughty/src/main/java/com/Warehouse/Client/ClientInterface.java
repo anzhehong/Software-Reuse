@@ -11,6 +11,7 @@ import com.google.common.eventbus.Subscribe;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.jms.JMSException;
+import javax.jms.Message;
 import javax.jms.Session;
 import javax.swing.*;
 import java.awt.*;
@@ -129,23 +130,38 @@ public class ClientInterface implements ActionListener {
 
     @Subscribe
     public void listenEvent(TestEvent testEvent){
-        System.out.println(testEvent.getStr().toString());
-        uninit();
-        clientView = new ClientView();
-        clientView.ConfirmButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String content = clientView.MessageEdit.getText().trim();
-                AAMessage sendMes = new AAMessage(5,content);
-                try {
-                    client.SendMessage(sendMes);
-                } catch (JMSException e1) {
-                    e1.printStackTrace();
-                }
 
-                System.out.print("mouse clicked");
+        //收到登录成功信息
+        if(testEvent.getStr().toString().equals("aaa")) {
+            System.out.println(testEvent.getStr().toString());
+            uninit();
+            clientView = new ClientView();
+            clientView.ConfirmButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String content = clientView.MessageEdit.getText().trim();
+                    AAMessage sendMes = new AAMessage(5, content);
+                    try {
+                        client.SendMessage(sendMes);
+                    } catch (JMSException e1) {
+                        e1.printStackTrace();
+                    }
+
+                    System.out.print("mouse clicked");
+                }
+            });
+        }
+
+        //收到有信息收到的消息，更新聊天界面
+        if(testEvent.getStr().toString().equals("sendMessage"))
+        {
+            Message message = testEvent.getMessage();
+            try {
+                clientView.MessageShow.setText(message.getStringProperty("content"));
+            } catch (JMSException e) {
+                e.printStackTrace();
             }
-        });
+        }
 //        clientView.addMouseListener(new MouseAdapter() {//这里使用MouseAdapter代替MouseListener，因为MouseListener要重写的方法太多
 //            public void mouseClicked(MouseEvent e) {
 //                System.out.print("mouse clicked");
