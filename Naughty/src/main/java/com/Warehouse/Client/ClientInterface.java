@@ -132,7 +132,7 @@ public class ClientInterface implements ActionListener {
     public void listenEvent(TestEvent testEvent){
 
         //收到登录成功信息
-        if(testEvent.getStr().toString().equals("aaa")) {
+        if(testEvent.getStr().toString().equals("loginSuccessfully")) {
             System.out.println(testEvent.getStr().toString());
             uninit();
             clientView = new ClientView();
@@ -150,18 +150,21 @@ public class ClientInterface implements ActionListener {
                     System.out.print("mouse clicked");
                 }
             });
-        }
-
-        //收到有信息收到的消息，更新聊天界面
-        if(testEvent.getStr().toString().equals("sendMessage"))
+        }else if(testEvent.getStr().toString().equals("MessageReceived"))   //收到有信息收到的消息，更新聊天界面
         {
             Message message = testEvent.getMessage();
             try {
-                clientView.MessageShow.setText(message.getStringProperty("content"));
+                clientView.MessageShow.setText(clientView.MessageShow.getText().trim()+
+                        "\n" + message.getStringProperty("content"));
             } catch (JMSException e) {
                 e.printStackTrace();
             }
+        }else {
+            String errorMsg = testEvent.getStr().toString();
+            System.out.println("error: " + errorMsg);
         }
+
+
 //        clientView.addMouseListener(new MouseAdapter() {//这里使用MouseAdapter代替MouseListener，因为MouseListener要重写的方法太多
 //            public void mouseClicked(MouseEvent e) {
 //                System.out.print("mouse clicked");

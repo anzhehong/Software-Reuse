@@ -43,8 +43,16 @@ public class MainServiceImp implements MainService {
 
     @Override
     public User findByName(String userName){
-        User user = mainDAO.findByName(userName);
-        return user;
-
+        List<User> userList = mainDAO.queryAll();
+        if (userList.size() == 0) {
+            return null;
+        }else {
+            for (int i = 0 ; i < userList.size(); i ++) {
+                User user = userList.get(i);
+                if (user.getUserName().equals(userName))
+                    return user;
+            }
+            return null;
+        }
     }
 }

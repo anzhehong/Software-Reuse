@@ -34,15 +34,18 @@ public class MainController {
         mainController.test();
     }
 
-    public void test() {
-        users = mainService.listAllUsers();
-        User user = mainService.findByName("test001");
+    public void test() throws JMSException {
+        User user = mainService.findByName("abc");
         System.out.println(user.getUserPassword());
-
+        System.out.println(checkPassword("abc", "abc"));
     }
 
     public boolean checkPassword(String username,String password)throws JMSException {
         User user = mainService.findByName(username);
+        if (user == null) {
+            return false;
+        }
+        System.out.println(user.getUserName());
         if(password.equals(user.getUserPassword()))
             return true;
         else

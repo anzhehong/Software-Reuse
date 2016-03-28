@@ -45,10 +45,8 @@ public class Client {
         privateConnect.addMessageHandler(new MessageListener() {
             @Override
             public void onMessage(Message message) {
-                System.out.println("add handler");
                 int type = 0;
                 //TODO: 收到登录验证
-
                 try {
                     type = message.getIntProperty("type");
                     if (type == 1) {
@@ -58,22 +56,22 @@ public class Client {
                             public void onMessage(Message message) {
 //                                aaMessage.setType(3);
                                 try {
-                                    EventController.eventBus.post(new TestEvent("sendMessage",message));
+                                    EventController.eventBus.post(new TestEvent("MessageReceived",message));
                                     System.out.println(message.getStringProperty("content"));
-
-
                                 } catch (JMSException e) {
                                     e.printStackTrace();
                                 }
                             }
                         });
-
+                        EventController.eventBus.post(new TestEvent("loginSuccessfully"));
+                    }else if (type == 2) {
+                        //TODO: 登录失败，两种情况
+                        System.out.println(message.getStringProperty("content"));
+                        EventController.eventBus.post(new TestEvent(message.getStringProperty("content")));
                     }
                 } catch (JMSException e) {
                     e.printStackTrace();
                 }
-                System.out.println(type);
-                EventController.eventBus.post(new TestEvent("aaa"));
             }
         });
     }
