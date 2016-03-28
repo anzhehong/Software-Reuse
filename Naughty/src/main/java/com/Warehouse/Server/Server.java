@@ -123,9 +123,10 @@ public class Server {
                         try {
                             int type = message.getIntProperty("type");
                             if (type == 777) {
+                                System.out.println("aaa777777777");
                                 //TODO: 请求重连，回复888，并且不再ignore
-                                message.setIntProperty("type", 888);
-                                connect.sendMessage(message);
+                                AAMessage reloginPermitMessage = new AAMessage(888, "Relogin Successfully");
+                                connect.sendMessage(reloginPermitMessage.getFinalMessage());
                             }else {
                                 //TODO: 做次数检测
                                 String isMessageValidStr = isMessageValid(message, connect);
@@ -182,8 +183,9 @@ public class Server {
                         //TODO: 断掉这个链接
                         //TODO: 发一个消息给client
                         //TODO: ignore后面的消息
-                        message.setIntProperty("type", 999);
-                        connect.sendMessage(message);
+                        AAMessage aaMessage = new AAMessage(999, "Redo Login");
+                        connect.sendMessage(aaMessage.getFinalMessage());
+                        connectArrayListMap.get(userName).clear();
                         return "ignore";
                     } else {
                         connectArrayListMap.get(userName).add(now);

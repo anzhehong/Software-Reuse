@@ -45,10 +45,12 @@ public class Client {
         privateConnect.addMessageHandler(new MessageListener() {
             @Override
             public void onMessage(Message message) {
+                System.out.println("test on message");
                 int type = 0;
                 //TODO: 收到登录验证
                 try {
                     type = message.getIntProperty("type");
+                    System.out.println("typeeeee: "+ type);
                     if (type == 1) {
                         topicConenct = new MQConnect(MQFactory.getSubscriber("Topic"));
                         topicConenct.addMessageHandler(new MessageListener() {
@@ -71,8 +73,9 @@ public class Client {
                         //TODO: 继续监听，直到拿到server发给我的『你成功重连啦！』的消息->加入topic，告诉interface可以接受。
                         EventController.eventBus.post(new TestEvent("inputForbidden"));
                         topicConenct.getMessageConsumer().close();
-                        message.setIntProperty("type", 777);
-                        privateConnect.sendMessage(message);
+
+                        AAMessage reloginMessage = new AAMessage(777, "Relogin Request");
+                        privateConnect.sendMessage(reloginMessage.getFinalMessage());
 
                     }else if (type == 888) {
                         //TODO: 『你成功重连啦！』的消息->加入topic，告诉interface可以接受。
@@ -106,12 +109,12 @@ public class Client {
         if (privateConnect != null) {
             System.out.println("Client send a message to server...");
             privateConnect.sendMessage(aaMessage.getFinalMessage());
-            privateConnect.addMessageHandler(new MessageListener() {
-                @Override
-                public void onMessage(Message message) {
-                    System.out.println("Listen to Server for reply...");
-                }
-            });
+//            privateConnect.addMessageHandler(new MessageListener() {
+//                @Override
+//                public void onMessage(Message message) {
+//                    System.out.println("Listen to Server for reply...");
+//                }
+//            });
         }else {
             //TODO:断开连接？
         }
