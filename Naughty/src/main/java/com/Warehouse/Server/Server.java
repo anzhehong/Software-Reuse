@@ -68,6 +68,7 @@ public class Server {
                                 @Override
                                 public void onMessage(Message message) {
                                     try {
+                                        System.out.print("asasas");
                                         topicConnect.sendMessage(message);
                                     } catch (JMSException e) {
                                         e.printStackTrace();

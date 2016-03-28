@@ -1,6 +1,7 @@
 package com.Warehouse.Client;
 
 import com.Warehouse.Event.TestEvent;
+import com.Warehouse.GUI.ClientView;
 import com.Warehouse.entity.AAMessage;
 import com.Warehouse.entity.StaticVarible;
 import com.Warehouse.entity.User;
@@ -13,8 +14,7 @@ import javax.jms.JMSException;
 import javax.jms.Session;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 /**
  * Created by MSI on 2016/3/23.
@@ -22,8 +22,8 @@ import java.awt.event.ActionListener;
 public class ClientInterface implements ActionListener {
 
     private Client client;
+    public ClientView clientView;
     private Session session;
-    private ClientInterface clientInterface;
     private JFrame jFrame = new JFrame();
     private JPanel jPanel = new JPanel();
     private Label username_label = new Label();
@@ -94,6 +94,10 @@ public class ClientInterface implements ActionListener {
 
     }
 
+    private void uninit()
+    {
+        this.jFrame.setVisible(false);
+    }
     @Autowired
     MainService mainService;
 
@@ -126,6 +130,27 @@ public class ClientInterface implements ActionListener {
     @Subscribe
     public void listenEvent(TestEvent testEvent){
         System.out.println(testEvent.getStr().toString());
+        uninit();
+        clientView = new ClientView();
+        clientView.ConfirmButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String content = clientView.MessageEdit.getText().trim();
+                AAMessage sendMes = new AAMessage(5,content);
+                try {
+                    client.SendMessage(sendMes);
+                } catch (JMSException e1) {
+                    e1.printStackTrace();
+                }
+
+                System.out.print("mouse clicked");
+            }
+        });
+//        clientView.addMouseListener(new MouseAdapter() {//这里使用MouseAdapter代替MouseListener，因为MouseListener要重写的方法太多
+//            public void mouseClicked(MouseEvent e) {
+//                System.out.print("mouse clicked");
+//            }
+//        });
     }
 
     public static void main(String[] args) throws JMSException{
