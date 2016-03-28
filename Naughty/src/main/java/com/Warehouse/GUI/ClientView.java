@@ -8,9 +8,8 @@ import java.awt.*;
  */
 public class ClientView extends JFrame {
 
-    public JTextField MessageShow;//消息展示区
+    public JTextArea MessageShow;//消息展示区
     public JTextArea MessageEdit;//消息编辑区
-    public JTextField NumberList;//当前成员
     public JButton ConfirmButton; //发送键
     public JButton CloseButton;//关闭键
     public static void main(String args[] )
@@ -32,7 +31,7 @@ public class ClientView extends JFrame {
         this.setLayout(layout);
 
         //MessageShow 面板
-        MessageShow = new JTextField();
+        MessageShow = new JTextArea();
         MessageShow.setEnabled(false);
         this.add(MessageShow, new GBC(0, 0, 2, 1).
                 setFill(GBC.BOTH).
@@ -48,24 +47,18 @@ public class ClientView extends JFrame {
                 setIpad(550,200 ).
                 setWeight(1, 1));
 
-/*
-        //NumberList
-        NumberList = new JTextField();
-        this.add(NumberList,new GBC(2,0,1,3).
-                setFill(GBC.BOTH).
-                setIpad(200,600).
-                setWeight(1,1));
 
-*/
-        ConfirmButton = new JButton("exit");
-        this.add(ConfirmButton, new GBC(0, 2, 1, 1).
+
+
+        CloseButton = new JButton("exit");
+        this.add(CloseButton, new GBC(0, 2, 1, 1).
                 setFill(GBC.BOTH).
                 setIpad(225, 50).
                 setWeight(1, 1));
 
 
-        CloseButton=new JButton("send");
-        this.add(CloseButton, new GBC(1, 2, 1, 1).
+        ConfirmButton=new JButton("send");
+        this.add(ConfirmButton, new GBC(1, 2, 1, 1).
                 setFill(GBC.BOTH).
                 setIpad(225, 50).
                 setWeight(1, 1));
