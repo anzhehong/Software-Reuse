@@ -9,10 +9,4 @@ import com.Warehouse.entity.User;
  */
 public interface MainDAO extends GeneralDAO<User> {
 
-    /**
-     * 通过用户名取用户数据
-     * @param username 用户姓名
-     * @return 用户
-     */
-    User findByName(String username);
 }

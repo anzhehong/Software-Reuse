@@ -1,7 +1,6 @@
 package com.Warehouse.DAO;
 
 import com.Warehouse.entity.User;
-import org.springframework.orm.hibernate4.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -18,8 +17,4 @@ public class MainDAOImp extends GeneralDAOImp<User> implements MainDAO {
         super(User.class);
     }
 
-    public User findByName(String username){
-        HibernateTemplate hibernateTemplate = new HibernateTemplate(getSessionFactory());
-        return (User)hibernateTemplate.find("from User u Where u.userName = ?",username).get(0);
-    }
 }
