@@ -5,9 +5,12 @@
 *.iml
 
 ## Directory-based project format:
-.idea/
-/.idea
+**/.idea/workspace.xml
+**/.idea/dictionaries
+**/.idea/tasks.xml
+
 /log
+/target
 # if you remove the above rule, at least ignore the following:
 
 # User-specific stuff:
