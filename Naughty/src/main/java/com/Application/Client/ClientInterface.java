@@ -100,7 +100,7 @@ public class ClientInterface implements ActionListener {
         this.jFrame.setSize(400,300);
         this.jFrame.setResizable(false);
         this.jFrame.setVisible(true);
-        this.jFrame.setTitle("LOG IN/UP");
+        this.jFrame.setTitle(ConfigData.getMqHost());
         this.jFrame.setLocation(200,100);
         this.jFrame.show();
 
@@ -148,7 +148,7 @@ public class ClientInterface implements ActionListener {
             /**
              *  关掉登录界面， 打开聊天界面
              */
-            //TODO:登录成功写入文件
+
             validLoginCount +=1;
             uninit();
             clientView = new ClientView();
@@ -178,14 +178,20 @@ public class ClientInterface implements ActionListener {
             }
         }else if (interfaceEvent.getStr().toString().equals("inputForbidden"))       //被告知需要断开
         {
-            //TODO: button失效
+
             clientView.ConfirmButton.setVisible(false);
         }else if (interfaceEvent.getStr().toString().equals("LoggedAgain")) {
-            //TODO: button恢复
+
             clientView.ConfirmButton.setVisible(true);
         } else {
             inValidLoginCount += 1;
             String errorMsg = interfaceEvent.getStr().toString();
+
+            /**
+             * 登录失败，弹出警告框
+             */
+            //TODO:重复登录的问题
+            JOptionPane.showMessageDialog(null, errorMsg, null,JOptionPane.ERROR_MESSAGE);
             System.out.println("error: " + errorMsg);
         }
 
@@ -204,7 +210,10 @@ public class ClientInterface implements ActionListener {
     static class WriteLoginTask extends TimerTask
     {
         public void run() {
-            //TODO: 把validLogin和invalidLogin记录到文件中
+            /**
+             *   把validLogin和invalidLogin记录到文件中
+             */
+
             Date date = new Date();
             WriteLog.write(loginLog, date + "\tValid Login Count: " + validLoginCount + "\tInvalid Login Count: " + inValidLoginCount);
             WriteLog.write(receiveMessageLog,date + "\tReceived message Count: " + receivedMessageCount);

@@ -61,7 +61,6 @@ public class Client {
                 //TODO: 收到登录验证
                 try {
                     type = message.getIntProperty("type");
-                    System.out.println("typeeeee: "+ type);
                     if (type == Integer.parseInt(ConfigData.getLoginPermitted())) {
                         loginSuccessHandler();
                     }else if (type == Integer.parseInt(ConfigData.getRedoLogin())){
