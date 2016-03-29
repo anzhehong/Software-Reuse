@@ -1,5 +1,6 @@
 package Client;
 
+import com.Util.WriteLog;
 import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.After;
 import org.junit.Before;
@@ -9,8 +10,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Date;
 
-import static com.Warehouse.Client.WriteLog.write;
-import static com.Warehouse.Client.WriteLog.writeLoginForClient;
 import static junit.framework.Assert.assertEquals;
 
 /** 
@@ -41,7 +40,7 @@ public void testWrite() throws Exception {
    //向文件输入一行数据，测试输入数据与文件最后一行数据是否相同；
     String txt = "testMeAgain";
     FileReader fr = new FileReader("testWrite.txt");
-    write("testWrite.txt", txt);
+    WriteLog.write("testWrite.txt", txt);
     String lastLine= null;
 
     BufferedReader br = new BufferedReader(fr);
@@ -68,7 +67,7 @@ public void testWriteLoginForClient() throws Exception {
     Date date = new Date();
     String ClientName = "abc";
     boolean result = true;
-    writeLoginForClient(ClientName,result);
+    WriteLog.writeLoginForClient(ClientName, result);
 
     FileReader fr = new FileReader("Log.txt");
     String lastLine= null;

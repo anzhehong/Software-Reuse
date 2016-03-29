@@ -1,7 +1,7 @@
 package controller;
 
-import com.Warehouse.controller.MainController;
-import com.Warehouse.entity.User;
+import com.Communication.Entity.User;
+import com.Database.Controller.MainController;
 import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.After;
 import org.junit.Before;
@@ -18,7 +18,7 @@ import static org.junit.Assert.assertEquals;
 * @since <pre>���� 28, 2016</pre> 
 * @version 1.0 
 */ 
-public class MainControllerTest { 
+public class MainControllerTest {
     private MainController mainController = new MainController();
     private User user = new User("abc","abc");
 @Before
