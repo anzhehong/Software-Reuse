@@ -1,6 +1,6 @@
 package com.Database.Controller;
 
-import com.Application.Entity.User;
+import com.Communication.Entity.User;
 import com.Database.Service.MainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

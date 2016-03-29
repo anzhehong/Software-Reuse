@@ -1,6 +1,6 @@
 package com.Database.DAO;
 
-import com.Application.Entity.User;
+import com.Communication.Entity.User;
 import org.springframework.stereotype.Repository;
 
 /**

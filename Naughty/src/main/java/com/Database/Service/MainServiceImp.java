@@ -1,7 +1,7 @@
 package com.Database.Service;
 
 import com.Database.DAO.MainDAO;
-import com.Application.Entity.User;
+import com.Communication.Entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

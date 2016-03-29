@@ -4,7 +4,7 @@ import com.Communication.TestEvent;
 import com.Application.GUI.ClientView;
 import com.Communication.AAMessage;
 import com.Config.StaticVarible;
-import com.Application.Entity.User;
+import com.Communication.Entity.User;
 import com.Database.Service.MainService;
 import com.Util.EventController;
 import com.google.common.eventbus.EventBus;
@@ -172,12 +172,6 @@ public class ClientInterface implements ActionListener {
             System.out.println("error: " + errorMsg);
         }
 
-
-//        clientView.addMouseListener(new MouseAdapter() {//这里使用MouseAdapter代替MouseListener，因为MouseListener要重写的方法太多
-//            public void mouseClicked(MouseEvent e) {
-//                System.out.print("mouse clicked");
-//            }
-//        });
     }
 
     public static void main(String[] args) throws JMSException{

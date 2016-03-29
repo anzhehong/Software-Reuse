@@ -1,7 +1,6 @@
 package com.Communication;
 
-import com.Application.Entity.User;
-import com.Communication.MQFactory;
+import com.Communication.Entity.User;
 
 import javax.jms.JMSException;
 import javax.jms.Message;

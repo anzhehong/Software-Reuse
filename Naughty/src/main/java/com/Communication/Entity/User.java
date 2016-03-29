@@ -1,4 +1,4 @@
-package com.Application.Entity;
+package com.Communication.Entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

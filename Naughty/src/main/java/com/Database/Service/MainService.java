@@ -1,6 +1,6 @@
 package com.Database.Service;
 
-import com.Application.Entity.User;
+import com.Communication.Entity.User;
 
 import java.util.List;
 
