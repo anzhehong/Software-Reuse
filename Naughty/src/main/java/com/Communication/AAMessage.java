@@ -13,8 +13,6 @@ import java.util.Date;
  */
 public class AAMessage {
 
-
-
     /**
      * TODO  0: 发送连接请求;  1: 返回成功连接； 2：返回失败连接
      * TODO  3:

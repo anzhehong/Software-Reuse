@@ -1,10 +1,10 @@
 package com.Application.Client;
 
+import com.Communication.AAMessage;
 import com.Communication.InterfaceEvent;
 import com.Communication.MQConnect;
 import com.Communication.MQFactory;
-import com.Communication.AAMessage;
-import com.Config.StaticVarible;
+import com.Config.ConfigData;
 import com.Util.EventController;
 
 import javax.jms.JMSException;
@@ -17,26 +17,33 @@ import javax.jms.MessageListener;
 public class Client {
 
     /**
-     * 登录等请求
+     * 登录请求
      */
     private MQConnect baseConnect;
 
     /**
-     * 消息传送通道
+     * 每一个Client和Server的消息传送通道
      */
     public MQConnect privateConnect;
 
+    /**
+     * 公用Topic
+     */
     public MQConnect topicConenct;
 
     public Client() {
         try {
-            this.baseConnect = new MQConnect(MQFactory.getproducer(StaticVarible.baseQueueProducer)
-            );
+            this.baseConnect = new MQConnect(MQFactory.getproducer(ConfigData.getBaseQueueDestination()));
         } catch (JMSException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * 登录，通过判断message的type来判断状态；发送信息
+     * @param aaMessage
+     * @throws JMSException
+     */
     public void Login(final AAMessage aaMessage) throws JMSException {
         String userName = aaMessage.getUser().getUserName();
 
@@ -110,6 +117,11 @@ public class Client {
         });
     }
 
+    /**
+     * 私有queue发送信息给server
+     * @param aaMessage
+     * @throws JMSException
+     */
     public void SendMessage(AAMessage aaMessage) throws JMSException {
         if (privateConnect != null) {
             System.out.println("Client send a message to server...");

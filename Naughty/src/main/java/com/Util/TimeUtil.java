@@ -12,6 +12,12 @@ import java.util.Date;
  * 返回的是时间差秒数
  */
 public class TimeUtil {
+    /**
+     * 计算两个Date类型数据相差的秒数
+     * @param date1
+     * @param date2
+     * @return
+     */
     static public long getTimeInterval(Date date1, Date date2) {
         long time1=date1.getTime();
         long time2=date2.getTime();

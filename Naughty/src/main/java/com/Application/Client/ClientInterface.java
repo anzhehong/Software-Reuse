@@ -3,8 +3,8 @@ package com.Application.Client;
 import com.Communication.InterfaceEvent;
 import com.Application.GUI.ClientView;
 import com.Communication.AAMessage;
-import com.Config.StaticVarible;
 import com.Communication.Entity.User;
+import com.Config.ConfigData;
 import com.Database.Service.MainService;
 import com.Util.EventController;
 import com.google.common.eventbus.EventBus;
@@ -176,7 +176,7 @@ public class ClientInterface implements ActionListener {
 
     public static void main(String[] args) throws JMSException{
         ClientInterface clientInterface1 = new ClientInterface();
-        clientInterface1.init(StaticVarible.baseQueueConsumer);
+        clientInterface1.init(ConfigData.getBaseQueueDestination());
         EventBus eventBus = EventController.eventBus;
         eventBus.register(clientInterface1);
     }

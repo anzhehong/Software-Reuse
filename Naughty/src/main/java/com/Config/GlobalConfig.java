@@ -6,6 +6,9 @@ package com.Config;
  * Time: 21:16
  */
 public class GlobalConfig {
+    /**
+     * 所有property都在infrastructure.xml中配置bean
+     */
     private String baseQueueDestination;
     private String requestLogin;
     private String loginPermitted;
@@ -15,6 +18,8 @@ public class GlobalConfig {
     private String csMessage;
     private String requestReLogin;
     private String mqHost;
+    private String loginLog;
+    private String loginLogSecond;
 
     public void setBaseQueueDestination(String baseQueueDestination) {
         this.baseQueueDestination = baseQueueDestination;
@@ -86,5 +91,21 @@ public class GlobalConfig {
 
     public String getMqHost() {
         return mqHost;
+    }
+
+    public void setLoginLog(String loginLog) {
+        this.loginLog = loginLog;
+    }
+
+    public String getLoginLog() {
+        return loginLog;
+    }
+
+    public void setLoginLogSecond(String loginLogSecond) {
+        this.loginLogSecond = loginLogSecond;
+    }
+
+    public String getLoginLogSecond() {
+        return loginLogSecond;
     }
 }

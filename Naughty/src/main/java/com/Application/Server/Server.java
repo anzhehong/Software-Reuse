@@ -1,12 +1,12 @@
 package com.Application.Server;
 
-import com.Util.WriteLog;
+import com.Communication.AAMessage;
 import com.Communication.MQConnect;
 import com.Communication.MQFactory;
-import com.Util.TimeUtil;
+import com.Config.ConfigData;
 import com.Database.Controller.MainController;
-import com.Communication.AAMessage;
-import com.Config.StaticVarible;
+import com.Util.TimeUtil;
+import com.Util.WriteLog;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -20,30 +20,54 @@ import java.util.*;
  */
 public class Server {
 
+    /**
+     * 合法输入次数/minutes
+     */
     private static int validLoginCount = 0;
+    /**
+     * 不合法输入次数/minute
+     */
     private static int inValidLoginCount = 0;
-    private static String loginLog = "ServerLoginLog.txt";
+    /**
+     * 登录日志的路径
+     */
+    private static String loginLog = ConfigData.getLoginLog();
 
-    private static int second = 1000;
+    private static int second = Integer.parseInt(ConfigData.getLoginLogSecond());
 
+    /**
+     * queue用来发送登录请求
+     * TODO: 注册
+     */
     public  MQConnect baseConnect;
+
+    /**
+     * 私用queue发送消息给server
+     * (except login register request)
+     */
+    public MQConnect privateConnect;
+    /**
+     * 公用topic连接
+     */
     public MQConnect topicConnect;
 
     /**
      * 用来存收发消息的MQConnect
      */
     private static ArrayList<MQConnect> mqConnects = new ArrayList<MQConnect>();
+    /**
+     * 用来记录每一个登录且发送过消息的client这次session的每次消息时间
+     */
     private static Map<String, ArrayList<Date>> connectArrayListMap = new HashMap<String, ArrayList<Date>>();
 
-    public MQConnect privateConnect;
-
-    public static void main(String[] args) throws JMSException {
-        Server server = new Server();
-        server.timer = new Timer();
-        server.timer.schedule(new WriteLoginTask(), 60 * second, 60 * second);
-    }
-
+    /**
+     * 写日志的定时器
+     */
     public static Timer timer;
+
+    /**
+     * 定时器记录每分钟合法和不合法的消息个数
+     */
     static class WriteLoginTask extends TimerTask
     {
         public void run() {
@@ -57,9 +81,15 @@ public class Server {
     }
 
 
+    public static void main(String[] args) throws JMSException {
+        Server server = new Server();
+        server.timer = new Timer();
+        server.timer.schedule(new WriteLoginTask(), 60 * second, 60 * second);
+    }
+
     public Server() {
         try {
-            this.baseConnect = new MQConnect(MQFactory.getConsumer(StaticVarible.baseQueueConsumer));
+            this.baseConnect = new MQConnect(MQFactory.getConsumer(ConfigData.getBaseQueueDestination()));
             this.topicConnect = new MQConnect(MQFactory.getpublisher("Topic"));
             start();
         } catch (JMSException e) {
@@ -82,6 +112,10 @@ public class Server {
         }
     }
 
+    /**
+     * 从client接受到消息
+     * @param message
+     */
     public void receiveQueue(Message message){
         try {
             System.out.println("receiveQueue");
@@ -99,6 +133,12 @@ public class Server {
         }
     }
 
+    /**
+     * 发送回执消息给client
+     * @param flag
+     * @param connect
+     * @throws JMSException
+     */
     public void sendQueue(boolean flag, final MQConnect connect) throws JMSException {
         if (flag) {
             if (isConnectExist(connect)) {
@@ -151,11 +191,22 @@ public class Server {
         }
      }
 
+    /**
+     * 合法消息发送到topic中
+     * @param message
+     * @throws JMSException
+     */
      public void sendTopic(Message message) throws JMSException {
         topicConnect.sendMessage(message);
      }
 
 
+    /**
+     * 检查某一个client是不是已经在已允许的列表中
+     * @param connect
+     * @return
+     * @throws JMSException
+     */
     public boolean isConnectExist (MQConnect connect) throws JMSException {
         for(int i = 0; i< mqConnects.size(); i++) {
             if (mqConnects.get(i).getMessageProducer().getDestination().equals(connect.getMessageProducer().getDestination())) {
@@ -165,6 +216,13 @@ public class Server {
         return false;
     }
 
+    /**
+     * 判断消息是否合法
+     * @param message
+     * @param connect
+     * @return
+     * @throws JMSException
+     */
     public String isMessageValid (Message message, MQConnect connect) throws JMSException {
         Date now = new Date();
         String userName = message.getStringProperty("userName");

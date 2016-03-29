@@ -24,6 +24,11 @@ public class InterfaceEvent {
         this.str = str;
     }
 
+    /**
+     * Constructure 用于Client向界面传信息
+     * @param str
+     * @param message
+     */
     public InterfaceEvent(String str, Message message) {
         this.str = str;
         this.message = message;
