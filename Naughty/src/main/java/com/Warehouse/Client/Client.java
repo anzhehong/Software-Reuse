@@ -9,6 +9,9 @@ import com.Warehouse.entity.StaticVarible;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by MSI on 2016/3/27.
@@ -52,6 +55,8 @@ public class Client {
                     type = message.getIntProperty("type");
                     System.out.println("typeeeee: "+ type);
                     if (type == 1) {
+                        //TODO:登录成功写入文件
+
                         topicConenct = new MQConnect(MQFactory.getSubscriber("Topic"));
                         topicConenct.addMessageHandler(new MessageListener() {
                             @Override
@@ -94,6 +99,8 @@ public class Client {
                         EventController.eventBus.post(new TestEvent("LoggedAgain"));
                     }
                     else if (type == 2) {
+                        //TODO:登录失败，写入文件
+
                         //TODO: 登录失败，两种情况
                         System.out.println(message.getStringProperty("content"));
                         EventController.eventBus.post(new TestEvent(message.getStringProperty("content")));
@@ -119,4 +126,6 @@ public class Client {
             //TODO:断开连接？
         }
     }
+
+
 }

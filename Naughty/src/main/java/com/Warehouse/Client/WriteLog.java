@@ -8,6 +8,8 @@ import java.util.Date;
  * Created by MSI on 2016/3/28.
  */
 public class WriteLog {
+
+
     public static void write(String fileName, String content) {
         try {
             // 打开一个随机访问文件流，按读写方式
