@@ -111,7 +111,6 @@ public class Client {
         });
         EventController.eventBus.post(new InterfaceEvent("loginSuccessfully"));
     }
-
     public void getReDoLogInHandler() throws JMSException{
         //TODO: 断开重连
         //TODO: 发送给interface 不能再输入了

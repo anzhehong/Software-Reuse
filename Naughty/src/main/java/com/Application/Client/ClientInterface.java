@@ -39,8 +39,11 @@ public class ClientInterface implements ActionListener {
     private JButton signup_btn = new JButton();
     private static int validLoginCount = 0;
     private static int inValidLoginCount = 0;
+    private static int receivedMessageCount = 0;
     private static int second = 1000;
     private static String loginLog = "ClientLoginLog.txt";
+    private static String receiveMessageLog = "ClientMesReceived.txt";
+
 
 
     public void setSession(Session session) {
@@ -169,6 +172,7 @@ public class ClientInterface implements ActionListener {
             try {
                 clientView.MessageShow.setText(clientView.MessageShow.getText().trim()+
                         "\n" + message.getStringProperty("content"));
+                receivedMessageCount += 1;
             } catch (JMSException e) {
                 e.printStackTrace();
             }
@@ -203,8 +207,10 @@ public class ClientInterface implements ActionListener {
             //TODO: 把validLogin和invalidLogin记录到文件中
             Date date = new Date();
             WriteLog.write(loginLog, date + "\tValid Login Count: " + validLoginCount + "\tInvalid Login Count: " + inValidLoginCount);
+            WriteLog.write(receiveMessageLog,date + "\tReceived message Count: " + receivedMessageCount);
             inValidLoginCount = 0;
             validLoginCount = 0;
+            receivedMessageCount = 0;
         }
     }
 }
