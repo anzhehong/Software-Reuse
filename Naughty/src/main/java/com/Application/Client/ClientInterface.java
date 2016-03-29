@@ -1,6 +1,6 @@
 package com.Application.Client;
 
-import com.Communication.TestEvent;
+import com.Communication.InterfaceEvent;
 import com.Application.GUI.ClientView;
 import com.Communication.AAMessage;
 import com.Config.StaticVarible;
@@ -130,11 +130,11 @@ public class ClientInterface implements ActionListener {
     }
 
     @Subscribe
-    public void listenEvent(TestEvent testEvent){
+    public void listenEvent(InterfaceEvent interfaceEvent){
 
         //收到登录成功信息
-        if(testEvent.getStr().toString().equals("loginSuccessfully")) {
-            System.out.println(testEvent.getStr().toString());
+        if(interfaceEvent.getStr().toString().equals("loginSuccessfully")) {
+            System.out.println(interfaceEvent.getStr().toString());
             uninit();
             clientView = new ClientView();
             clientView.ConfirmButton.addActionListener(new ActionListener() {
@@ -151,24 +151,24 @@ public class ClientInterface implements ActionListener {
                     System.out.print("mouse clicked");
                 }
             });
-        }else if(testEvent.getStr().toString().equals("MessageReceived"))   //收到有信息收到的消息，更新聊天界面
+        }else if(interfaceEvent.getStr().toString().equals("MessageReceived"))   //收到有信息收到的消息，更新聊天界面
         {
-            Message message = testEvent.getMessage();
+            Message message = interfaceEvent.getMessage();
             try {
                 clientView.MessageShow.setText(clientView.MessageShow.getText().trim()+
                         "\n" + message.getStringProperty("content"));
             } catch (JMSException e) {
                 e.printStackTrace();
             }
-        }else if (testEvent.getStr().toString().equals("inputForbidden"))       //被告知需要断开
+        }else if (interfaceEvent.getStr().toString().equals("inputForbidden"))       //被告知需要断开
         {
             //TODO: button失效
             clientView.ConfirmButton.setVisible(false);
-        }else if (testEvent.getStr().toString().equals("LoggedAgain")) {
+        }else if (interfaceEvent.getStr().toString().equals("LoggedAgain")) {
             //TODO: button恢复
             clientView.ConfirmButton.setVisible(true);
         } else {
-            String errorMsg = testEvent.getStr().toString();
+            String errorMsg = interfaceEvent.getStr().toString();
             System.out.println("error: " + errorMsg);
         }
 

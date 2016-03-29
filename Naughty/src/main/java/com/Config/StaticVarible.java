@@ -9,6 +9,4 @@ public class StaticVarible {
 
     static public String baseQueueProducer = "testQueue";
     static public String baseQueueConsumer = "testQueue";
-    static public String privateQueueProducer = "producer_abc";
-    static public String privateQueueConsumer = "consumer_abc";
 }

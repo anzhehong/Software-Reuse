@@ -1,10 +1,10 @@
 package com.Database.Controller;
 
 import com.Communication.Entity.User;
+import com.Config.ConfigData;
+import com.Config.GlobalConfig;
 import com.Database.Service.MainService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 
 import javax.jms.JMSException;
@@ -26,18 +26,25 @@ public class MainController {
 
     public static void main(String[] args) throws Exception{
 
-        ApplicationContext beanFactory;
-        beanFactory = new ClassPathXmlApplicationContext("/WEB-INF/applicationContext.xml");
+//        ApplicationContext beanFactory;
+//        beanFactory = new ClassPathXmlApplicationContext("/WEB-INF/applicationContext.xml");
+//
+//        MainController mainController = (MainController) beanFactory.getBean("main");
 
-        MainController mainController = (MainController) beanFactory.getBean("main");
-
-        mainController.test();
+//        mainController.testConfig();
+        System.out.println(ConfigData.getBaseQueueDestination());
     }
 
     public void test() throws JMSException {
         User user = mainService.findByName("abc");
         System.out.println(user.getUserPassword());
         System.out.println(checkPassword("abc", "abc"));
+    }
+
+    @Autowired
+    GlobalConfig globalConfig;
+    public void testConfig (){
+        System.out.println(globalConfig.getLoginRefused());
     }
 
     public boolean checkPassword(String username,String password)throws JMSException {

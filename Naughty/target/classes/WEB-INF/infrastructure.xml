@@ -9,7 +9,7 @@
     ">
 
     <!--  classpath*:*.properties-->
-    <context:property-placeholder location="classpath:/WEB-INF/properties/hibernate.properties" />
+    <context:property-placeholder location="classpath:/WEB-INF/properties/*.properties" />
 
     <!-- 使用C3P0数据源，MySQL数据库 -->
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
@@ -29,7 +29,7 @@
     <bean id="sessionFactory"
          class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
           <property name="dataSource" ref="dataSource" />
-          <property name="packagesToScan" value="com.Communication.Entity" />
+          <property name="packagesToScan" value="com.Communication" />
           <property name="hibernateProperties">
                  <props>
                     <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
@@ -50,6 +50,18 @@
     <bean id="transactionManager"
          class="org.springframework.orm.hibernate4.HibernateTransactionManager">
           <property name="sessionFactory" ref="sessionFactory"></property>
+    </bean>
+
+    <bean id="globalConfig" class="com.Config.GlobalConfig">
+        <property name="baseQueueDestination" value="${baseQueueDestination}"></property>
+        <property name="requestLogin" value="${requestLogin}"></property>
+        <property name="loginPermitted" value="${loginPermitted}"></property>
+        <property name="loginRefused" value="${loginRefused}"></property>
+        <property name="redoLogin" value="${redoLogin}"></property>
+        <property name="reLoginPermitted" value="${reLoginPermitted}"></property>
+        <property name="CSMessage" value="${CSMessage}"></property>
+        <property name="requestReLogin" value="${requestReLogin}"></property>
+        <property name="mqHost" value="${mqHost}"></property>
     </bean>
 
     <!-- enable @Transactional Annotation -->

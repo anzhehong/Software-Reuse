@@ -7,7 +7,7 @@ import javax.jms.Message;
  * Date: 16/3/27
  * Time: 21:46
  */
-public class TestEvent  {
+public class InterfaceEvent {
     private String str;
     private Message message;
     public String getStr() {
@@ -19,12 +19,12 @@ public class TestEvent  {
         this.str = str;
     }
 
-    public TestEvent(String str) {
+    public InterfaceEvent(String str) {
 
         this.str = str;
     }
 
-    public TestEvent(String str, Message message) {
+    public InterfaceEvent(String str, Message message) {
         this.str = str;
         this.message = message;
     }
