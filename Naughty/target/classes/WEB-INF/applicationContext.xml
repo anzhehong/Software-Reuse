@@ -13,11 +13,11 @@
     in the application context (no matter if they were defined with XML or by package scanning) -->
 
     <!-- scans packages to find and register beans within the application context. -->
-   <context:component-scan base-package="com.Warehouse.service"/>
-   <context:component-scan base-package="com.Warehouse.entity"/>
-   <context:component-scan base-package="com.Warehouse.DAO"/>
+   <context:component-scan base-package="com.Database.Service"/>
+   <context:component-scan base-package="com.Application.Entity"/>
+   <context:component-scan base-package="com.Database.DAO"/>
 
-    <bean id="main" name="main" class="com.Warehouse.controller.MainController"></bean>
-    <bean id="client" name="client" class="com.Warehouse.Client.ClientInterface"></bean>
+    <bean id="main" name="main" class="com.Database.Controller.MainController"></bean>
+    <bean id="client" name="client" class="com.Application.Client.ClientInterface"></bean>
 
 </beans>

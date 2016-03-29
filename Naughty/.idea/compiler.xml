@@ -24,9 +24,17 @@
         <processorPath useClasspath="true" />
         <module name="AmazingAmazon" />
       </profile>
+      <profile default="false" name="Annotation profile for Naughty" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="Naughty" />
+      </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="AmazingAmazon" target="1.5" />
+      <module name="Naughty" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
