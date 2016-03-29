@@ -92,8 +92,7 @@ public class ClientView extends JFrame {
                 new GBC(2, 3, 1, 1).
                 setFill(GBC.BOTH).
                 setWeight(0, 24).setInsets(10,3,5,5));
-
-
+        this.setTitle("连接正常");
         /*
         //SplitLine 分割线
         SplitLine = new JTextArea();

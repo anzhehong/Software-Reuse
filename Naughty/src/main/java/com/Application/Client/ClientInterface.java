@@ -178,11 +178,12 @@ public class ClientInterface implements ActionListener {
             }
         }else if (interfaceEvent.getStr().toString().equals("inputForbidden"))       //被告知需要断开
         {
-
             clientView.ConfirmButton.setVisible(false);
+            clientView.setTitle("连接断开，正在重连。。。");
         }else if (interfaceEvent.getStr().toString().equals("LoggedAgain")) {
 
             clientView.ConfirmButton.setVisible(true);
+            clientView.setTitle("连接正常");
         } else {
             inValidLoginCount += 1;
             String errorMsg = interfaceEvent.getStr().toString();
