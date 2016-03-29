@@ -56,7 +56,7 @@ public class Server {
     /**
      * 用来存收发消息的MQConnect
      */
-    private static ArrayList<MQConnect> mqConnects = new ArrayList<MQConnect>();
+    protected ArrayList<MQConnect> mqConnects = new ArrayList<MQConnect>();
     /**
      * 用来记录每一个登录且发送过消息的client这次session的每次消息时间
      */
@@ -215,6 +215,7 @@ public class Server {
     public boolean isConnectExist (MQConnect connect) throws JMSException {
         for(int i = 0; i< mqConnects.size(); i++) {
             if (mqConnects.get(i).getMessageProducer().getDestination().equals(connect.getMessageProducer().getDestination())) {
+                System.out.println("mqConnect i : " + mqConnects.get(i).getMessageProducer().getDestination());
                 return true;
             }
         }
