@@ -9,7 +9,8 @@ import java.awt.*;
  */
 public class ClientView extends JFrame {
     public JPanel contentPane;
-    public JScrollPane scrollPane;
+    public JScrollPane ShowScroll;
+    public JScrollPane EditScroll;
 
 
     public JTextArea MessageShow;//消息展示区
@@ -28,7 +29,7 @@ public class ClientView extends JFrame {
     public ClientView()
     {
         this.init();
-        this.setSize(750,600);
+        this.setSize(650,600);
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
@@ -41,7 +42,8 @@ public class ClientView extends JFrame {
         GridBagLayout layout = new GridBagLayout();
         contentPane.setLayout(layout);
         this.setContentPane(contentPane);
-        scrollPane=new JScrollPane();
+        EditScroll=new JScrollPane();
+        ShowScroll=new JScrollPane();
 
         layout.columnWidths = new int[]{400, 100, 100, 0};
         layout.columnWeights = new double[]{0, 0, 0, 1.0E-4};
@@ -51,21 +53,24 @@ public class ClientView extends JFrame {
        //MessageShow 面板
         MessageShow = new JTextArea();
         MessageShow.setEnabled(false);
-        this.add(MessageShow,
+        ShowScroll.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+        this.add(ShowScroll,
                 new GBC(0, 0, 6, 1).
                 setFill(GBC.BOTH).
                 setWeight(1, 250));
+        ShowScroll.setViewportView(MessageShow);
 
         //MessageEdit
         MessageEdit = new JTextArea();
         MessageEdit.setLineWrap(true);
-        scrollPane.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        EditScroll.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-        this.add(scrollPane,
+        this.add(EditScroll,
                 new GBC(0, 2, 6, 1).
                 setFill(GBC.BOTH).
                 setWeight(1, 225));
-        scrollPane.setViewportView(MessageEdit);
+        EditScroll.setViewportView(MessageEdit);
 
         //BlankArea 面板
         BlankArea = new JTextArea();
