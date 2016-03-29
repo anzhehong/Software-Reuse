@@ -7,6 +7,7 @@ import com.Communication.Entity.User;
 import com.Config.ConfigData;
 import com.Database.Service.MainService;
 import com.Util.EventController;
+import com.Util.WriteLog;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ import javax.jms.Session;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
+import java.util.Timer;
 
 /**
  * Created by MSI on 2016/3/23.
@@ -34,6 +37,13 @@ public class ClientInterface implements ActionListener {
     private JTextField password_input = new JTextField();
     private JButton login_btn = new JButton();
     private JButton signup_btn = new JButton();
+    private static int validLoginCount = 0;
+    private static int inValidLoginCount = 0;
+    private static int receivedMessageCount = 0;
+    private static int second = 1000;
+    private static String loginLog = "ClientLoginLog.txt";
+    private static String receiveMessageLog = "ClientMesReceived.txt";
+
 
 
     public void setSession(Session session) {
@@ -90,7 +100,7 @@ public class ClientInterface implements ActionListener {
         this.jFrame.setSize(400,300);
         this.jFrame.setResizable(false);
         this.jFrame.setVisible(true);
-        this.jFrame.setTitle("LOG IN/UP");
+        this.jFrame.setTitle(ConfigData.getMqHost());
         this.jFrame.setLocation(200,100);
         this.jFrame.show();
 
@@ -134,21 +144,26 @@ public class ClientInterface implements ActionListener {
 
         //收到登录成功信息
         if(interfaceEvent.getStr().toString().equals("loginSuccessfully")) {
-            System.out.println(interfaceEvent.getStr().toString());
+
+            /**
+             *  关掉登录界面， 打开聊天界面
+             */
+
+            validLoginCount +=1;
             uninit();
             clientView = new ClientView();
             clientView.ConfirmButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    String content = clientView.MessageEdit.getText().trim();
-                    AAMessage sendMes = new AAMessage(5, content);
+                    /**
+                     * 发送聊天信息，让server去通过Topic 转发
+                     */
+                    AAMessage sendChatMessage = new AAMessage(5, clientView.MessageEdit.getText().trim());
                     try {
-                        client.SendMessage(sendMes);
+                        client.SendMessage(sendChatMessage);
                     } catch (JMSException e1) {
                         e1.printStackTrace();
                     }
-
-                    System.out.print("mouse clicked");
                 }
             });
         }else if(interfaceEvent.getStr().toString().equals("MessageReceived"))   //收到有信息收到的消息，更新聊天界面
@@ -157,18 +172,27 @@ public class ClientInterface implements ActionListener {
             try {
                 clientView.MessageShow.setText(clientView.MessageShow.getText().trim()+
                         "\n" + message.getStringProperty("content"));
+                receivedMessageCount += 1;
             } catch (JMSException e) {
                 e.printStackTrace();
             }
         }else if (interfaceEvent.getStr().toString().equals("inputForbidden"))       //被告知需要断开
         {
-            //TODO: button失效
             clientView.ConfirmButton.setVisible(false);
+            clientView.setTitle("连接断开，正在重连。。。");
         }else if (interfaceEvent.getStr().toString().equals("LoggedAgain")) {
-            //TODO: button恢复
+
             clientView.ConfirmButton.setVisible(true);
+            clientView.setTitle("连接正常");
         } else {
+            inValidLoginCount += 1;
             String errorMsg = interfaceEvent.getStr().toString();
+
+            /**
+             * 登录失败，弹出警告框
+             */
+            //TODO:重复登录的问题
+            JOptionPane.showMessageDialog(null, errorMsg, null,JOptionPane.ERROR_MESSAGE);
             System.out.println("error: " + errorMsg);
         }
 
@@ -176,8 +200,27 @@ public class ClientInterface implements ActionListener {
 
     public static void main(String[] args) throws JMSException{
         ClientInterface clientInterface1 = new ClientInterface();
+        clientInterface1.timer = new Timer();
+        clientInterface1.timer.schedule(new WriteLoginTask(), 60 * second, 60 * second);
         clientInterface1.init(ConfigData.getBaseQueueDestination());
         EventBus eventBus = EventController.eventBus;
         eventBus.register(clientInterface1);
+    }
+
+    public static java.util.Timer timer;
+    static class WriteLoginTask extends TimerTask
+    {
+        public void run() {
+            /**
+             *   把validLogin和invalidLogin记录到文件中
+             */
+
+            Date date = new Date();
+            WriteLog.write(loginLog, date + "\tValid Login Count: " + validLoginCount + "\tInvalid Login Count: " + inValidLoginCount);
+            WriteLog.write(receiveMessageLog,date + "\tReceived message Count: " + receivedMessageCount);
+            inValidLoginCount = 0;
+            validLoginCount = 0;
+            receivedMessageCount = 0;
+        }
     }
 }

@@ -28,10 +28,12 @@ public class Server {
      * 不合法输入次数/minute
      */
     private static int inValidLoginCount = 0;
+    private static int forwardedMessageCount = 0;
     /**
      * 登录日志的路径
      */
     private static String loginLog = ConfigData.getLoginLog();
+    private static String ForwardedMessageLog = "ServerForwardedMessageLog.txt";
 
     private static int second = Integer.parseInt(ConfigData.getLoginLogSecond());
 
@@ -74,8 +76,10 @@ public class Server {
             //TODO: 把validLogin和invalidLogin记录到文件中
             Date date = new Date();
             WriteLog.write(loginLog, date + "\tValid Login Count: " + validLoginCount + "\tInvalid Login Count: " + inValidLoginCount);
+            WriteLog.write(ForwardedMessageLog, date + "\tForwarded Message Count: " + forwardedMessageCount);
             inValidLoginCount = 0;
             validLoginCount = 0;
+            forwardedMessageCount = 0;
 
         }
     }
@@ -198,6 +202,7 @@ public class Server {
      */
      public void sendTopic(Message message) throws JMSException {
         topicConnect.sendMessage(message);
+        forwardedMessageCount += mqConnects.size();
      }
 
 
