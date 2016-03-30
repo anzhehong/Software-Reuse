@@ -170,8 +170,15 @@ public class ClientInterface implements ActionListener {
         {
             Message message = interfaceEvent.getMessage();
             try {
-                clientView.MessageShow.setText(clientView.MessageShow.getText().trim()+
-                        "\n" + message.getStringProperty("content"));
+                String dateStr = message.getStringProperty("createdTime");
+//                String name = message.getStringProperty("author");
+                if (clientView.MessageShow.getText().trim().equals("")) {
+                    clientView.MessageShow.setText(clientView.MessageShow.getText().trim()
+                            + dateStr   + " : " + message.getStringProperty("content"));
+                }else {
+                    clientView.MessageShow.setText(clientView.MessageShow.getText().trim()
+                            + "\n" + dateStr   + " : " + message.getStringProperty("content"));
+                }
                 receivedMessageCount += 1;
             } catch (JMSException e) {
                 e.printStackTrace();

@@ -1,6 +1,7 @@
 package com.Communication;
 
 import com.Communication.Entity.User;
+import com.Util.DateUtil;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -76,6 +77,7 @@ public class AAMessage {
             message.setStringProperty("userPassword", this.user.getUserPassword());
         }
         message.setStringProperty("content", this.content);
+        message.setStringProperty("createdTime", DateUtil.getStrByDefaultFormat(this.createdTime));
         return message;
     }
 
