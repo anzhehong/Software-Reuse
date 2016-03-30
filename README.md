@@ -11,7 +11,7 @@ One more important thing: the application is named as `Naught`.
 
 > Additionally, I'd like to tell you something intresting about the name.
 > 
-> Cause many groups use `Netty` to accomplish the tasks, which we hadn't know it before they told us, and we choose `ActiveMQ` to be the main part of message middleware, in which way we will not care things about `Socket`. It may be a bad thing for learning the useful thing, `Socket`. Therefore we choose a name sounds like `Naughty` to mix up. hhhhh...there seems to be nothing deserves laughing, right?...
+> Cause many groups use `Netty` to accomplish the tasks, which we hadn't know it before they told us, and we choose `ActiveMQ` to be the main part of message middleware, in which way we will not care things about `Socket`. It may be a bad thing for learning the useful thing, `Socket`. Therefore we choose a name sounds like `Naughty` to make up. hhhhh...there seems to be nothing deserves laughing, right?...
 
 # Directory
 
