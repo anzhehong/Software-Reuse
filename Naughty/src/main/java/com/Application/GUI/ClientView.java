@@ -52,8 +52,9 @@ public class ClientView extends JFrame {
 
        //MessageShow 面板
         MessageShow = new JTextArea();
-        MessageShow.setEnabled(false);
+        MessageShow.setEditable(false);
         ShowScroll.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        MessageShow.setFont(new Font("Serif",Font.PLAIN,24));
 
         this.add(ShowScroll,
                 new GBC(0, 0, 6, 1).
@@ -65,6 +66,7 @@ public class ClientView extends JFrame {
         MessageEdit = new JTextArea();
         MessageEdit.setLineWrap(true);
         EditScroll.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        MessageEdit.setFont(new Font("Serif",Font.PLAIN,24));
 
         this.add(EditScroll,
                 new GBC(0, 2, 6, 1).
@@ -92,8 +94,7 @@ public class ClientView extends JFrame {
                 new GBC(2, 3, 1, 1).
                 setFill(GBC.BOTH).
                 setWeight(0, 24).setInsets(10,3,5,5));
-
-
+        this.setTitle("连接正常");
         /*
         //SplitLine 分割线
         SplitLine = new JTextArea();

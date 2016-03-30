@@ -62,6 +62,8 @@
         <property name="CSMessage" value="${CSMessage}"></property>
         <property name="requestReLogin" value="${requestReLogin}"></property>
         <property name="mqHost" value="${mqHost}"></property>
+        <property name="loginLog" value="${loginLog}"></property>
+        <property name="loginLogSecond" value="${loginLogSecond}"></property>
     </bean>
 
     <!-- enable @Transactional Annotation -->

@@ -1,6 +1,7 @@
 package com.Communication;
 
 import com.Communication.Entity.User;
+import com.Util.DateUtil;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -12,8 +13,6 @@ import java.util.Date;
  * Time: 01:48
  */
 public class AAMessage {
-
-
 
     /**
      * TODO  0: 发送连接请求;  1: 返回成功连接； 2：返回失败连接
@@ -78,6 +77,7 @@ public class AAMessage {
             message.setStringProperty("userPassword", this.user.getUserPassword());
         }
         message.setStringProperty("content", this.content);
+        message.setStringProperty("createdTime", DateUtil.getStrByDefaultFormat(this.createdTime));
         return message;
     }
 
