@@ -21,54 +21,64 @@ import java.util.*;
 public class Server {
 
     /**
-     * 合法输入次数/minutes
+     * 合法输入次数/minutes.
      */
     private static int validLoginCount = 0;
     /**
-     * 不合法输入次数/minute
+     * 不合法输入次数/minute.
      */
     private static int inValidLoginCount = 0;
+    /**
+     * 转发消息数量.
+     */
     private static int forwardedMessageCount = 0;
     /**
-     * 登录日志的路径
+     * 登录日志的路径.
      */
     private static String loginLog = ConfigData.getLoginLog();
-    private static String ForwardedMessageLog = "ServerForwardedMessageLog.txt";
 
+    /**
+     * 转发消息路径
+     */
+    private static String forwardedMessageLog = "ServerForwardedMessageLog.txt";
+
+    /**
+     * 秒钟
+     */
     private static int second = Integer.parseInt(ConfigData.getLoginLogSecond());
 
     /**
-     * queue用来发送登录请求
+     * queue用来发送登录请求.
      * TODO: 注册
      */
     public  MQConnect baseConnect;
 
     /**
-     * 私用queue发送消息给server
+     * 私用queue发送消息给server.
      * (except login register request)
      */
     public MQConnect privateConnect;
     /**
-     * 公用topic连接
+     * 公用topic连接.
      */
     public MQConnect topicConnect;
 
     /**
-     * 用来存收发消息的MQConnect
+     * 用来存收发消息的MQConnect.
      */
     protected ArrayList<MQConnect> mqConnects = new ArrayList<MQConnect>();
     /**
-     * 用来记录每一个登录且发送过消息的client这次session的每次消息时间
+     * 用来记录每一个登录且发送过消息的client这次session的每次消息时间.
      */
     private static Map<String, ArrayList<Date>> connectArrayListMap = new HashMap<String, ArrayList<Date>>();
 
     /**
-     * 写日志的定时器
+     * 写日志的定时器.
      */
     public static Timer timer;
 
     /**
-     * 定时器记录每分钟合法和不合法的消息个数
+     * 定时器记录每分钟合法和不合法的消息个数.
      */
     static class WriteLoginTask extends TimerTask
     {
@@ -76,7 +86,7 @@ public class Server {
             //TODO: 把validLogin和invalidLogin记录到文件中
             Date date = new Date();
             WriteLog.write(loginLog, date + "\tValid Login Count: " + validLoginCount + "\tInvalid Login Count: " + inValidLoginCount);
-            WriteLog.write(ForwardedMessageLog, date + "\tForwarded Message Count: " + forwardedMessageCount);
+            WriteLog.write(forwardedMessageLog, date + "\tForwarded Message Count: " + forwardedMessageCount);
             inValidLoginCount = 0;
             validLoginCount = 0;
             forwardedMessageCount = 0;
@@ -102,7 +112,7 @@ public class Server {
 
     }
 
-    public void start(){
+    public void start() {
         try {
             baseConnect.addMessageHandler(new MessageListener() {
                 @Override
@@ -120,7 +130,7 @@ public class Server {
      * 从client接受到消息
      * @param message
      */
-    public void receiveQueue(Message message){
+    public void receiveQueue(Message message) {
         try {
             System.out.println("receiveQueue");
             String userName = message.getStringProperty("userName");
@@ -130,7 +140,7 @@ public class Server {
             MainController mainController = (MainController) beanFactory.getBean("main");
             boolean flag = mainController.checkPassword(userName, userPassword);
             System.out.println("flag : " + flag);
-            privateConnect = new MQConnect(MQFactory.getproducer("SC_" + userName),MQFactory.getConsumer("CS_"+userName));
+            privateConnect = new MQConnect(MQFactory.getproducer("SC_" + userName), MQFactory.getConsumer("CS_" + userName));
             sendQueue(flag, privateConnect);
         } catch (JMSException e) {
             e.printStackTrace();
@@ -152,7 +162,7 @@ public class Server {
                 inValidLoginCount += 1;
                 //TODO: 测试 删除此privateConnect
 //                boolean removeFlag = removeConnect(connect);
-            }else {
+            } else {
                 System.out.println("sendQueue");
                 AAMessage aaMessage = new AAMessage(1, "Login Successfully");
                 connect.sendMessage(aaMessage.getFinalMessage());
@@ -171,12 +181,12 @@ public class Server {
                                 //TODO: 请求重连，回复888，并且不再ignore
                                 AAMessage reloginPermitMessage = new AAMessage(888, "Relogin Successfully");
                                 connect.sendMessage(reloginPermitMessage.getFinalMessage());
-                            }else {
+                            } else {
                                 //TODO: 做次数检测
                                 String isMessageValidStr = isMessageValid(message, connect);
                                 if (isMessageValidStr.equals("ok")) {
                                     sendTopic(message);
-                                }else {
+                                } else {
                                     //TODO: invalidMessage +1
                                 }
                             }
@@ -186,7 +196,7 @@ public class Server {
                     }
                 });
             }
-        }else {
+        } else {
             AAMessage aaMessage = new AAMessage(2, "Validation Failed.");
             connect.sendMessage(aaMessage.getFinalMessage());
             inValidLoginCount += 1;
@@ -212,8 +222,8 @@ public class Server {
      * @return
      * @throws JMSException
      */
-    public boolean isConnectExist (MQConnect connect) throws JMSException {
-        for(int i = 0; i< mqConnects.size(); i++) {
+    public boolean isConnectExist(MQConnect connect) throws JMSException {
+        for (int i = 0; i< mqConnects.size(); i++) {
             if (mqConnects.get(i).getMessageProducer().getDestination().equals(connect.getMessageProducer().getDestination())) {
                 System.out.println("mqConnect i : " + mqConnects.get(i).getMessageProducer().getDestination());
                 return true;
@@ -229,10 +239,10 @@ public class Server {
      * @return
      * @throws JMSException
      */
-    public String isMessageValid (Message message, MQConnect connect) throws JMSException {
+    public String isMessageValid(Message message, MQConnect connect) throws JMSException {
         Date now = new Date();
         String userName = message.getStringProperty("userName");
-        if (connectArrayListMap.containsKey(message.getStringProperty("userName")) ) {
+        if (connectArrayListMap.containsKey(message.getStringProperty("userName"))) {
             ArrayList<Date> dates = connectArrayListMap.get(message.getStringProperty("userName"));
 //            if (dates.size() > )
             if (dates.size() > 5) {
@@ -241,7 +251,7 @@ public class Server {
                 if (interval < 1) {
                     //TODO:ignore
                     return "ignore";
-                }else {
+                } else {
                     //TODO: 判断100
                     if (dates.size() >= 100) {
                         //TODO: 断掉这个链接
@@ -256,11 +266,11 @@ public class Server {
                         return "ok";
                     }
                 }
-            }else {
+            } else {
                 connectArrayListMap.get(userName).add(now);
                 return "ok";
             }
-        }else {
+        } else {
             //TODO 没有这个用户名
             return "strange";
         }
