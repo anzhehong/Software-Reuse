@@ -20,6 +20,7 @@ In the main Directory of our Git project, you will see two main directories:
 1. `Naughty` is the main project directory, including all of the source code and test code.
 2. `Documents` is the directory for project documents, written in Chinese, for better explanating our thoughts without misunderstanding...
 3. `Disscussion` is the direcotry for in-class discussion homework, which is finished independently.
+4. `Resources` is the directory for `CM` component file. Anyone can modify a Json file by adding some properties in it and then they can use the properties by calling `ReadJson` 's functions. And `test.json` is our group's basic configuration file.
 
 
 # Members

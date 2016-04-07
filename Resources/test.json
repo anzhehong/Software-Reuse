@@ -1,0 +1,17 @@
+{
+  "mqHost": "tcp://localhost:61616",
+"baseQueueDestination": "testQueue",
+
+"requestLogin":"0",
+"loginPermitted":"1",
+"loginRefused":"2",
+"redoLogin":"999",
+"reLoginPermitted":"888",
+
+"CSMessage":"5",
+"CSSession":"13",
+"requestReLogin":"777",
+
+"loginLog":"ServerLoginLog.txt",
+"loginLogSecond":"1000"
+}
