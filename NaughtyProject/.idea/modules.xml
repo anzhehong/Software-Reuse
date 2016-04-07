@@ -6,10 +6,9 @@
       <module fileurl="file://$PROJECT_DIR$/Client/Client.iml" filepath="$PROJECT_DIR$/Client/Client.iml" />
       <module fileurl="file://$PROJECT_DIR$/Communication/Communication.iml" filepath="$PROJECT_DIR$/Communication/Communication.iml" />
       <module fileurl="file://$PROJECT_DIR$/Database/Database.iml" filepath="$PROJECT_DIR$/Database/Database.iml" />
+      <module fileurl="file://$PROJECT_DIR$/License/License.iml" filepath="$PROJECT_DIR$/License/License.iml" />
       <module fileurl="file://$PROJECT_DIR$/NaughtyProject.iml" filepath="$PROJECT_DIR$/NaughtyProject.iml" />
       <module fileurl="file://$PROJECT_DIR$/PM/PM.iml" filepath="$PROJECT_DIR$/PM/PM.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Restriction/Restriction.iml" filepath="$PROJECT_DIR$/Restriction/Restriction.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Restriction/Restriction.iml" filepath="$PROJECT_DIR$/Restriction/Restriction.iml" />
       <module fileurl="file://$PROJECT_DIR$/Server/Server.iml" filepath="$PROJECT_DIR$/Server/Server.iml" />
       <module fileurl="file://$PROJECT_DIR$/Utility/Utility.iml" filepath="$PROJECT_DIR$/Utility/Utility.iml" />
     </modules>

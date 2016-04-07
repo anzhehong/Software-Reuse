@@ -27,6 +27,7 @@
         <module name="CM" />
         <module name="Communication" />
         <module name="Database" />
+        <module name="License" />
         <module name="NaughtyProject (1)" />
         <module name="PM" />
         <module name="Restriction" />
@@ -39,6 +40,7 @@
       <module name="CM" target="1.8" />
       <module name="Communication" target="1.8" />
       <module name="Database" target="1.8" />
+      <module name="License" target="1.8" />
       <module name="NaughtyProject" target="1.8" />
       <module name="NaughtyProject (1)" target="1.8" />
       <module name="PM" target="1.8" />
