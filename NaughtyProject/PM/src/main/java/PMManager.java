@@ -5,13 +5,13 @@ import java.util.Date;
 /**
  * Created by MSI on 2016/3/28.
  */
-public class WriteLog {
+public class PMManager {
     /**
      * 写文件
      * @param fileName 文件路径
      * @param content  内容
      */
-    public static void write(String fileName, String content) {
+    public static void Write(String fileName, String content) {
         try {
             // 打开一个随机访问文件流，按读写方式
             RandomAccessFile randomFile = new RandomAccessFile("log/" + fileName, "rw");
@@ -26,10 +26,14 @@ public class WriteLog {
         }
     }
 
-    //记录登录记录，包括时间、client使用的username、是否成功
-    public static void writeLoginForClient(String ClientName , boolean result){
+    /**
+     * 记录登录记录，包括时间、client使用的username、是否成功
+     * @param ClientName
+     * @param result
+     */
+    public static void WriteLoginForClient(String ClientName , boolean result){
         Date date = new Date();
-        write("Log.txt","Client: " + ClientName + " login " + result + " at " + date);
+        Write("Log.txt","Client: " + ClientName + " login " + result + " at " + date);
     }
 
     public static void createNewFile(String name){

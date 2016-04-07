@@ -6,5 +6,8 @@ import com.google.common.eventbus.EventBus;
  * Time: 21:44
  */
 public class EventController {
+    /**
+     * 新建一个EventBus
+     */
     public static EventBus eventBus = new EventBus("controller");
 }
