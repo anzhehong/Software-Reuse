@@ -27,10 +27,10 @@
         <module>Database</module>
         <module>Utility</module>
         <module>CM</module>
-        <module>PM</module>
         <module>Communication</module>
         <module>Client</module>
         <module>Server</module>
+        <module>PM</module>
     </modules>
 
 </project>

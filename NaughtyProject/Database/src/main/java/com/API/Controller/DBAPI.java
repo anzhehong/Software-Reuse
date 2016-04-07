@@ -60,4 +60,8 @@ public class DBAPI {
         DBAPI dbapi = (DBAPI) beanFactory.getBean("api");
         return dbapi;
     }
+
+    public static void main(String[] args) {
+
+    }
 }

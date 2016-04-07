@@ -26,6 +26,7 @@
         <module name="CM" />
         <module name="Communication" />
         <module name="Database" />
+        <module name="PM" />
         <module name="Server" />
         <module name="Utility" />
       </profile>
@@ -36,6 +37,7 @@
       <module name="Communication" target="1.8" />
       <module name="Database" target="1.8" />
       <module name="NaughtyProject" target="1.8" />
+      <module name="PM" target="1.8" />
       <module name="Server" target="1.8" />
       <module name="Utility" target="1.8" />
     </bytecodeTargetLevel>

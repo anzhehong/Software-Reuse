@@ -45,4 +45,8 @@ public class DateUtil {
     public static void setDefaultDatePattern(String defaultDatePattern) {
         DateUtil.defaultDatePattern = defaultDatePattern;
     }
+
+    public static void main(String[] args) {
+
+    }
 }

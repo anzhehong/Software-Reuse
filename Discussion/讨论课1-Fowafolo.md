@@ -144,6 +144,7 @@ public class ActiveMQTransportListener implements TransportListener{
 
 根据项目，我认为考虑这三者的顺序应该是，首先做到不遗漏，其次是不重复，最后是压缩。
 
+
 ### 消息不遗漏
 
 在本项目中，登录成功后的client每次发送一条消息，都要经过server端license的验证，合法消息才被发到topic中。保证不遗漏，只需要做到两方面：
@@ -156,10 +157,25 @@ public class ActiveMQTransportListener implements TransportListener{
 
 	ActiveMQ的topic连接中有参数可以设置，能够保证监听topic的client都收到合法消息。
 
+#### ActiveMQ消息丢失解决方案
+
+（1）、没发送到broker上就丢失了：在发送broker之前，将消息本地化存储。收到发送成功的反馈后移除本地文件。实时检索本地文件，发现超过一定时间没有发送直接重新发送。
+
+（2）、在broker上丢失：将broker的持久化改成数据库，将数据库做主从处理
+
+（3）、从broker到订阅者丢失：在没有收到订阅者成功接收的时候，不移除broker的持久化数据，其实这个貌似有事务支持
+
+（4）、集群的failover失败：建立一个测试队列，定时发送消息测试每个节点是否服务正常。只能通过之类心跳类监控手段来确认服务器是否正常。
+
 ### 消息不重复
 
 上面已经提到，消息是被server转到特定topic，而MQ内部实现了一个消息被一个subscriber接收后不被重复接收的机制。因此我们的项目中不用再次重写。
 
+#### ActiveMQ中消息重复的可能性
+1. AUTO_ACKNOWLEDGE : 自动确认,这就意味着消息的确认时机将有consumer择机确认."择机确认"似乎充满了不确定性,这也意味着,开发者必须明确知道"择机确认"的具体时机,否则将有可能导致消息的丢失,或者消息的重复接收.
+
+2. 当我们使用messageListener方式消费消息时，通常建议在onMessage方法中使用try-catch,这样可以在处理消息出错时记录一些信息，而不是让consumer不断去重发消息；如果你没有使用try-catch,就有可能会因为异常而导致消息重复接收的问题,需要注意你的onMessage方法中逻辑是否能够兼容对重复消息的判断。
+ 
 ### 消息压缩
 
 消息主体包含了消息的核心数据。
