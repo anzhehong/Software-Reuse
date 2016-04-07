@@ -3,6 +3,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * Created by MSI on 2016/4/6.
  */
@@ -42,11 +44,13 @@ public class MultiFrequencyRestriction implements MessageRestriction{
             if (dates.size() <= NumOfMessagePerSecond)
                 return true;
             else {
-                Date lastDate = dates.get(dates.size() - NumOfMessagePerSecond - 1);
+                Date lastDate = dates.get(dates.size() - NumOfMessagePerSecond -1);
                 double interval = getTimeInterval(now, lastDate);
-                System.out.println("internal:" + interval);
-                if (interval > 1)
+                System.out.print("internal:" + interval);
+                if (interval > 1) {
+                    System.out.println("true");
                     return true;
+                }
                 else {
                     dates.remove(dates.size() - 1);
                     return false;
@@ -60,5 +64,37 @@ public class MultiFrequencyRestriction implements MessageRestriction{
     @Override
     public boolean Check() {
         return false;
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        MultiFrequencyRestriction multiFrequencyRestriction = new MultiFrequencyRestriction(10);
+        multiFrequencyRestriction.addMap("first");
+        for(int i = 0 ;i < 10;i++){
+            System.out.print(i + " ");
+            Thread.sleep(50);
+            Boolean test = multiFrequencyRestriction.CheckByKey("first");
+            System.out.println(test);
+
+        }
+
+        System.out.print(11 + " ");
+        Thread.sleep(50);
+        Boolean test = multiFrequencyRestriction.CheckByKey("first");
+        System.out.println(test);
+
+
+        Boolean testError = multiFrequencyRestriction.CheckByKey("second");
+        System.out.println(testError);
+
+        Thread.sleep(1001);
+        for(int i = 0 ;i < 20;i++){
+            System.out.print(i + " ");
+            Thread.sleep(200);
+            Boolean testSuccess = multiFrequencyRestriction.CheckByKey("first");
+            System.out.println(test);
+
+        }
+
+
     }
 }

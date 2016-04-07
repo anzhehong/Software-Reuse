@@ -10,8 +10,13 @@ public class MaxNumOfMessage implements MessageRestriction {
     private int MaxNumOfMessage;
     private int CurrentNum;
 
+    public int getMaxNumOfMessage() {
+        return MaxNumOfMessage;
+    }
+
     public MaxNumOfMessage(int maxNumOfMessage) {
         MaxNumOfMessage = maxNumOfMessage;
+
         CurrentNum = 0;
     }
 

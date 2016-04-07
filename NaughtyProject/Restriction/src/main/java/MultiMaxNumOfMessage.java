@@ -6,7 +6,7 @@ import java.util.Map;
  */
 public class MultiMaxNumOfMessage implements MessageRestriction{
 
-    private static Map<String, Integer> arrayListMap = new HashMap<String, Integer>();
+    private Map<String, Integer> arrayListMap = new HashMap<String, Integer>();
     private int MaxNumOfMessage;
 
     public MultiMaxNumOfMessage(int maxNumOfMessage) {
@@ -25,24 +25,44 @@ public class MultiMaxNumOfMessage implements MessageRestriction{
         arrayListMap.remove(key);
     }
 
+    public int getMaxNumOfMessage() {
+        return MaxNumOfMessage;
+    }
+
     public boolean CheckByKey(String key) {
         if(arrayListMap.containsKey(key)){
-            Integer CurrentNum = arrayListMap.get(key);
-            CurrentNum++;
-            if(CurrentNum > MaxNumOfMessage)
+            arrayListMap.put(key,arrayListMap.get(key)+1);
+            if(arrayListMap.get(key) > MaxNumOfMessage)
             {
-                CurrentNum = 0;
+                arrayListMap.put(key,0);
                 return false;
             }
             return true;
         }
         else
             return false;
-
     }
 
     @Override
     public boolean Check() {
         return false;
     }
+
+//    public static void main(String[] args) {
+//        MultiMaxNumOfMessage multiMaxNumOfMessage = new MultiMaxNumOfMessage(10);
+//        multiMaxNumOfMessage.addMap("first");
+//        multiMaxNumOfMessage.addMap("second");
+//        boolean first;
+//        boolean second;
+//        boolean third;
+//        for(int i= 0 ; i< multiMaxNumOfMessage.getMaxNumOfMessage() + 5;i++) {
+//            first = multiMaxNumOfMessage.CheckByKey("first");
+//            second = multiMaxNumOfMessage.CheckByKey("second");
+//            third = multiMaxNumOfMessage.CheckByKey("third");
+//            System.out.println(i + "first:\t"+ first);
+//            System.out.println(i + "second:\t"+ second);
+//            System.out.println(i + "third:\t"+ third);
+//
+//        }
+//    }
 }
