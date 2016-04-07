@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
+    <option name="DEFAULT_COMPILER" value="Javac" />
     <resourceExtensions />
     <wildcardResourcePatterns>
       <entry name="!?*.java" />
@@ -26,7 +27,9 @@
         <module name="CM" />
         <module name="Communication" />
         <module name="Database" />
+        <module name="NaughtyProject (1)" />
         <module name="PM" />
+        <module name="Restriction" />
         <module name="Server" />
         <module name="Utility" />
       </profile>
@@ -37,7 +40,9 @@
       <module name="Communication" target="1.8" />
       <module name="Database" target="1.8" />
       <module name="NaughtyProject" target="1.8" />
+      <module name="NaughtyProject (1)" target="1.8" />
       <module name="PM" target="1.8" />
+      <module name="Restriction" target="1.8" />
       <module name="Server" target="1.8" />
       <module name="Utility" target="1.8" />
     </bytecodeTargetLevel>

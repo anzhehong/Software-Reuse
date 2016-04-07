@@ -31,6 +31,7 @@
         <module>Client</module>
         <module>Server</module>
         <module>PM</module>
+        <module>Restriction</module>
     </modules>
 
 </project>
