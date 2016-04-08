@@ -26,7 +26,6 @@ public class FrequencyRestriction implements MessageRestriction{
         else{
             Date lastDate = dates.get(dates.size() - NumOfMessagePerSecond - 1);
             double interval = getTimeInterval(now,lastDate);
-            System.out.println("internal:" + interval);
             if(interval > 1)
                 return true;
             else {
