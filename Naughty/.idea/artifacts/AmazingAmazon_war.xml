@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="AmazingAmazon:war">
-    <output-path>$PROJECT_DIR$/target</output-path>
-    <root id="archive" name="Naughty.war">
-      <element id="artifact" artifact-name="AmazingAmazon:war exploded" />
-    </root>
-  </artifact>
-</component>
