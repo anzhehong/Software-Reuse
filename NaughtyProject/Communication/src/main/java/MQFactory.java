@@ -7,10 +7,19 @@ import javax.jms.*;
  */
 public class MQFactory {
     private static Session session = null;
+
+    public static String address = "tcp://localhost:61616";
+
+    public static void setAddress(String address) {
+        MQFactory.address = address;
+    }
+
     public static Session getSession() throws JMSException {
+
         if (session != null) return session;
         else {
-            ConnectionFactory factory = new ActiveMQConnectionFactory("tcp://localhost:61616");
+
+            ConnectionFactory factory = new ActiveMQConnectionFactory(address);
             Connection connection = factory.createConnection();
             connection.start();
             Session connectionSession = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);

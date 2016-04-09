@@ -64,35 +64,35 @@ public class MultiFrequencyRestriction implements MessageRestriction{
         return false;
     }
 
-    public static void main(String[] args) throws InterruptedException {
-        MultiFrequencyRestriction multiFrequencyRestriction = new MultiFrequencyRestriction(10);
-        multiFrequencyRestriction.addMap("first");
-        for(int i = 0 ;i < 10;i++){
-            System.out.print(i + " ");
-            Thread.sleep(50);
-            Boolean test = multiFrequencyRestriction.CheckByKey("first");
-            System.out.println(test);
-
-        }
-
-        System.out.print(11 + " ");
-        Thread.sleep(50);
-        Boolean test = multiFrequencyRestriction.CheckByKey("first");
-        System.out.println(test);
-
-
-        Boolean testError = multiFrequencyRestriction.CheckByKey("second");
-        System.out.println(testError);
-
-        Thread.sleep(1001);
-        for(int i = 0 ;i < 20;i++){
-            System.out.print(i + " ");
-            Thread.sleep(200);
-            Boolean testSuccess = multiFrequencyRestriction.CheckByKey("first");
-            System.out.println(test);
-
-        }
-
-
-    }
+//    public static void main(String[] args) throws InterruptedException {
+//        MultiFrequencyRestriction multiFrequencyRestriction = new MultiFrequencyRestriction(10);
+//        multiFrequencyRestriction.addMap("first");
+//        for(int i = 0 ;i < 10;i++){
+//            System.out.print(i + " ");
+//            Thread.sleep(50);
+//            Boolean test = multiFrequencyRestriction.CheckByKey("first");
+//            System.out.println(test);
+//
+//        }
+//
+//        System.out.print(11 + " ");
+//        Thread.sleep(50);
+//        Boolean test = multiFrequencyRestriction.CheckByKey("first");
+//        System.out.println(test);
+//
+//
+//        Boolean testError = multiFrequencyRestriction.CheckByKey("second");
+//        System.out.println(testError);
+//
+//        Thread.sleep(1001);
+//        for(int i = 0 ;i < 20;i++){
+//            System.out.print(i + " ");
+//            Thread.sleep(200);
+//            Boolean testSuccess = multiFrequencyRestriction.CheckByKey("first");
+//            System.out.println(test);
+//
+//        }
+//
+//
+//    }
 }

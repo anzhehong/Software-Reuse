@@ -42,18 +42,18 @@ public class FrequencyRestriction implements MessageRestriction{
         return (double)test / 1000;
     }
 
-    public static void main(String[] args) throws InterruptedException {
-        MessageRestriction ff = new FrequencyRestriction(10);
-        for(int i = 0 ;i<12;i++){
-            System.out.print(i + " ");
-            Thread.sleep(50);
-            System.out.println(ff.Check());
-        }
-        Thread.sleep(1001);
-        for(int i = 0 ;i<12;i++){
-            System.out.print(i+12 + " ");
-            Thread.sleep(50);
-            System.out.println(ff.Check());
-        }
-    }
+//    public static void main(String[] args) throws InterruptedException {
+//        MessageRestriction ff = new FrequencyRestriction(10);
+//        for(int i = 0 ;i<12;i++){
+//            System.out.print(i + " ");
+//            Thread.sleep(50);
+//            System.out.println(ff.Check());
+//        }
+//        Thread.sleep(1001);
+//        for(int i = 0 ;i<12;i++){
+//            System.out.print(i+12 + " ");
+//            Thread.sleep(50);
+//            System.out.println(ff.Check());
+//        }
+//    }
 }

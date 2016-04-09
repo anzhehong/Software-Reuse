@@ -1,4 +1,4 @@
- # License Component Document：
+ 	 # License Component Document：
 
 > This is the illustration for our License Component of Software Testing Course Project, SSE Tongji University, Spring 2016.
 
