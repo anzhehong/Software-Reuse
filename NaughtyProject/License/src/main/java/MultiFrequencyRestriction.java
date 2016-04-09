@@ -46,9 +46,7 @@ public class MultiFrequencyRestriction implements MessageRestriction{
             else {
                 Date lastDate = dates.get(dates.size() - NumOfMessagePerSecond -1);
                 double interval = getTimeInterval(now, lastDate);
-                System.out.print("internal:" + interval);
                 if (interval > 1) {
-                    System.out.println("true");
                     return true;
                 }
                 else {

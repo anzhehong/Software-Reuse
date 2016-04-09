@@ -1,4 +1,4 @@
-# License Component Document：
+ # License Component Document：
 
 > This is the illustration for our License Component of Software Testing Course Project, SSE Tongji University, Spring 2016.
 
@@ -37,31 +37,32 @@ You can download [here](http://7xsf2g.com1.z0.glb.clouddn.com/jar_version0408_Li
 
 ## Usage
 
+### 1. FrequencyRestriction
+
 -   you should Instantiate the object that you would like to use.  
 
 	```java
 	FrequencyRestriction FrequencyRestriction = new FrequencyRestriction(num);
 	```
 	
-> Note: The value of num confirm the limit of the component is "num" per second. 
+> Note: The value of num confirm that the limit of the component is "num" per second. 
 	
 
--  Use the function "Check()" at the place which you want to limit.
+-  Use the function **Check()** at the place which you want to limit.
 
 	```java
 	FrequencyRestriction.Check()
 	```
 -  The function will return false or true to tell you whether the action is limited or not.
-	 
--  For the class `MaxNumOfMessage()`. it is same as what we talked before.
 
 -  If you have **several** object that wanted to be limited.</br>
 you can use **Multi-** just call the function `.addMap(name)` </br> 
 And called `.CheckByKey(name)` to limit the certain object
 
-###Example:
+### Example:
+
 ```java
-FrequencyRestriction frequencyRestriction = new FrequencyRestriction(10)
+FrequencyRestriction frequencyRestriction = new FrequencyRestriction(10);
 for(int i = 0 ;i < 11;i++){
     System.out.print(i + " ");
     Thread.sleep(50);
@@ -84,12 +85,147 @@ for(int i = 0 ;i < 11;i++){
 	`9 true`
 	`10 false`
 
+### 2. MaxNumOfMessage
+-   you should Instantiate the object that you would like to use.  
+
+	```java
+	MaxNumOfMessage maxNumOfMessage = new MaxNumOfMessage(num);
+	```
+	
+> Note: The value of num confirm the max number of the component is num. 
+	
+
+-  Use the function **Check()** at the place which you want to limit.
+
+	```java
+	MaxNumOfMessage.Check()
+	```
+-  The function will return false or true to tell you whether the action is limited or not.
+
+-  If you have **several** object that wanted to be limited.</br>
+you can use **Multi-** just call the function `.addMap(name)` </br> 
+And called `.CheckByKey(name)` to limit the certain object
+
+### Example:
+
+```java
+MaxNumOfMessage maxNumOfMessage = new MaxNumOfMessage(10);
+for(int i = 0 ;i < 11;i++){
+    System.out.print(i + " ");
+    Boolean test = frequencyRestriction.Check();
+    System.out.println(test);
+}
+```
+
+> We call the function `Check()` for 11 times ,so the 11th output of `test` is false, The previous output is true.
+> 
+	`0 true`
+	`1 true`
+	`2 true`
+	`3 true`
+	`4 true`
+	`5 true`
+	`6 true`
+	`7 true`
+	`8 true`
+	`9 true`
+	`10 false`
+
+### 3. MultiFrequencyRestriction
+-   you should Instantiate the object that you would like to use.  
+
+	```java
+	MultiFrequencyRestriction multiFrequencyRestriction = new MultiFrequencyRestriction(num);
+	```
+	
+> Note: The value of num confirm that the limit of the component is "num" per second. 
+	
+-  Use the function **addMap(key)** to add an limiter .
+ 	```java
+	multiFrequencyRestriction.addMap("first");
+	```
+-  Use the function **CheckCheckByKey(key)** at the place which you want to limit.
+
+	```java
+	FrequencyRestriction.CheckByKey("first")
+	```
+-  The function will return false or true to tell you whether the action is limited or not.
+
+### Example:
+
+```java
+	MultiFrequencyRestriction multiFrequencyRestriction = new MultiFrequencyRestriction(10);
+	multiFrequencyRestriction.addMap("first");
+        for(int i = 0 ;i < 10;i++){
+            System.out.print(i + " ");
+            Thread.sleep(50);
+            Boolean test = multiFrequencyRestriction.CheckByKey("first");
+            System.out.println(test);           
+        }
+
+        System.out.print(11 + " ");
+        Thread.sleep(50);
+        Boolean test = multiFrequencyRestriction.CheckByKey("first");
+        System.out.println(test);
+
+        Boolean testError = multiFrequencyRestriction.CheckByKey("second");
+        System.out.println(testError);
+        
+
+        Thread.sleep(1001);
+        for(int i = 0 ;i < 20;i++){
+            System.out.print(i + " ");
+            Thread.sleep(200);
+            Boolean testSuccess = multiFrequencyRestriction.CheckByKey("first");
+            System.out.println(testSuccess);
+       
+        }
+	
+```
+
+> We call the function `Check()` for 11 times ,so the 11th output of `test` is false, The previous output is true.
+> 
+	0 true
+	1 true
+	2 true
+	3 true
+	4 true
+	5 true
+	6 true
+	7 true
+	8 true
+	9 true
+	11 false	
+	false
+	12 true
+	13 true
+	14 true
+	15 true
+	16 true
+	17 true
+	18 true
+	19 true
+	20 true
+	21 true
+	22 true
+	23 true
+	24 true
+	25 true
+	26 true
+	27 true
+	28 true
+	29 true
+	30 true
+	31 true
+
+### 4. MultiMaxNumOfMessage
+> You can get the usage of this function by the previous presentation.
 
 ## Features
 
 * Easy to understand and use.
-* For more convenient use, all of the methods are made in static way.
+* Control serveral object at the same time.
 
 ## TODO
            
-* Demo to illustration.
+* Provide more constraints

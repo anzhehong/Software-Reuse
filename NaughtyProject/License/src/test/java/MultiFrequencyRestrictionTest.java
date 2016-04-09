@@ -35,7 +35,7 @@ public class MultiFrequencyRestrictionTest {
 
         Thread.sleep(1001);
         for(int i = 0 ;i < 20;i++){
-            System.out.print(i + " ");
+            System.out.print(i + 12 + " ");
             Thread.sleep(200);
             Boolean testSuccess = multiFrequencyRestriction.CheckByKey("first");
             System.out.println(testSuccess);
