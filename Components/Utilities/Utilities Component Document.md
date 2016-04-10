@@ -49,7 +49,7 @@ There are totally two methods to install our component.
 
 1. Download the `Utility-1.0-SNAPSHOT.jar` file to your computer.
 	
-	You can easily download `Utility-1.0-SNAPSHOT.jar` from [here](http://7xsf2g.com1.z0.glb.clouddn.com/jar_version0408_Utility-1.0-SNAPSHOT.jar).
+	You can easily download `Utility-1.0-SNAPSHOT.jar` from [here](http://7xsf2g.com1.z0.glb.clouddn.com/jar_version0410_Utility-1.0-SNAPSHOT.jar).
 	
 2. Import the `.jar` file to your project library.
 	
