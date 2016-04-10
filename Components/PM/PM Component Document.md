@@ -1,6 +1,6 @@
 # PM Component Document
 
-> This is the illustration for our Utilities Component of Software Testing Course Project, SSE Tongji University, Spring 2016.
+> This is the illustration for our PM Component of Software Testing Course Project, SSE Tongji University, Spring 2016.
 
 ## Requirement
 
@@ -25,67 +25,35 @@ Steps are very Similar to use `Utility`, but the `pom.xml` file should be differ
 You can download the `.jar` file [here](http://7xsf2g.com1.z0.glb.clouddn.com/jar_version0408_PM-1.0-SNAPSHOT.jar).
 
 ## Usage
-This utility encapsulates three files.
+This PM encapsulates only one file.
 
-1. **DateUtil**
+1. **PMManager**
 	
 	The methods are made in static way, therefore you can use any of them without instantiation.
 	
 	```java
-	/**
-     * Return the string value of the current date with the default date format: "yyyy-MM-dd HH:mm:ss"
+     /**
+     * Write file
+     * @param fileName 
+     * @param content 
+     * @param outPath 
      */
-    public static String getTodayStr()
-
+    public static void Write(String fileName, String content, String outPath);
+  
+	```
+	
+	```java
     /**
-     * Return the string value of the date parameter with the default date format: "yyyy-MM-dd HH:mm:ss"
+     * Noting the log records,including time,the username of client and whether success
+     * @param ClientName
+     * @param result
      */
-    public static String getStrByDefaultFormat(Date date)
-
-    /**
-     * Return the string value of the date parameter with the date format parameter
-     */
-    public static String getStrByCustomFormat(Date date, String pattern)
+    public static void WriteLoginForClient(String ClientName , boolean result, String outPath);
+  
 	```
 	
-	And we also make a sample for you.
 	
 	
-	```java
-	public class MainTest {
-	    public static void main(String[] args) {
-	        System.out.println(DateUtil.getTodayStr());
-	        System.out.println(DateUtil.getStrByDefaultFormat(new Date()));
-	        System.out.println(DateUtil.getStrByCustomFormat(new Date(), "hh:mm:ss/ MM dd yy"));
-	    }
-	}
-	```
-
-2. **EventController**
-
-	This class is used to create a new event bus. Method is shown below:
-	
-	```java
-	/**
-     * Create a new EventBus
-     */
-    public static EventBus eventBus = new EventBus("controller");
-    ```
-
-3. **TimeUtil**
-
-	This class is made to calculate two `Date` s' interval(in second unit).
-	
-	```java
-	/**
-     * calculate date1 and date2 's interval(in second unit).
-     * @param date1
-     * @param date2
-     * @return
-     */
-    static public long getTimeInterval(Date date1, Date date2) 
-	```
-
 
 ## Features
 
