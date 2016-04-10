@@ -1,6 +1,6 @@
 # CM Component Document
 
-> This is the illustration for our Utilities Component of Software Testing Course Project, SSE Tongji University, Spring 2016.
+> This is the illustration for our CM Component of Software Testing Course Project, SSE Tongji University, Spring 2016.
 
 ## Requirement
 
