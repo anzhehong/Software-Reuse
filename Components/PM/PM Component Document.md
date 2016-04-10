@@ -33,7 +33,7 @@ This PM encapsulates only one file.
 	
 	```java
      /**
-     * Write file
+     * writes the content to the file specified
      * @param fileName 
      * @param content 
      * @param outPath 
