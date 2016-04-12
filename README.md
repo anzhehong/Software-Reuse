@@ -30,4 +30,26 @@ In the main Directory of our Git project, you will see two main directories:
 | 林思妙| 1352849 | [linsimiao](https://github.com/linsimiao) | 
 |  康慧琳     | 1352871      |   [1352871](https://github.com/1352871)|
 | 安哲宏 | 1352834 | [anzhehong](https://github.com/anzhehong) |
-| 张嘉琪 | 1352863      |   [kobpko](https://github.com/kobpko)  |
+| 张嘉琦 | 1352863      |   [kobpko](https://github.com/kobpko)  |
+
+# Component
+
+- Communication 
+You can download the `.jar` file [here](http://7xsf2g.com1.z0.glb.clouddn.com/jar_version0410_Communication-1.0-SNAPSHOT.jar).
+
+- CM
+You can download the `.jar` file [here](http://7xsf2g.com1.z0.glb.clouddn.com/jar_version0410_CM-1.0-SNAPSHOT.jar).
+
+- Database
+You can download the `.jar` file [here](http://7xsf2g.com1.z0.glb.clouddn.com/jar_version0410_Database-1.0-SNAPSHOT.jar).
+
+- License
+You can download [here](http://7xsf2g.com1.z0.glb.clouddn.com/jar_version0410_License-1.0-SNAPSHOT.jar).
+
+
+- PM
+You can download the `.jar` file [here](http://7xsf2g.com1.z0.glb.clouddn.com/jar_version0410_PM-1.0-SNAPSHOT.jar).
+
+- Utilities
+Download the `Utility-1.0-SNAPSHOT.jar` file to your computer.	
+	You can easily download `Utility-1.0-SNAPSHOT.jar` from [here](http://7xsf2g.com1.z0.glb.clouddn.com/jar_version0410_Utility-1.0-SNAPSHOT.jar).

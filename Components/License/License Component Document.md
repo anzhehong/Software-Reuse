@@ -31,8 +31,6 @@ In other parts of our component documents, we will just add something different 
 
 ### Jar
 
-You can totally refer to `Utility Component Document` [here](https://github.com/anzhehong/Software-Reuse/blob/master/Components/Utilities/Utilities%20Component%20Document.md).
-
 You can download [here](http://7xsf2g.com1.z0.glb.clouddn.com/jar_version0410_License-1.0-SNAPSHOT.jar).
 
 ## Usage
