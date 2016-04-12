@@ -32,24 +32,17 @@ In the main Directory of our Git project, you will see two main directories:
 | 安哲宏 | 1352834 | [anzhehong](https://github.com/anzhehong) |
 | 张嘉琦 | 1352863      |   [kobpko](https://github.com/kobpko)  |
 
-# Component
+**One more thing,** the components `.jar` file and document path are listed as follows.
 
-- Communication 
-You can download the `.jar` file [here](http://7xsf2g.com1.z0.glb.clouddn.com/jar_version0410_Communication-1.0-SNAPSHOT.jar).
+# ***Component***
 
-- CM
-You can download the `.jar` file [here](http://7xsf2g.com1.z0.glb.clouddn.com/jar_version0410_CM-1.0-SNAPSHOT.jar).
+> **Notice**: Because installing methods of each component is very similar, we only make Utility Document in detail. If you're trying to use other components, you can refer to Utility Document.
 
-- Database
-You can download the `.jar` file [here](http://7xsf2g.com1.z0.glb.clouddn.com/jar_version0410_Database-1.0-SNAPSHOT.jar).
-
-- License
-You can download [here](http://7xsf2g.com1.z0.glb.clouddn.com/jar_version0410_License-1.0-SNAPSHOT.jar).
-
-
-- PM
-You can download the `.jar` file [here](http://7xsf2g.com1.z0.glb.clouddn.com/jar_version0410_PM-1.0-SNAPSHOT.jar).
-
-- Utilities
-Download the `Utility-1.0-SNAPSHOT.jar` file to your computer.	
-	You can easily download `Utility-1.0-SNAPSHOT.jar` from [here](http://7xsf2g.com1.z0.glb.clouddn.com/jar_version0410_Utility-1.0-SNAPSHOT.jar).
+|Component Name|Document Link|`.jar`File Download Link|
+|:---:|:---:|:---:|
+|Utility|[Utility Document](https://github.com/anzhehong/Software-Reuse/blob/master/Components/Utilities/Utilities%20Component%20Document.md)|[Utility Jar](http://7xsf2g.com1.z0.glb.clouddn.com/jar_version0410_Utility-1.0-SNAPSHOT.jar)|
+|CM|[CM Document](https://github.com/anzhehong/Software-Reuse/blob/master/Components/CM/CM%20Component%20Document.md)|[CM Jar](http://7xsf2g.com1.z0.glb.clouddn.com/jar_version0410_CM-1.0-SNAPSHOT.jar)|
+|Communication|[Communication Document](https://github.com/anzhehong/Software-Reuse/blob/master/Components/Communication/Communication%20Component%20Document.md)|[Communication Jar](http://7xsf2g.com1.z0.glb.clouddn.com/jar_version0410_Communication-1.0-SNAPSHOT.jar)|
+|Database|[Database Document](https://github.com/anzhehong/Software-Reuse/blob/master/Components/Database/Database%20Component%20Document.md)|[Database Jar](http://7xsf2g.com1.z0.glb.clouddn.com/jar_version0410_Database-1.0-SNAPSHOT.jar)|
+|License|[License Document](https://github.com/anzhehong/Software-Reuse/blob/master/Components/License/License%20Component%20Document.md)|[License Jar](http://7xsf2g.com1.z0.glb.clouddn.com/jar_version0410_License-1.0-SNAPSHOT.jar)|
+|PM|[PM Document](https://github.com/anzhehong/Software-Reuse/blob/master/Components/PM/PM%20Component%20Document.md)|[PM Jar](http://7xsf2g.com1.z0.glb.clouddn.com/jar_version0410_PM-1.0-SNAPSHOT.jar)|
