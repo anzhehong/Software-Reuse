@@ -16,7 +16,7 @@ There are totally two methods to install our component.
 
 ### Maven
 
-1. Firstly, you should downloand our maven module `Utilities` from our Github repository from [here](https://github.com/anzhehong/Software-Reuse).
+<!--1. Firstly, you should downloand our maven module `Utilities` from our Github repository from [here](https://github.com/anzhehong/Software-Reuse).
 2. Then, click `File` -> `New` -> `Module From Existing Sources` and then select the module you have just downloaded. After that, select `Maven` like the picture below:
 	<img src = "http://7xsf2g.com1.z0.glb.clouddn.com/component_%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-04-08%2020.22.33.png" >
 
@@ -43,7 +43,45 @@ There are totally two methods to install our component.
     </dependencies>
 	```
 	
-6. Now you can use the utilities inside the module.
+6. Now you can use the utilities inside the module.-->
+
+It is very easy to use our components if your project is based on `Maven`.
+
+1. Create a new maven based project.
+2. Add the repository to you `.pom` file like:
+
+	```xml
+	<!-- 仓库地址 -->
+    <repositories>
+        <repository>
+            <id>nexus</id>
+            <name>Team Nexus Repository</name>
+            <url>http://115.28.74.242:8081/nexus/content/groups/tj.sse.group2.reuse/</url>
+        </repository>
+    </repositories>
+
+    <!-- 插件地址 -->
+    <pluginRepositories>
+        <pluginRepository>
+            <id>nexus</id>
+            <name>Team Nexus Repository</name>
+            <url>http://115.28.74.242:8081/nexus/content/groups/public</url>
+        </pluginRepository>
+    </pluginRepositories>
+	```
+	
+3. Import the specified component to your `.pom` file's `Dependencies` like:
+
+	```xml
+	<dependencies>
+        <dependency>
+            <groupId>tj.sse.group2.reuse</groupId>
+            <artifactId>Utility</artifactId>
+            <version>1.1</version>
+        </dependency>
+    </dependencies>
+	```
+4. Now you can use the utilities.
 
 ### Jar
 

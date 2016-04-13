@@ -18,7 +18,7 @@ Cause it is very similar to use all of our components, we make one of them in de
 
 ### Maven
 
-Steps are very Similar to use `Utility`, but the `pom.xml` file should be different. You can refer to `Utility` and notice the difference such as `artifactId`.
+Steps are very Similar to use `Utility`, but the `pom.xml` file should be different. You can refer to `Utility`, but do notice the difference of `artifactId` of each component.
 
 ### Jar
 

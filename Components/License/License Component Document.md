@@ -22,12 +22,7 @@ In other parts of our component documents, we will just add something different 
 
 ### Maven
 
-```xml
-<dependency>
-	<groupId>tj.sse.reuse.group2</groupId>
-	<artifactId>License</artifactId>
-</dependency>
-```
+Steps are very Similar to use `Utility`, but the `pom.xml` file should be different. You can refer to `Utility`, but do notice the difference of `artifactId` of each component.
 
 ### Jar
 

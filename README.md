@@ -17,10 +17,11 @@ One more important thing: the application is named as `Naught`.
 
 In the main Directory of our Git project, you will see two main directories: 
 
-1. `Naughty` is the main project directory, including all of the source code and test code.
+1. `NaughtyProject` is the main project directory, including all of the source code and test code.
 2. `Documents` is the directory for project documents, written in Chinese, for better explanating our thoughts without misunderstanding...
 3. `Disscussion` is the direcotry for in-class discussion homework, which is finished independently.
-4. `Resources` is the directory for `CM` component file. Anyone can modify a Json file by adding some properties in it and then they can use the properties by calling `ReadJson` 's functions. And `test.json` is our group's basic configuration file.
+4. `Resources` is the directory for an example of `CM` component file. Anyone can modify a Json file by adding some properties in it and then they can use the properties by calling `ReadJson` 's functions. And `test.json` is our group's basic configuration file.
+5. `Components` is the direcotory for documents and `.jar` file of our components.
 
 
 # Members
@@ -35,6 +36,13 @@ In the main Directory of our Git project, you will see two main directories:
 **One more thing,** the components `.jar` file and document path are listed as follows.
 
 # ***Component***
+
+There are two ways for you to import our components into your project.
+
+1. Maven
+2. Jar File
+
+You can refer to the document below for detail.
 
 > **Notice**: Because installing methods of each component is very similar, we only make Utility Document in detail. If you're trying to use other components, you can refer to Utility Document.
 
