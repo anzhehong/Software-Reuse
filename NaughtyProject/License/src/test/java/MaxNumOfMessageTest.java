@@ -1,6 +1,6 @@
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import reuse.license.MaxNumOfMessage;
 
 import static org.junit.Assert.*;
 

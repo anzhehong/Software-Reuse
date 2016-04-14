@@ -26,7 +26,7 @@ Steps are very Similar to use `Utility`, but the `pom.xml` file should be differ
 
 ### Jar
 
-You can download [here](http://7xsf2g.com1.z0.glb.clouddn.com/jar_version0410_License-1.0-SNAPSHOT.jar).
+You can download [here](http://7xsf2g.com1.z0.glb.clouddn.com/jar0414_License-1.0-SNAPSHOT-jar-with-dependencies.jar).
 
 ## Usage
 

@@ -1,3 +1,5 @@
+import reuse.license.MultiMaxNumOfMessage;
+
 import static org.junit.Assert.*;
 
 public class MultiMaxNumOfMessageTest {

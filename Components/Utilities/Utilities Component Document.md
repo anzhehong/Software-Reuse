@@ -56,18 +56,9 @@ It is very easy to use our components if your project is based on `Maven`.
         <repository>
             <id>nexus</id>
             <name>Team Nexus Repository</name>
-            <url>http://115.28.74.242:8081/nexus/content/groups/tj.sse.group2.reuse/</url>
+            <url>http://115.28.74.242:8081/nexus/content/groups/group2/</url>
         </repository>
     </repositories>
-
-    <!-- 插件地址 -->
-    <pluginRepositories>
-        <pluginRepository>
-            <id>nexus</id>
-            <name>Team Nexus Repository</name>
-            <url>http://115.28.74.242:8081/nexus/content/groups/public</url>
-        </pluginRepository>
-    </pluginRepositories>
 	```
 	
 3. Import the specified component to your `.pom` file's `Dependencies` like:
@@ -77,17 +68,19 @@ It is very easy to use our components if your project is based on `Maven`.
         <dependency>
             <groupId>tj.sse.group2.reuse</groupId>
             <artifactId>Utility</artifactId>
-            <version>1.1</version>
+            <version>1.1.1</version>
         </dependency>
     </dependencies>
 	```
 4. Now you can use the utilities.
 
+> If maven cannot resolve dependencies for the components, please update your maven repositories firstly.
+
 ### Jar
 
 1. Download the `Utility-1.0-SNAPSHOT.jar` file to your computer.
 	
-	You can easily download `Utility-1.0-SNAPSHOT.jar` from [here](http://7xsf2g.com1.z0.glb.clouddn.com/jar_version0410_Utility-1.0-SNAPSHOT.jar).
+	You can easily download `Utility-1.0-SNAPSHOT.jar` from [here](http://7xsf2g.com1.z0.glb.clouddn.com/jar0414_Utility-1.0-SNAPSHOT-jar-with-dependencies.jar).
 	
 2. Import the `.jar` file to your project library.
 	

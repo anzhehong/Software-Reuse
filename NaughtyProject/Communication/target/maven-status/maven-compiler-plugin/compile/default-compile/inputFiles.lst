@@ -1,5 +1,5 @@
-/Users/fowafolo/Documents/Programming/Software-Reuse/NaughtyProject/Communication/src/main/java/User.java
-/Users/fowafolo/Documents/Programming/Software-Reuse/NaughtyProject/Communication/src/main/java/InterfaceEvent.java
-/Users/fowafolo/Documents/Programming/Software-Reuse/NaughtyProject/Communication/src/main/java/MQConnect.java
-/Users/fowafolo/Documents/Programming/Software-Reuse/NaughtyProject/Communication/src/main/java/MQFactory.java
-/Users/fowafolo/Documents/Programming/Software-Reuse/NaughtyProject/Communication/src/main/java/AAMessage.java
+/Users/fowafolo/Documents/Programming/Software-Reuse/NaughtyProject/Communication/src/main/java/reuse/communication/entity/AAMessage.java
+/Users/fowafolo/Documents/Programming/Software-Reuse/NaughtyProject/Communication/src/main/java/reuse/communication/MQ/MQConnect.java
+/Users/fowafolo/Documents/Programming/Software-Reuse/NaughtyProject/Communication/src/main/java/reuse/communication/entity/User.java
+/Users/fowafolo/Documents/Programming/Software-Reuse/NaughtyProject/Communication/src/main/java/reuse/communication/MQ/MQFactory.java
+/Users/fowafolo/Documents/Programming/Software-Reuse/NaughtyProject/Communication/src/main/java/reuse/communication/InterfaceEvent.java

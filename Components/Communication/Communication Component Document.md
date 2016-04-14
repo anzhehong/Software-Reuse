@@ -22,7 +22,7 @@ Steps are very Similar to use `Utility`, but the `pom.xml` file should be differ
 
 ### Jar
 
-You can download the `.jar` file [here](http://7xsf2g.com1.z0.glb.clouddn.com/jar_version0410_Communication-1.0-SNAPSHOT.jar).
+You can download the `.jar` file [here](http://7xsf2g.com1.z0.glb.clouddn.com/jar0414_Communication-1.0-SNAPSHOT-jar-with-dependencies.jar).
 
 ## Usage
 
@@ -31,7 +31,8 @@ This utility encapsulates three files.
 1. **MQFactory**
 
 	The methods are made in static way, therefore you can use any of them without instantiation.
-	```java
+	
+```java
 	/**
      * We set the default address of connection as "tcp://localhost:61616"
      * you can change the address using setAddress(String address)
@@ -62,13 +63,13 @@ This utility encapsulates three files.
      * Return the a Message
      */
 	public static Message getMessage()
-	```
+```
 
 2. **MQConnect**
 	
 	The methods are made in static way, therefore you can use any of them without instantiation.
-	```java
-
+	
+```java
 	/**
      * Constructor of MQConnect
      */
@@ -112,8 +113,7 @@ This utility encapsulates three files.
     public MessageConsumer getMessageConsumer() {
         return messageConsumer;
     }
-
-	```
+```
 
 ## Features
 
