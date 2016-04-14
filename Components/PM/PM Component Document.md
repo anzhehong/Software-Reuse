@@ -20,6 +20,16 @@ Cause it is very similar to use all of our components, we make one of them in de
 
 Steps are very Similar to use `Utility`, but the `pom.xml` file should be different. You can refer to `Utility`, but do notice the difference of `artifactId` of each component.
 
+The dependency is as follows.
+```xml
+<dependency>
+  <groupId>tj.sse.group2.reuse</groupId>
+  <artifactId>PM</artifactId>
+  <version>1.1.0</version>
+  <classifier>dependencies</classifier>
+</dependency>
+```
+
 ### Jar
 
 You can download the `.jar` file [here](http://7xsf2g.com1.z0.glb.clouddn.com/jar0414_PM-1.0-SNAPSHOT-jar-with-dependencies.jar).

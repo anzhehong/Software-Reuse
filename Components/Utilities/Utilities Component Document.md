@@ -65,16 +65,16 @@ It is very easy to use our components if your project is based on `Maven`.
 
 	```xml
 	<dependencies>
-        <dependency>
-            <groupId>tj.sse.group2.reuse</groupId>
-            <artifactId>Utility</artifactId>
-            <version>1.1.1</version>
-        </dependency>
+       <dependency>
+		<groupId>tj.sse.group2.reuse</groupId>
+		<artifactId>Utility</artifactId>
+		<version>1.1.0</version>
+		<classifier>dependencies</classifier>
+		</dependency>
     </dependencies>
 	```
 4. Now you can use the utilities.
 
-> If maven cannot resolve dependencies for the components, please update your maven repositories firstly.
 
 ### Jar
 
