@@ -36,9 +36,6 @@ public class PMManager {
         Write("Log.txt","Client: " + ClientName + " login " + result + " at " + date, outPath);
     }
 
-    public static void createNewFile(String name){
-
-    }
 
 
 }
