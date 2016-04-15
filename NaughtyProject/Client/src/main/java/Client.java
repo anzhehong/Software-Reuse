@@ -27,7 +27,7 @@ public class Client {
      */
     public Client() {
         try {
-            this.baseConnect = new MQConnect(MQFactory.getproducer(ReadJson.GetConfig("baseQueueDestination", ClientInterface.jsonPath)));
+            this.baseConnect = new MQConnect(MQFactory.getproducer("testQueue"));
         } catch (JMSException e) {
             e.printStackTrace();
         }

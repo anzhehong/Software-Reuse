@@ -1,4 +1,5 @@
 import GUI.ClientView;
+import com.HaroldLIU.PerformanceManager;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
@@ -35,10 +36,10 @@ public class ClientInterface implements ActionListener {
     private static int second = 1000;
     private static String loginLog = "ClientLoginLog.txt";
     private static String receiveMessageLog = "ClientMesReceived.txt";
+    private PerformanceManager performanceManager;
 
-
-    static public String jsonPath = "/Users/fowafolo/Desktop/test.json";
-    static public String outPath = "/Users/fowafolo/Desktop/Log/Client/";
+//    static public String jsonPath = "/Users/fowafolo/Desktop/test.json";
+//    static public String outPath = "/Users/fowafolo/Desktop/Log/Client/";
 
     public void setSession(Session session) {
         this.session = session;
@@ -46,6 +47,8 @@ public class ClientInterface implements ActionListener {
 
     public ClientInterface() {
         client = new Client();
+        performanceManager = new PerformanceManager("C:\\Users\\MSI\\Desktop\\",1000);
+        performanceManager.start();
     }
 
     public String getUsername() {
@@ -94,7 +97,7 @@ public class ClientInterface implements ActionListener {
         this.jFrame.setSize(400,300);
         this.jFrame.setResizable(false);
         this.jFrame.setVisible(true);
-        this.jFrame.setTitle(ReadJson.GetConfig("mqHost", jsonPath));
+        this.jFrame.setTitle("sdf");
         this.jFrame.setLocation(200,100);
         this.jFrame.show();
 
@@ -140,7 +143,10 @@ public class ClientInterface implements ActionListener {
             /**
              *  关掉登录界面， 打开聊天界面
              */
-
+            /**
+             *  登录成功写文档。
+             */
+            performanceManager.successTime++;
             validLoginCount +=1;
             uninit();
             clientView = new ClientView();
@@ -190,6 +196,10 @@ public class ClientInterface implements ActionListener {
             /**
              * 登录失败，弹出警告框
              */
+            /**
+             * 登录失败，失败次数加一
+             */
+            performanceManager.failTime++;
             //TODO:重复登录的问题
             JOptionPane.showMessageDialog(null, errorMsg, null,JOptionPane.ERROR_MESSAGE);
             System.out.println("error: " + errorMsg);
@@ -199,27 +209,27 @@ public class ClientInterface implements ActionListener {
 
     public static void main(String[] args) throws JMSException{
         ClientInterface clientInterface1 = new ClientInterface();
-        clientInterface1.timer = new Timer();
-        clientInterface1.timer.schedule(new WriteLoginTask(), 5 * second, 5 * second);
-        clientInterface1.init(ReadJson.GetConfig("baseQueueDestination", clientInterface1.jsonPath));
+//        clientInterface1.timer = new Timer();
+//        clientInterface1.timer.schedule(new WriteLoginTask(), 5 * second, 5 * second);
+        clientInterface1.init(ReadJson.GetConfig("baseQueueDestination", "asdasd"));
         EventBus eventBus = EventController.eventBus;
         eventBus.register(clientInterface1);
     }
 
     public static Timer timer;
-    static class WriteLoginTask extends TimerTask
-    {
-        public void run() {
-            /**
-             *   把validLogin和invalidLogin记录到文件中
-             */
-
-            Date date = new Date();
-            PMManager.Write(loginLog, date + "\tValid Login Count: " + validLoginCount + "\tInvalid Login Count: " + inValidLoginCount, ClientInterface.outPath);
-            PMManager.Write(receiveMessageLog,date + "\tReceived message Count: " + receivedMessageCount, ClientInterface.outPath);
-            inValidLoginCount = 0;
-            validLoginCount = 0;
-            receivedMessageCount = 0;
-        }
-    }
+//    static class WriteLoginTask extends TimerTask
+//    {
+//        public void run() {
+//            /**
+//             *   把validLogin和invalidLogin记录到文件中
+//             */
+//
+//            Date date = new Date();
+////            PMManager.Write(loginLog, date + "\tValid Login Count: " + validLoginCount + "\tInvalid Login Count: " + inValidLoginCount, ClientInterface.outPath);
+////            PMManager.Write(receiveMessageLog,date + "\tReceived message Count: " + receivedMessageCount, ClientInterface.outPath);
+//            inValidLoginCount = 0;
+//            validLoginCount = 0;
+//            receivedMessageCount = 0;
+//        }
+//    }
 }
