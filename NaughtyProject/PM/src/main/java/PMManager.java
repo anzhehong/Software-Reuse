@@ -2,7 +2,6 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -19,6 +18,10 @@ public class PMManager {
     public PMManager(String _filePath,int _delayMinute) {
         filepath = _filePath;
         delaySecond = _delayMinute * 60000;
+    }
+
+    public static void setFilepath(String filepath) {
+        PMManager.filepath = filepath;
     }
 
     public void LogSuccess(){
@@ -42,7 +45,8 @@ public class PMManager {
             //TODO: 把validLogin和invalidLogin记录到文件中
             String currentMins = new SimpleDateFormat("yyyy_MM_dd HH mm ss").format(Calendar.getInstance().getTime());
             String fileName = "LogInRecordAt" +currentMins;
-            System.out.println(filepath+fileName+ ".txt");
+
+//            System.out.println(filepath+fileName+ ".txt");
             PMManager.Write(fileName + ".txt", currentMins + "\tValid Login Count: " + validLoginCount + "\tInvalid Login Count: " + inValidLoginCount, filepath);
             inValidLoginCount = 0;
             validLoginCount = 0;
@@ -80,11 +84,11 @@ public class PMManager {
 //    }
 
     public static void main(String[] args) {
-        PMManager pmManager = new PMManager("C:\\Users\\MSI\\Desktop\\",1);
-        pmManager.startRecord();
-        pmManager.LogSuccess();
-        pmManager.LogSuccess();
-        pmManager.LogFail();
+//        PMManager pmManager = new PMManager("/Users/fowafolo/Desktop/1111/",1);
+//        pmManager.startRecord();
+//        pmManager.LogSuccess();
+//        pmManager.LogSuccess();
+//        pmManager.LogFail();
     }
 
 

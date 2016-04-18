@@ -48,7 +48,7 @@ You can download [here](http://7xsf2g.com1.z0.glb.clouddn.com/jar_version0410_Li
 
 
 - PM
-You can download the `.jar` file [here](http://7xsf2g.com1.z0.glb.clouddn.com/jar_version0410_PM-1.0-SNAPSHOT.jar).
+You can download the `.jar` file [here](http://7xsf2g.com1.z0.glb.clouddn.com/jar_version0417_PM-1.0-SNAPSHOT.jar).
 
 - Utilities
 Download the `Utility-1.0-SNAPSHOT.jar` file to your computer.	
