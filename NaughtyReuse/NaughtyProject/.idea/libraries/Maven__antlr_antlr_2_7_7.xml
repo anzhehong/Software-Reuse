@@ -3,6 +3,9 @@
     <CLASSES>
       <root url="jar://$MAVEN_REPOSITORY$/antlr/antlr/2.7.7/antlr-2.7.7.jar!/" />
       <root url="jar://$PROJECT_DIR$/../../../License-master/tzlicense-1.0.1-jar-with-dependencies.jar!/" />
+      <root url="jar://F:/学习/软件复用/open-reuse-common.jar!/" />
+      <root url="jar://F:/学习/软件复用/open-reuse-config.jar!/" />
+      <root url="jar://F:/学习/软件复用/PerformanceManager.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$MAVEN_REPOSITORY$/antlr/antlr/2.7.7/antlr-2.7.7-javadoc.jar!/" />

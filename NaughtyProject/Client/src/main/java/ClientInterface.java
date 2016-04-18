@@ -47,7 +47,7 @@ public class ClientInterface implements ActionListener {
 
     public ClientInterface() {
         client = new Client();
-        performanceManager = new PerformanceManager("C:\\Users\\MSI\\Desktop\\",1000);
+        performanceManager = new PerformanceManager("C:\\Users\\MSI\\Desktop\\",60000);
         performanceManager.start();
     }
 

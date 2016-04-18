@@ -16,7 +16,7 @@ public class Server {
     static public String jsonPath = "/Users/fowafolo/Desktop/test.json";
 
     /**
-     * 合法输入次数/minutes.
+     * 合法输入次数/minutes.z
      */
     private static int validLoginCount = 0;
     /**
