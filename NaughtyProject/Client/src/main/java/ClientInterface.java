@@ -10,9 +10,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by MSI on 2016/3/23.
@@ -30,12 +27,12 @@ public class ClientInterface implements ActionListener {
     private JTextField password_input = new JTextField();
     private JButton login_btn = new JButton();
     private JButton signup_btn = new JButton();
-    private static int validLoginCount = 0;
-    private static int inValidLoginCount = 0;
-    private static int receivedMessageCount = 0;
+//    private static int validLoginCount = 0;
+//    private static int inValidLoginCount = 0;
+//    private static int receivedMessageCount = 0;
     private static int second = 1000;
-    private static String loginLog = "ClientLoginLog.txt";
-    private static String receiveMessageLog = "ClientMesReceived.txt";
+//    private static String loginLog = "ClientLoginLog.txt";
+//    private static String receiveMessageLog = "ClientMesReceived.txt";
     private PerformanceManager performanceManager;
 
 //    static public String jsonPath = "/Users/fowafolo/Desktop/test.json";
@@ -147,7 +144,7 @@ public class ClientInterface implements ActionListener {
              *  登录成功写文档。
              */
             performanceManager.successTime++;
-            validLoginCount +=1;
+       //     validLoginCount +=1;
             uninit();
             clientView = new ClientView();
             clientView.ConfirmButton.addActionListener(new ActionListener() {
@@ -177,7 +174,7 @@ public class ClientInterface implements ActionListener {
                     clientView.MessageShow.setText(clientView.MessageShow.getText().trim()
                             + "\n" + dateStr   + " : " + message.getStringProperty("content"));
                 }
-                receivedMessageCount += 1;
+        //        receivedMessageCount += 1;
             } catch (JMSException e) {
                 e.printStackTrace();
             }
@@ -190,7 +187,7 @@ public class ClientInterface implements ActionListener {
             clientView.ConfirmButton.setVisible(true);
             clientView.setTitle("连接正常");
         } else {
-            inValidLoginCount += 1;
+        //    inValidLoginCount += 1;
             String errorMsg = interfaceEvent.getStr().toString();
 
             /**
@@ -211,12 +208,12 @@ public class ClientInterface implements ActionListener {
         ClientInterface clientInterface1 = new ClientInterface();
 //        clientInterface1.timer = new Timer();
 //        clientInterface1.timer.schedule(new WriteLoginTask(), 5 * second, 5 * second);
-        clientInterface1.init(ReadJson.GetConfig("baseQueueDestination", "asdasd"));
+        clientInterface1.init(ReadJson.GetConfig("baseQueueDestination", "based"));
         EventBus eventBus = EventController.eventBus;
         eventBus.register(clientInterface1);
     }
 
-    public static Timer timer;
+//   public static Timer timer;
 //    static class WriteLoginTask extends TimerTask
 //    {
 //        public void run() {
