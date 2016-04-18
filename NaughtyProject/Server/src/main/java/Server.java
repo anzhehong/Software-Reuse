@@ -1,4 +1,4 @@
-import com.API.Controller.DBAPI;
+﻿import com.API.Controller.DBAPI;
 import reuse.communication.entity.AAMessage;
 import reuse.communication.MQ.MQConnect;
 import reuse.communication.MQ.MQFactory;
@@ -6,6 +6,9 @@ import reuse.cm.ReadJson;
 import reuse.license.MultiFrequencyRestriction;
 import reuse.license.MultiMaxNumOfMessage;
 import reuse.pm.PMManager;
+import license.PerSecondCountLicense;
+import license.SumCountLicense;
+import license.TZLicense;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -72,8 +75,9 @@ public class Server {
      */
 //    private static Map<String, ArrayList<Date>> connectArrayListMap = new HashMap<String, ArrayList<Date>>();
 
-    private MultiFrequencyRestriction multiFrequencyRestriction;
-    private MultiMaxNumOfMessage multiMaxNumOfMessage;
+    private TZLicense tzLicense;
+    private Map<String,TZLicense> licenseSumMap;
+    private Map<String,TZLicense> licenseFreMap;
 
     /**
      * 写日志的定时器.
@@ -108,8 +112,8 @@ public class Server {
         try {
             this.baseConnect = new MQConnect(MQFactory.getConsumer(ReadJson.GetConfig("baseQueueDestination", jsonPath)));
             this.topicConnect = new MQConnect(MQFactory.getpublisher("Topic"));
-            this.multiFrequencyRestriction = new MultiFrequencyRestriction(Integer.parseInt(ReadJson.GetConfig("CSMessage",jsonPath)));
-            this.multiMaxNumOfMessage = new MultiMaxNumOfMessage(Integer.parseInt(ReadJson.GetConfig("CSSession", jsonPath)));
+            licenseSumMap = new HashMap<String,TZLicense>();
+            licenseFreMap = new HashMap<String,TZLicense>();
             start();
         } catch (JMSException e) {
             e.printStackTrace();
@@ -169,9 +173,8 @@ public class Server {
                 AAMessage aaMessage = new AAMessage(1, "Login Successfully");
                 connect.sendMessage(aaMessage.getFinalMessage());
                 mqConnects.add(connect);
-
-                multiMaxNumOfMessage.addMap(aaMessage.getFinalMessage().getStringProperty("userName"));
-                multiFrequencyRestriction.addMap(aaMessage.getFinalMessage().getStringProperty("userName"));
+                licenseSumMap.put(aaMessage.getFinalMessage().getStringProperty("userName"), new SumCountLicense(Integer.parseInt(ReadJson.GetConfig("CSSession", jsonPath))));
+                licenseFreMap.put(aaMessage.getFinalMessage().getStringProperty("userName"), new PerSecondCountLicense(Integer.parseInt(ReadJson.GetConfig("CSMessage",jsonPath))));
 //                connectArrayListMap.put(aaMessage.getFinalMessage().getStringProperty("userName"), new ArrayList<Date>());
                 validLoginCount += 1;
 
@@ -245,8 +248,8 @@ public class Server {
      */
     public String isMessageValid(Message message, MQConnect connect) throws JMSException {
 
-        boolean sessionFlag =  multiMaxNumOfMessage.CheckByKey(message.getStringProperty("userName"));
-        boolean secondFlag = multiFrequencyRestriction.CheckByKey(message.getStringProperty("userName"));
+        boolean sessionFlag =  licenseSumMap.get(message.getStringProperty("userName")).tryAcquire();
+        boolean secondFlag = licenseFreMap.get(message.getStringProperty("userName")).tryAcquire();
 
         if (!secondFlag) {
             return "ignore";
@@ -254,6 +257,8 @@ public class Server {
             if (!sessionFlag) {
                 AAMessage aaMessage = new AAMessage(999, "Redo Login");
                 connect.sendMessage(aaMessage.getFinalMessage());
+                licenseSumMap.get(message.getStringProperty("userName")).reset();
+                licenseFreMap.get(message.getStringProperty("userName")).reset();
                 return "ignore";
             }else {
 

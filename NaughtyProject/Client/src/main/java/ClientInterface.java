@@ -1,7 +1,10 @@
-import GUI.ClientView;
+﻿import GUI.ClientView;
+
 import reuse.communication.entity.AAMessage;
 import reuse.communication.InterfaceEvent;
 import reuse.communication.entity.User;
+import com.HaroldLIU.PerformanceManager;
+
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import reuse.cm.ReadJson;
@@ -15,9 +18,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by MSI on 2016/3/23.
@@ -35,16 +35,16 @@ public class ClientInterface implements ActionListener {
     private JTextField password_input = new JTextField();
     private JButton login_btn = new JButton();
     private JButton signup_btn = new JButton();
-    private static int validLoginCount = 0;
-    private static int inValidLoginCount = 0;
-    private static int receivedMessageCount = 0;
+//    private static int validLoginCount = 0;
+//    private static int inValidLoginCount = 0;
+//    private static int receivedMessageCount = 0;
     private static int second = 1000;
-    private static String loginLog = "ClientLoginLog.txt";
-    private static String receiveMessageLog = "ClientMesReceived.txt";
+//    private static String loginLog = "ClientLoginLog.txt";
+//    private static String receiveMessageLog = "ClientMesReceived.txt";
+    private PerformanceManager performanceManager;
 
-
-    static public String jsonPath = "/Users/fowafolo/Desktop/test.json";
-    static public String outPath = "/Users/fowafolo/Desktop/Log/Client/";
+//    static public String jsonPath = "/Users/fowafolo/Desktop/test.json";
+//    static public String outPath = "/Users/fowafolo/Desktop/Log/Client/";
 
     public void setSession(Session session) {
         this.session = session;
@@ -52,6 +52,8 @@ public class ClientInterface implements ActionListener {
 
     public ClientInterface() {
         client = new Client();
+        performanceManager = new PerformanceManager("C:\\Users\\MSI\\Desktop\\",60000);
+        performanceManager.start();
     }
 
     public String getUsername() {
@@ -100,7 +102,7 @@ public class ClientInterface implements ActionListener {
         this.jFrame.setSize(400,300);
         this.jFrame.setResizable(false);
         this.jFrame.setVisible(true);
-        this.jFrame.setTitle(ReadJson.GetConfig("mqHost", jsonPath));
+        this.jFrame.setTitle("sdf");
         this.jFrame.setLocation(200,100);
         this.jFrame.show();
 
@@ -146,8 +148,11 @@ public class ClientInterface implements ActionListener {
             /**
              *  关掉登录界面， 打开聊天界面
              */
-
-            validLoginCount +=1;
+            /**
+             *  登录成功写文档。
+             */
+            performanceManager.successTime++;
+       //     validLoginCount +=1;
             uninit();
             clientView = new ClientView();
             clientView.ConfirmButton.addActionListener(new ActionListener() {
@@ -177,7 +182,7 @@ public class ClientInterface implements ActionListener {
                     clientView.MessageShow.setText(clientView.MessageShow.getText().trim()
                             + "\n" + dateStr   + " : " + message.getStringProperty("content"));
                 }
-                receivedMessageCount += 1;
+        //        receivedMessageCount += 1;
             } catch (JMSException e) {
                 e.printStackTrace();
             }
@@ -190,12 +195,16 @@ public class ClientInterface implements ActionListener {
             clientView.ConfirmButton.setVisible(true);
             clientView.setTitle("连接正常");
         } else {
-            inValidLoginCount += 1;
+        //    inValidLoginCount += 1;
             String errorMsg = interfaceEvent.getStr().toString();
 
             /**
              * 登录失败，弹出警告框
              */
+            /**
+             * 登录失败，失败次数加一
+             */
+            performanceManager.failTime++;
             //TODO:重复登录的问题
             JOptionPane.showMessageDialog(null, errorMsg, null,JOptionPane.ERROR_MESSAGE);
             System.out.println("error: " + errorMsg);
@@ -205,27 +214,27 @@ public class ClientInterface implements ActionListener {
 
     public static void main(String[] args) throws JMSException{
         ClientInterface clientInterface1 = new ClientInterface();
-        clientInterface1.timer = new Timer();
-        clientInterface1.timer.schedule(new WriteLoginTask(), 5 * second, 5 * second);
-        clientInterface1.init(ReadJson.GetConfig("baseQueueDestination", clientInterface1.jsonPath));
+//        clientInterface1.timer = new Timer();
+//        clientInterface1.timer.schedule(new WriteLoginTask(), 5 * second, 5 * second);
+        clientInterface1.init(ReadJson.GetConfig("baseQueueDestination", "based"));
         EventBus eventBus = EventController.eventBus;
         eventBus.register(clientInterface1);
     }
 
-    public static Timer timer;
-    static class WriteLoginTask extends TimerTask
-    {
-        public void run() {
-            /**
-             *   把validLogin和invalidLogin记录到文件中
-             */
-
-            Date date = new Date();
-            PMManager.Write(loginLog, date + "\tValid Login Count: " + validLoginCount + "\tInvalid Login Count: " + inValidLoginCount, ClientInterface.outPath);
-            PMManager.Write(receiveMessageLog,date + "\tReceived message Count: " + receivedMessageCount, ClientInterface.outPath);
-            inValidLoginCount = 0;
-            validLoginCount = 0;
-            receivedMessageCount = 0;
-        }
-    }
+//   public static Timer timer;
+//    static class WriteLoginTask extends TimerTask
+//    {
+//        public void run() {
+//            /**
+//             *   把validLogin和invalidLogin记录到文件中
+//             */
+//
+//            Date date = new Date();
+////            PMManager.Write(loginLog, date + "\tValid Login Count: " + validLoginCount + "\tInvalid Login Count: " + inValidLoginCount, ClientInterface.outPath);
+////            PMManager.Write(receiveMessageLog,date + "\tReceived message Count: " + receivedMessageCount, ClientInterface.outPath);
+//            inValidLoginCount = 0;
+//            validLoginCount = 0;
+//            receivedMessageCount = 0;
+//        }
+//    }
 }

@@ -32,7 +32,11 @@ The dependency is as follows.
 
 ### Jar
 
+<<<<<<< HEAD
 You can download the `.jar` file [here](http://7xsf2g.com1.z0.glb.clouddn.com/jar0414_PM-1.0-SNAPSHOT-jar-with-dependencies.jar).
+=======
+You can download the `.jar` file [here](http://7xsf2g.com1.z0.glb.clouddn.com/jar_version0417_PM-1.0-SNAPSHOT.jar).
+>>>>>>> kobpko
 
 ## Usage
 This PM encapsulates only one file.
