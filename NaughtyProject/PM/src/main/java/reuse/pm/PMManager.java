@@ -18,7 +18,7 @@ public class PMManager {
     private long delaySecond;
 
     public PMManager(String _filePath,int _delayMinute) {
-        filepath = _filePath;
+            filepath = _filePath;
         delaySecond = _delayMinute * 60000;
     }
 

@@ -32,47 +32,69 @@ The dependency is as follows.
 
 ### Jar
 
-<<<<<<< HEAD
-You can download the `.jar` file [here](http://7xsf2g.com1.z0.glb.clouddn.com/jar0414_PM-1.0-SNAPSHOT-jar-with-dependencies.jar).
-=======
 You can download the `.jar` file [here](http://7xsf2g.com1.z0.glb.clouddn.com/jar_version0417_PM-1.0-SNAPSHOT.jar).
->>>>>>> kobpko
+
 
 ## Usage
 This PM encapsulates only one file.
 
 1. **PMManager**
 	
-	The methods are made in static way, therefore you can use any of them without instantiation.
+	First, you should do the instantiation.
 	
 	```java
      /**
-     * writes the content to the file specified
-     * @param fileName 
-     * @param content 
-     * @param outPath 
+     * instantiation
+     * @param _filePath  
+     * @param _delayMinute 
      */
-    public static void Write(String fileName, String content, String outPath);
+    PMManager pmManager = new PMManager(String _filePath,int _delayMinute);
   
 	```
-	
-	```java
-    /**
-     * Noting the log records,including time,the username of client and whether success
-     * @param ClientName
-     * @param result
-     */
-    public static void WriteLoginForClient(String ClientName , boolean result, String outPath);
-  
-	```
-	
-	
-	
+	Second,start the Manager
 
+	```java
+    public void startRecord( )
+  
+	```
+	Third, change the amount of the record.
+	```java
+	/**
+     * Log in successfully
+     */
+    public void LogSuccess()
+
+	/**
+     * Log in failed
+     */
+    public void LogFail()
+  
+	```
+	Besides,we can change the filepath.
+	
+	```
+	/**
+	 * reset the filepath
+	 * param filepath
+	 */
+	public static void setFilepath(String filepath)
+	```
+
+## Example
+Here is the example.
+1. **PMManager**
+	```java
+	PMManager pmManager = new PMManager("/Users/fowafolo/Desktop/1111/",1);
+    pmManager.startRecord();
+    pmManager.LogSuccess();
+    pmManager.LogSuccess();
+    pmManager.LogFail();
+	```	
+	
 ## Features
 
 * Easy to understand and use.
-* For more convenient use, all of the methods are made in static way.
+* Create the file on its own.
 
 ## TODO
 
