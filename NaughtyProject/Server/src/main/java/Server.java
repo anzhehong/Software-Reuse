@@ -1,4 +1,4 @@
-﻿import com.API.Controller.DBAPI;
+import com.API.Controller.DBAPI;
 import reuse.communication.entity.AAMessage;
 import reuse.communication.MQ.MQConnect;
 import reuse.communication.MQ.MQFactory;
@@ -6,9 +6,6 @@ import reuse.cm.ReadJson;
 import reuse.license.MultiFrequencyRestriction;
 import reuse.license.MultiMaxNumOfMessage;
 import reuse.pm.PMManager;
-import license.PerSecondCountLicense;
-import license.SumCountLicense;
-import license.TZLicense;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -38,7 +35,7 @@ public class Server {
     /**
      * 登录日志的路径.
      */
-    private static String loginLog = ReadJson.GetConfig("loginLog", jsonPath);
+    private static String loginLog = ReadJson.getStringConfig("loginLog");
 
     /**
      * 转发消息路径
@@ -75,9 +72,8 @@ public class Server {
      */
 //    private static Map<String, ArrayList<Date>> connectArrayListMap = new HashMap<String, ArrayList<Date>>();
 
-    private TZLicense tzLicense;
-    private Map<String,TZLicense> licenseSumMap;
-    private Map<String,TZLicense> licenseFreMap;
+    private MultiFrequencyRestriction multiFrequencyRestriction;
+    private MultiMaxNumOfMessage multiMaxNumOfMessage;
 
     /**
      * 写日志的定时器.
@@ -110,10 +106,10 @@ public class Server {
 
     public Server() {
         try {
-            this.baseConnect = new MQConnect(MQFactory.getConsumer(ReadJson.GetConfig("baseQueueDestination", jsonPath)));
+            this.baseConnect = new MQConnect(MQFactory.getConsumer(ReadJson.getStringConfig("baseQueueDestination")));
             this.topicConnect = new MQConnect(MQFactory.getpublisher("Topic"));
-            licenseSumMap = new HashMap<String,TZLicense>();
-            licenseFreMap = new HashMap<String,TZLicense>();
+            this.multiFrequencyRestriction = new MultiFrequencyRestriction(Integer.parseInt(ReadJson.getStringConfig("CSMessage")));
+            this.multiMaxNumOfMessage = new MultiMaxNumOfMessage(Integer.parseInt(ReadJson.getStringConfig("CSSession")));
             start();
         } catch (JMSException e) {
             e.printStackTrace();
@@ -173,8 +169,9 @@ public class Server {
                 AAMessage aaMessage = new AAMessage(1, "Login Successfully");
                 connect.sendMessage(aaMessage.getFinalMessage());
                 mqConnects.add(connect);
-                licenseSumMap.put(aaMessage.getFinalMessage().getStringProperty("userName"), new SumCountLicense(Integer.parseInt(ReadJson.GetConfig("CSSession", jsonPath))));
-                licenseFreMap.put(aaMessage.getFinalMessage().getStringProperty("userName"), new PerSecondCountLicense(Integer.parseInt(ReadJson.GetConfig("CSMessage",jsonPath))));
+
+                multiMaxNumOfMessage.addMap(aaMessage.getFinalMessage().getStringProperty("userName"));
+                multiFrequencyRestriction.addMap(aaMessage.getFinalMessage().getStringProperty("userName"));
 //                connectArrayListMap.put(aaMessage.getFinalMessage().getStringProperty("userName"), new ArrayList<Date>());
                 validLoginCount += 1;
 
@@ -248,8 +245,8 @@ public class Server {
      */
     public String isMessageValid(Message message, MQConnect connect) throws JMSException {
 
-        boolean sessionFlag =  licenseSumMap.get(message.getStringProperty("userName")).tryAcquire();
-        boolean secondFlag = licenseFreMap.get(message.getStringProperty("userName")).tryAcquire();
+        boolean sessionFlag =  multiMaxNumOfMessage.CheckByKey(message.getStringProperty("userName"));
+        boolean secondFlag = multiFrequencyRestriction.CheckByKey(message.getStringProperty("userName"));
 
         if (!secondFlag) {
             return "ignore";
@@ -257,8 +254,6 @@ public class Server {
             if (!sessionFlag) {
                 AAMessage aaMessage = new AAMessage(999, "Redo Login");
                 connect.sendMessage(aaMessage.getFinalMessage());
-                licenseSumMap.get(message.getStringProperty("userName")).reset();
-                licenseFreMap.get(message.getStringProperty("userName")).reset();
                 return "ignore";
             }else {
 
