@@ -65,6 +65,6 @@ You can refer to the document below for detail.
 |Communication|[Communication Document](https://github.com/anzhehong/Software-Reuse/blob/master/Components/Communication/Communication%20Component%20Document.md)|[Communication Jar](http://7xsf2g.com1.z0.glb.clouddn.com/jar0414_Communication-1.0-SNAPSHOT-jar-with-dependencies.jar)|
 |Database|[Database Document](https://github.com/anzhehong/Software-Reuse/blob/master/Components/Database/Database%20Component%20Document.md)|[Database Jar](http://7xsf2g.com1.z0.glb.clouddn.com/jar0414_Database-1.0-SNAPSHOT-jar-with-dependencies.jar)|
 |License|[License Document](https://github.com/anzhehong/Software-Reuse/blob/master/Components/License/License%20Component%20Document.md)|[License Jar](http://7xsf2g.com1.z0.glb.clouddn.com/jar0414_License-1.0-SNAPSHOT-jar-with-dependencies.jar)|
-|PM|[PM Document](https://github.com/anzhehong/Software-Reuse/blob/master/Components/PM/PM%20Component%20Document.md)|[PM Jar]((http://7xsf2g.com1.z0.glb.clouddn.com/jar_version0417_PM-1.0-SNAPSHOT.jar)|
+|PM|[PM Document](https://github.com/anzhehong/Software-Reuse/blob/master/Components/PM/PM%20Component%20Document.md)|[PM Jar](http://7xsf2g.com1.z0.glb.clouddn.com/jar_version0417_PM-1.0-SNAPSHOT.jar)|
 
 
