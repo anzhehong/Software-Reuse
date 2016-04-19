@@ -1,11 +1,15 @@
 import com.API.Controller.DBAPI;
+import com.HaroldLIU.PerformanceManager;
+import license.PerSecondCountLicense;
+import license.SumCountLicense;
+import license.TZLicense;
 import reuse.communication.entity.AAMessage;
 import reuse.communication.MQ.MQConnect;
 import reuse.communication.MQ.MQFactory;
 import reuse.cm.ReadJson;
 import reuse.license.MultiFrequencyRestriction;
 import reuse.license.MultiMaxNumOfMessage;
-import reuse.pm.PMManager;
+//import reuse.pm.PMManager;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -19,19 +23,20 @@ public class Server {
 
     static public String outPath = "/Users/fowafolo/Desktop/Log/Server/";
     static public String jsonPath = "/Users/fowafolo/Desktop/test.json";
-
-    /**
-     * 合法输入次数/minutes.
-     */
-    private static int validLoginCount = 0;
-    /**
-     * 不合法输入次数/minute.
-     */
-    private static int inValidLoginCount = 0;
-    /**
-     * 转发消息数量.
-     */
-    private static int forwardedMessageCount = 0;
+    static private int Sum;
+    static private int Fre;
+//    /**
+//     * 合法输入次数/minutes.
+//     */
+//    private static int validLoginCount = 0;
+//    /**
+//     * 不合法输入次数/minute.
+//     */
+//    private static int inValidLoginCount = 0;
+//    /**
+//     * 转发消息数量.
+//     */
+//    private static int forwardedMessageCount = 0;
     /**
      * 登录日志的路径.
      */
@@ -72,44 +77,51 @@ public class Server {
      */
 //    private static Map<String, ArrayList<Date>> connectArrayListMap = new HashMap<String, ArrayList<Date>>();
 
-    private MultiFrequencyRestriction multiFrequencyRestriction;
-    private MultiMaxNumOfMessage multiMaxNumOfMessage;
-
-    /**
-     * 写日志的定时器.
-     */
-    public static Timer timer;
-
-    /**
-     * 定时器记录每分钟合法和不合法的消息个数.
-     */
-    static class WriteLoginTask extends TimerTask
-    {
-        public void run() {
-            //TODO: 把validLogin和invalidLogin记录到文件中
-            Date date = new Date();
-            PMManager.Write(loginLog, date + "\tValid Login Count: " + validLoginCount + "\tInvalid Login Count: " + inValidLoginCount, outPath);
-            PMManager.Write(forwardedMessageLog, date + "\tForwarded Message Count: " + forwardedMessageCount, outPath);
-            inValidLoginCount = 0;
-            validLoginCount = 0;
-            forwardedMessageCount = 0;
-
-        }
-    }
+//    private MultiFrequencyRestriction multiFrequencyRestriction;
+//    private MultiMaxNumOfMessage multiMaxNumOfMessage;
+    private PerformanceManager performanceManager;
+    private Map<String,TZLicense> licenseSumMap;
+    private Map<String,TZLicense> licenseFreMap;
+//    /**
+//     * 写日志的定时器.
+//     */
+//    public static Timer timer;
+//
+//    /**
+//     * 定时器记录每分钟合法和不合法的消息个数.
+//     */
+//    static class WriteLoginTask extends TimerTask
+//    {
+//        public void run() {
+//            //TODO: 把validLogin和invalidLogin记录到文件中
+//            Date date = new Date();
+////            PMManager.Write(loginLog, date + "\tValid Login Count: " + validLoginCount + "\tInvalid Login Count: " + inValidLoginCount, outPath);
+////            PMManager.Write(forwardedMessageLog, date + "\tForwarded Message Count: " + forwardedMessageCount, outPath);
+//            inValidLoginCount = 0;
+//            validLoginCount = 0;
+//            forwardedMessageCount = 0;
+//
+//        }
+//    }
 
 
     public static void main(String[] args) throws JMSException {
         Server server = new Server();
-        server.timer = new Timer();
-        server.timer.schedule(new WriteLoginTask(), 5 * second, 5 * second);
+
+//        server.timer = new Timer();
+//        server.timer.schedule(new WriteLoginTask(), 5 * second, 5 * second);
     }
 
     public Server() {
         try {
             this.baseConnect = new MQConnect(MQFactory.getConsumer(ReadJson.getStringConfig("baseQueueDestination")));
             this.topicConnect = new MQConnect(MQFactory.getpublisher("Topic"));
-            this.multiFrequencyRestriction = new MultiFrequencyRestriction(Integer.parseInt(ReadJson.getStringConfig("CSMessage")));
-            this.multiMaxNumOfMessage = new MultiMaxNumOfMessage(Integer.parseInt(ReadJson.getStringConfig("CSSession")));
+//            this.multiFrequencyRestriction = new MultiFrequencyRestriction(Integer.parseInt(ReadJson.getStringConfig("CSMessage")));
+//            this.multiMaxNumOfMessage = new MultiMaxNumOfMessage(Integer.parseInt(ReadJson.getStringConfig("CSSession")));
+            this.performanceManager = new PerformanceManager("D:\\Server\\",1000);
+            performanceManager.start();
+            licenseSumMap = new HashMap<String,TZLicense>();
+            licenseFreMap = new HashMap<String,TZLicense>();
             start();
         } catch (JMSException e) {
             e.printStackTrace();
@@ -161,7 +173,7 @@ public class Server {
                 System.out.println("already");
                 AAMessage aaMessage = new AAMessage(2, "This Account has Already Logged in.");
                 connect.sendMessage(aaMessage.getFinalMessage());
-                inValidLoginCount += 1;
+                performanceManager.failTime++;
                 //TODO: 测试 删除此privateConnect
 //                boolean removeFlag = removeConnect(connect);
             } else {
@@ -170,10 +182,12 @@ public class Server {
                 connect.sendMessage(aaMessage.getFinalMessage());
                 mqConnects.add(connect);
 
-                multiMaxNumOfMessage.addMap(aaMessage.getFinalMessage().getStringProperty("userName"));
-                multiFrequencyRestriction.addMap(aaMessage.getFinalMessage().getStringProperty("userName"));
+                licenseSumMap.put(aaMessage.getFinalMessage().getStringProperty("userName"), new SumCountLicense(Sum));
+                licenseFreMap.put(aaMessage.getFinalMessage().getStringProperty("userName"), new PerSecondCountLicense(Fre));
+//                multiMaxNumOfMessage.addMap(aaMessage.getFinalMessage().getStringProperty("userName"));
+//                multiFrequencyRestriction.addMap(aaMessage.getFinalMessage().getStringProperty("userName"));
 //                connectArrayListMap.put(aaMessage.getFinalMessage().getStringProperty("userName"), new ArrayList<Date>());
-                validLoginCount += 1;
+                performanceManager.successTime++;
 
                 connect.addMessageHandler(new MessageListener() {
                     @Override
@@ -203,7 +217,7 @@ public class Server {
         } else {
             AAMessage aaMessage = new AAMessage(2, "Validation Failed.");
             connect.sendMessage(aaMessage.getFinalMessage());
-            inValidLoginCount += 1;
+            performanceManager.failTime++;
             //TODO: 测试 删除此privateConnect
 //            boolean removeFlag = removeConnect(privateConnect);
         }
@@ -216,7 +230,7 @@ public class Server {
      */
      public void sendTopic(Message message) throws JMSException {
         topicConnect.sendMessage(message);
-        forwardedMessageCount += mqConnects.size();
+//        forwardedMessageCount += mqConnects.size();
      }
 
 
@@ -245,8 +259,8 @@ public class Server {
      */
     public String isMessageValid(Message message, MQConnect connect) throws JMSException {
 
-        boolean sessionFlag =  multiMaxNumOfMessage.CheckByKey(message.getStringProperty("userName"));
-        boolean secondFlag = multiFrequencyRestriction.CheckByKey(message.getStringProperty("userName"));
+        boolean sessionFlag =  licenseSumMap.get(message.getStringProperty("userName")).tryAcquire();
+        boolean secondFlag = licenseFreMap.get(message.getStringProperty("userName")).tryAcquire();
 
         if (!secondFlag) {
             return "ignore";
@@ -254,6 +268,8 @@ public class Server {
             if (!sessionFlag) {
                 AAMessage aaMessage = new AAMessage(999, "Redo Login");
                 connect.sendMessage(aaMessage.getFinalMessage());
+                licenseSumMap.get(message.getStringProperty("userName")).reset();
+                licenseFreMap.get(message.getStringProperty("userName")).reset();
                 return "ignore";
             }else {
 

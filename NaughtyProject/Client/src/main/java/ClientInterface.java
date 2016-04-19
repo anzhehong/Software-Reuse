@@ -1,4 +1,5 @@
 import GUI.ClientView;
+import com.HaroldLIU.PerformanceManager;
 import reuse.communication.entity.AAMessage;
 import reuse.communication.InterfaceEvent;
 import reuse.communication.entity.User;
@@ -35,13 +36,13 @@ public class ClientInterface implements ActionListener {
     private JTextField password_input = new JTextField();
     private JButton login_btn = new JButton();
     private JButton signup_btn = new JButton();
-    private static int validLoginCount = 0;
-    private static int inValidLoginCount = 0;
+//    private static int validLoginCount = 0;
+//    private static int inValidLoginCount = 0;
     private static int receivedMessageCount = 0;
     private static int second = 1000;
     private static String loginLog = "ClientLoginLog.txt";
     private static String receiveMessageLog = "ClientMesReceived.txt";
-
+    private PerformanceManager performanceManager;
 
     static public String jsonPath = "/Users/fowafolo/Desktop/test.json";
     static public String outPath = "/Users/fowafolo/Desktop/Log/Client/";
@@ -52,6 +53,8 @@ public class ClientInterface implements ActionListener {
 
     public ClientInterface() {
         client = new Client();
+        performanceManager = new PerformanceManager("D:\\Client\\",1000);
+        performanceManager.start();
     }
 
     public String getUsername() {
@@ -147,7 +150,7 @@ public class ClientInterface implements ActionListener {
              *  关掉登录界面， 打开聊天界面
              */
 
-            validLoginCount +=1;
+            performanceManager.successTime++;
             uninit();
             clientView = new ClientView();
             clientView.ConfirmButton.addActionListener(new ActionListener() {
@@ -190,7 +193,7 @@ public class ClientInterface implements ActionListener {
             clientView.ConfirmButton.setVisible(true);
             clientView.setTitle("连接正常");
         } else {
-            inValidLoginCount += 1;
+            performanceManager.failTime++;
             String errorMsg = interfaceEvent.getStr().toString();
 
             /**
@@ -205,27 +208,28 @@ public class ClientInterface implements ActionListener {
 
     public static void main(String[] args) throws JMSException{
         ClientInterface clientInterface1 = new ClientInterface();
-        clientInterface1.timer = new Timer();
-        clientInterface1.timer.schedule(new WriteLoginTask(), 5 * second, 5 * second);
+//        clientInterface1.timer = new Timer();
+//        clientInterface1.timer.schedule(new WriteLoginTask(), 5 * second, 5 * second);
+
         clientInterface1.init(ReadJson.getStringConfig("baseQueueDestination"));
         EventBus eventBus = EventController.eventBus;
         eventBus.register(clientInterface1);
     }
 
-    public static Timer timer;
-    static class WriteLoginTask extends TimerTask
-    {
-        public void run() {
-            /**
-             *   把validLogin和invalidLogin记录到文件中
-             */
-
-            Date date = new Date();
-            PMManager.Write(loginLog, date + "\tValid Login Count: " + validLoginCount + "\tInvalid Login Count: " + inValidLoginCount, ClientInterface.outPath);
-            PMManager.Write(receiveMessageLog,date + "\tReceived message Count: " + receivedMessageCount, ClientInterface.outPath);
-            inValidLoginCount = 0;
-            validLoginCount = 0;
-            receivedMessageCount = 0;
-        }
-    }
+//    public static Timer timer;
+//    static class WriteLoginTask extends TimerTask
+//    {
+//        public void run() {
+//            /**
+//             *   把validLogin和invalidLogin记录到文件中
+//             */
+//
+//            Date date = new Date();
+//            PMManager.Write(loginLog, date + "\tValid Login Count: " + validLoginCount + "\tInvalid Login Count: " + inValidLoginCount, ClientInterface.outPath);
+//            PMManager.Write(receiveMessageLog,date + "\tReceived message Count: " + receivedMessageCount, ClientInterface.outPath);
+//            inValidLoginCount = 0;
+//            validLoginCount = 0;
+//            receivedMessageCount = 0;
+//        }
+//    }
 }
