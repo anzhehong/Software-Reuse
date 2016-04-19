@@ -1,12 +1,14 @@
 import GUI.ClientView;
 import com.HaroldLIU.PerformanceManager;
-import reuse.communication.entity.AAMessage;
-import reuse.communication.InterfaceEvent;
-import reuse.communication.entity.User;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
+import com.openreuse.common.config.ConfigUtil;
+import com.openreuse.common.config.coef.AbstractCoef;
+import com.openreuse.common.config.coef.type.CoefType;
 import reuse.cm.ReadJson;
-import reuse.pm.PMManager;
+import reuse.communication.InterfaceEvent;
+import reuse.communication.entity.AAMessage;
+import reuse.communication.entity.User;
 import reuse.utility.EventController;
 
 import javax.jms.JMSException;
@@ -16,9 +18,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.io.File;
 
 /**
  * Created by MSI on 2016/3/23.
@@ -214,6 +214,24 @@ public class ClientInterface implements ActionListener {
         clientInterface1.init(ReadJson.getStringConfig("baseQueueDestination"));
         EventBus eventBus = EventController.eventBus;
         eventBus.register(clientInterface1);
+
+        /**
+         * 设置参数
+         */
+        ConfigUtil.setBasicCoef("35", 1);
+        File jsonFile = new File(jsonPath);
+        ConfigUtil.dumpBasicCoef(jsonFile);
+
+        /**
+         * 获取参数
+         */
+        File jsonFile2 = new File(jsonPath);
+        ConfigUtil.loadBasicCoef(jsonFile2);
+        ConfigUtil.setBasicCoef("1", "2");
+        AbstractCoef ac = ConfigUtil.getBasicCoef("1");
+        if(ac.getType().equals(CoefType.VARCHAR)){
+            System.out.println((String) ac.getValue());
+        }
     }
 
 //    public static Timer timer;
