@@ -1,5 +1,3 @@
-package reuse.communication.MQ;
-
 import org.apache.activemq.ActiveMQConnectionFactory;
 
 import javax.jms.*;

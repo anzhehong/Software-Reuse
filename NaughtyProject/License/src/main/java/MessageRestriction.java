@@ -1,5 +1,3 @@
-package reuse.license;
-
 /**
  * Created by MSI on 2016/4/6.
  */

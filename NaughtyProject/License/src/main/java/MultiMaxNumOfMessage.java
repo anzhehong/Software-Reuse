@@ -1,5 +1,3 @@
-package reuse.license;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,7 +49,7 @@ public class MultiMaxNumOfMessage implements MessageRestriction{
     }
 
 //    public static void main(String[] args) {
-//        reuse.license.MultiMaxNumOfMessage multiMaxNumOfMessage = new reuse.license.MultiMaxNumOfMessage(10);
+//        MultiMaxNumOfMessage multiMaxNumOfMessage = new MultiMaxNumOfMessage(10);
 //        multiMaxNumOfMessage.addMap("first");
 //        multiMaxNumOfMessage.addMap("second");
 //        boolean first;

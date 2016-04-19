@@ -1,4 +1,4 @@
-package reuse.license;
+import sun.management.snmp.jvminstr.JvmThreadInstanceEntryImpl;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,7 +43,7 @@ public class FrequencyRestriction implements MessageRestriction{
     }
 
 //    public static void main(String[] args) throws InterruptedException {
-//        reuse.license.MessageRestriction ff = new reuse.license.FrequencyRestriction(10);
+//        MessageRestriction ff = new FrequencyRestriction(10);
 //        for(int i = 0 ;i<12;i++){
 //            System.out.print(i + " ");
 //            Thread.sleep(50);

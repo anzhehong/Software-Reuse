@@ -1,5 +1,3 @@
-package reuse.utility;
-
 import com.google.common.eventbus.EventBus;
 
 /**

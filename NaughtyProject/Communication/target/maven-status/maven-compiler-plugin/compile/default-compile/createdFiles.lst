@@ -1,5 +1,5 @@
-reuse/communication/MQ/MQConnect.class
-reuse/communication/entity/AAMessage.class
-reuse/communication/entity/User.class
-reuse/communication/MQ/MQFactory.class
-reuse/communication/InterfaceEvent.class
+MQFactory.class
+AAMessage.class
+MQConnect.class
+InterfaceEvent.class
+User.class

@@ -1,5 +1,3 @@
-package reuse.utility;
-
 import java.util.Date;
 
 /**

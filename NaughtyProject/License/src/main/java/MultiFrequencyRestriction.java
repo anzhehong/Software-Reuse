@@ -1,9 +1,9 @@
-package reuse.license;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by MSI on 2016/4/6.
@@ -65,7 +65,7 @@ public class MultiFrequencyRestriction implements MessageRestriction{
     }
 
 //    public static void main(String[] args) throws InterruptedException {
-//        reuse.license.MultiFrequencyRestriction multiFrequencyRestriction = new reuse.license.MultiFrequencyRestriction(10);
+//        MultiFrequencyRestriction multiFrequencyRestriction = new MultiFrequencyRestriction(10);
 //        multiFrequencyRestriction.addMap("first");
 //        for(int i = 0 ;i < 10;i++){
 //            System.out.print(i + " ");

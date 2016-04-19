@@ -1,6 +1,5 @@
 import org.junit.Before;
 import org.junit.Test;
-import reuse.utility.TimeUtil;
 
 import java.util.Date;
 

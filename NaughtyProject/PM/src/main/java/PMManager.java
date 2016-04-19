@@ -1,5 +1,3 @@
-package reuse.pm;
-
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.text.SimpleDateFormat;
@@ -18,7 +16,7 @@ public class PMManager {
     private long delaySecond;
 
     public PMManager(String _filePath,int _delayMinute) {
-            filepath = _filePath;
+        filepath = _filePath;
         delaySecond = _delayMinute * 60000;
     }
 

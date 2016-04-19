@@ -1,6 +1,5 @@
 import org.junit.Before;
 import org.junit.Test;
-import reuse.license.FrequencyRestriction;
 
 import static org.junit.Assert.*;
 

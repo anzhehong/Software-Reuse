@@ -1,5 +1,3 @@
-package reuse.communication.entity;
-
 /**
  * Created by fowafolo
  * Date: 16/4/6

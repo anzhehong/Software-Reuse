@@ -1,5 +1,4 @@
 import org.junit.Test;
-import reuse.cm.ReadJson;
 
 /**
  * Created by fowafolo

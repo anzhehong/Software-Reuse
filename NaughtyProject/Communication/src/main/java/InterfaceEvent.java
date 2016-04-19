@@ -1,5 +1,3 @@
-package reuse.communication;
-
 import javax.jms.Message;
 
 /**

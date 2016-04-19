@@ -1,5 +1,3 @@
-package reuse.communication.MQ;
-
 import javax.jms.*;
 
 /**

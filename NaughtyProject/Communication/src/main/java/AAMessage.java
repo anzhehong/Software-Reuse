@@ -1,8 +1,3 @@
-package reuse.communication.entity;
-
-import reuse.communication.MQ.MQFactory;
-import reuse.utility.DateUtil;
-
 import javax.jms.JMSException;
 import javax.jms.Message;
 import java.util.Date;
@@ -61,7 +56,7 @@ public class AAMessage {
         this.type = type;
         this.content = content;
         this.createdTime = getCurrentTime();
-        //TODO: com.communication.User?null?
+        //TODO: User?null?
     }
 
     /**
@@ -86,11 +81,6 @@ public class AAMessage {
     }
 
 
-    public static void main(String[] args) throws JMSException {
-        AAMessage aaMessage = new AAMessage(1,"aaaa", new User("aaa","aaa"));
-        aaMessage.getFinalMessage();
-        System.out.println(aaMessage.getFinalMessage().getStringProperty("content"));
-    }
     /**
      * Getter and Setter
      * @return
@@ -127,5 +117,3 @@ public class AAMessage {
         this.user = user;
     }
 }
-
-
