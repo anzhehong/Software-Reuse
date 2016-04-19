@@ -44,69 +44,27 @@ This CM encapsulates only one file.
 	
 	```java
 	/**
-     * 1.Return the configuration value of ``string`` type provided the key value and the path of the config file.
-     If there is no corresponding value,an exception will be thrown to inform the user.
+     * 1.Return the configuration value provided the key value and the path of the config file.
      * 2.The args ``path`` should be a full path(absolute path).
      */
     
-    static String GetStringConfig(String str,String path);
+    static String GetConfig(String str,String path);
   
 	```
-
-	```java
-	/**
-     * 1.Return the configuration value of ``int`` type provided the key value and the path of the config file.
-     If there is no corresponding value or the corresponding value is not an int,an exception will be thrown to inform the user.
-     * 2.The args ``path`` should be a full path(absolute path).
-     */
-    
-    static String GetIntConfig(String str,String path);
-  
-	```
-
-	```java
-	/**
-     * 1.Return the configuration value of ``double`` type provided the key value and the path of the config file.
-     If there is no corresponding value or the corresponding value is not a double,an exception will be thrown to inform the user.
-     * 2.The args ``path`` should be a full path(absolute path).
-     */
-    
-    static String GetDoubleConfig(String str,String path);
-  
-	```
-
-	```java
-	/**
-     * 1.Return the configuration value of ``boolean`` type provided the key value and the path of the config file.
-     If there is no corresponding value or the corresponding value is not a boolean,an exception will be thrown to inform the user.
-     * 2.The args ``path`` should be a full path(absolute path).
-     */
-    
-    static String GetBooleanConfig(String str,String path);
-  
-	```
-
-
-
+	
 	And we also make a sample for you.
-
 	```java
 	/**
-	* 1.We provide a json file in the local path "/Users/fowafolo/Desktop/test.json",and it contains ``{"host":"localhost:8080","id":3,"price":98.99,"listen":false}''.
-	* 2.As a result,``localhost:8080``、``3``、``98.99``、``false``will be printed out.
+	* 1.We provide a json file in the local path "/Users/fowafolo/Desktop/test.json",and it contains ``{"id":"3"}''.
+	* 2.As a result,``3``will be printed out.
 	*/
 	
 	public class ReadJsonTest {
 	    @Test
-	    public void GetStringConfig() throws Exception {
-	        System.out.println(ReadJson.GetStringConfig("host", "/Users/fowafolo/Desktop/test.json"));
-	        System.out.println(ReadJson.GetIntConfig("id", "/Users/fowafolo/Desktop/test.json"));
-	        System.out.println(ReadJson.GetDoubleConfig("price", "/Users/fowafolo/Desktop/test.json"));
-	        System.out.println(ReadJson.GetBooleanConfig("listen", "/Users/fowafolo/Desktop/test.json"));
+	    public void getConfig() throws Exception {
+	        System.out.println(ReadJson.GetConfig("id", "/Users/fowafolo/Desktop/test.json"));
 	    }
 	}
-
-
 	```
 
 
