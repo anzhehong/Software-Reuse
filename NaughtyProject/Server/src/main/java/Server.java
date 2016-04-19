@@ -1,11 +1,15 @@
 import com.API.Controller.DBAPI;
+import com.HaroldLIU.PerformanceManager;
+import license.PerSecondCountLicense;
+import license.SumCountLicense;
+import license.TZLicense;
 import reuse.communication.entity.AAMessage;
 import reuse.communication.MQ.MQConnect;
 import reuse.communication.MQ.MQFactory;
 import reuse.cm.ReadJson;
 import reuse.license.MultiFrequencyRestriction;
 import reuse.license.MultiMaxNumOfMessage;
-import reuse.pm.PMManager;
+//import reuse.pm.PMManager;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -19,7 +23,8 @@ public class Server {
 
     static public String outPath = "/Users/fowafolo/Desktop/Log/Server/";
     static public String jsonPath = "/Users/fowafolo/Desktop/test.json";
-
+    static private int Sum;
+    static private int Fre;
     /**
      * 合法输入次数/minutes.
      */
@@ -72,44 +77,51 @@ public class Server {
      */
 //    private static Map<String, ArrayList<Date>> connectArrayListMap = new HashMap<String, ArrayList<Date>>();
 
-    private MultiFrequencyRestriction multiFrequencyRestriction;
-    private MultiMaxNumOfMessage multiMaxNumOfMessage;
-
-    /**
-     * 写日志的定时器.
-     */
-    public static Timer timer;
-
-    /**
-     * 定时器记录每分钟合法和不合法的消息个数.
-     */
-    static class WriteLoginTask extends TimerTask
-    {
-        public void run() {
-            //TODO: 把validLogin和invalidLogin记录到文件中
-            Date date = new Date();
-            PMManager.Write(loginLog, date + "\tValid Login Count: " + validLoginCount + "\tInvalid Login Count: " + inValidLoginCount, outPath);
-            PMManager.Write(forwardedMessageLog, date + "\tForwarded Message Count: " + forwardedMessageCount, outPath);
-            inValidLoginCount = 0;
-            validLoginCount = 0;
-            forwardedMessageCount = 0;
-
-        }
-    }
+//    private MultiFrequencyRestriction multiFrequencyRestriction;
+//    private MultiMaxNumOfMessage multiMaxNumOfMessage;
+    private PerformanceManager performanceManager;
+    private TZLicense tzSumLicense;
+    private TZLicense tzFreLicense;
+//    /**
+//     * 写日志的定时器.
+//     */
+//    public static Timer timer;
+//
+//    /**
+//     * 定时器记录每分钟合法和不合法的消息个数.
+//     */
+//    static class WriteLoginTask extends TimerTask
+//    {
+//        public void run() {
+//            //TODO: 把validLogin和invalidLogin记录到文件中
+//            Date date = new Date();
+////            PMManager.Write(loginLog, date + "\tValid Login Count: " + validLoginCount + "\tInvalid Login Count: " + inValidLoginCount, outPath);
+////            PMManager.Write(forwardedMessageLog, date + "\tForwarded Message Count: " + forwardedMessageCount, outPath);
+//            inValidLoginCount = 0;
+//            validLoginCount = 0;
+//            forwardedMessageCount = 0;
+//
+//        }
+//    }
 
 
     public static void main(String[] args) throws JMSException {
         Server server = new Server();
-        server.timer = new Timer();
-        server.timer.schedule(new WriteLoginTask(), 5 * second, 5 * second);
+
+//        server.timer = new Timer();
+//        server.timer.schedule(new WriteLoginTask(), 5 * second, 5 * second);
     }
 
     public Server() {
         try {
             this.baseConnect = new MQConnect(MQFactory.getConsumer(ReadJson.getStringConfig("baseQueueDestination")));
             this.topicConnect = new MQConnect(MQFactory.getpublisher("Topic"));
-            this.multiFrequencyRestriction = new MultiFrequencyRestriction(Integer.parseInt(ReadJson.getStringConfig("CSMessage")));
-            this.multiMaxNumOfMessage = new MultiMaxNumOfMessage(Integer.parseInt(ReadJson.getStringConfig("CSSession")));
+//            this.multiFrequencyRestriction = new MultiFrequencyRestriction(Integer.parseInt(ReadJson.getStringConfig("CSMessage")));
+//            this.multiMaxNumOfMessage = new MultiMaxNumOfMessage(Integer.parseInt(ReadJson.getStringConfig("CSSession")));
+            this.performanceManager = new PerformanceManager("D:\\Server\\",1000);
+            performanceManager.start();
+            this.tzSumLicense = new SumCountLicense(Sum);
+            this.tzFreLicense = new PerSecondCountLicense(Fre);
             start();
         } catch (JMSException e) {
             e.printStackTrace();
