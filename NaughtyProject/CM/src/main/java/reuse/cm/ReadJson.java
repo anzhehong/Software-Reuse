@@ -20,7 +20,7 @@ public class ReadJson{
         FileInputStream configIn = null;
         configmap  = new HashMap<String, Object>();
         try {
-            configIn = new FileInputStream("/Users/Sophie/Desktop/readjson/src/main/java/testJson/test.json");
+            configIn = new FileInputStream("/Users/Sophie/Software-Reuse/NaughtyProject/config.json");
             configmap = gson.fromJson(IOUtils.toString(configIn), configmap.getClass());
         } catch (JsonSyntaxException e) {
            // e.printStackTrace();

@@ -20,7 +20,7 @@ import java.util.TimerTask;
 public class ClientInterface implements ActionListener {
 
     private Client client;
-    public ClientView clientView;
+    public  ClientView clientView;
     private Session session;
     private JFrame jFrame = new JFrame();
     private JPanel jPanel = new JPanel();
