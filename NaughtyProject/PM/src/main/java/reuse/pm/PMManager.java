@@ -46,6 +46,13 @@ public class PMManager {
         Write("Log.txt","Client: " + ClientName + " login " + result + " at " + date, outPath);
     }
 
+
+    /**将client和server端输出的文件夹里所有没有被压缩过的文件压缩
+     @param sourceFilePath client和server端输出的文件夹
+     @param zipFilePath  压缩包文件夹
+     @param fileName 压缩包文件名
+     */
+
     public static boolean fileToZip(String sourceFilePath,String zipFilePath,String fileName){
         boolean flag = false;
         File sourceFile = new File(sourceFilePath);
