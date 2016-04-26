@@ -225,15 +225,14 @@ public class Server {
                                         if(files[i].getName().equals("yserver"+str))
                                         {
                                            // System.out.println("xiangdeng");
-                                            PMManager.Write("client"+str+"-v2",contentStored,readJson.getStringConfig("sourcePath")+"/");
+                                            PMManager.Write("server"+str+"-v2",contentStored,readJson.getStringConfig("sourcePath")+"/");
                                             flag = 1;
                                             break;
                                         }
                                     }
                                     if(flag == 0) {
-                                        PMManager.Write("client" + str, contentStored, readJson.getStringConfig("sourcePath") + "/");
+                                        PMManager.Write("server" + str, contentStored, readJson.getStringConfig("sourcePath") + "/");
                                     }
-                                    PMManager.Write("server"+str,contentStored,readJson.getStringConfig("sourcePath"));
 
                                 } else {
                                     //TODO: invalidMessage +1
