@@ -9,6 +9,7 @@ import reuse.cm.ReadJson;
 import reuse.communication.InterfaceEvent;
 import reuse.communication.entity.AAMessage;
 import reuse.communication.entity.User;
+import reuse.pm.PMManager;
 import reuse.utility.EventController;
 
 import javax.jms.JMSException;
@@ -19,6 +20,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by MSI on 2016/3/23.
@@ -44,7 +47,7 @@ public class ClientInterface implements ActionListener {
     private static String receiveMessageLog = "ClientMesReceived.txt";
     private PerformanceManager performanceManager;
 
-    static public String jsonPath = "/Users/fowafolo/Desktop/test.json";
+    static public String jsonPath = "/Users/Sophie/Software-Reuse/NaughtyProject/config.json";
     static public String outPath = "/Users/fowafolo/Desktop/Log/Client/";
 
     public void setSession(Session session) {
@@ -103,7 +106,7 @@ public class ClientInterface implements ActionListener {
         this.jFrame.setSize(400,300);
         this.jFrame.setResizable(false);
         this.jFrame.setVisible(true);
-        this.jFrame.setTitle(ReadJson.getStringConfig("mqHost"));
+        this.jFrame.setTitle(new ReadJson("/Users/Sophie/Software-Reuse/NaughtyProject/test.json").getStringConfig("mqHost"));
         this.jFrame.setLocation(200,100);
         this.jFrame.show();
 
@@ -162,6 +165,34 @@ public class ClientInterface implements ActionListener {
                     AAMessage sendChatMessage = new AAMessage(5, clientView.MessageEdit.getText().trim());
                     try {
                         client.SendMessage(sendChatMessage);
+                        //存储客户端发出去的消息
+                        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        String str = df.format(new Date()).split(" ")[0];
+
+
+                        ReadJson readJson = new ReadJson("/Users/Sophie/Software-Reuse/NaughtyProject/test.json");
+                        String contentStored  = username_input.getText().trim()+"\t"+
+                                sendChatMessage.getFinalMessage().getStringProperty("content")+"\t"+
+
+                                sendChatMessage.getFinalMessage().getStringProperty("createdTime");
+                        File file = new File(readJson.getStringConfig("sourcePath"));
+                        File[] files = file.listFiles();
+                        int flag = 0;
+                       // System.out.println("files detectived"+files.length);
+                        for(int i = 0;i < files.length;i++){
+                            System.out.println(files[i].getName());
+                            if(files[i].getName().equals("yclient"+str))
+                            {
+                              //  System.out.println("xiangdeng");
+                                PMManager.Write("server"+str+"-v2",contentStored,readJson.getStringConfig("sourcePath")+"/");
+                                flag = 1;
+                                break;
+                            }
+                        }
+                        if(flag == 0) {
+                            PMManager.Write("server" + str, contentStored, readJson.getStringConfig("sourcePath") + "/");
+                        }
+
                     } catch (JMSException e1) {
                         e1.printStackTrace();
                     }
@@ -211,7 +242,7 @@ public class ClientInterface implements ActionListener {
 //        clientInterface1.timer = new Timer();
 //        clientInterface1.timer.schedule(new WriteLoginTask(), 5 * second, 5 * second);
 
-        clientInterface1.init(ReadJson.getStringConfig("baseQueueDestination"));
+        clientInterface1.init(new ReadJson("/Users/Sophie/Software-Reuse/NaughtyProject/test.json").getStringConfig("baseQueueDestination"));
         EventBus eventBus = EventController.eventBus;
         eventBus.register(clientInterface1);
 

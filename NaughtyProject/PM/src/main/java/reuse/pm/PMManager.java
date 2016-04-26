@@ -121,7 +121,7 @@ public class PMManager {
 
     }
     public static void main(String[] args){
-
+PMManager.Write("one","ad","/Users/Sophie/Software-Reuse/NaughtyProject/sourcePath/");
     }
 
 }

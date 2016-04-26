@@ -9,11 +9,14 @@ import reuse.communication.MQ.MQFactory;
 import reuse.cm.ReadJson;
 import reuse.license.MultiFrequencyRestriction;
 import reuse.license.MultiMaxNumOfMessage;
+import reuse.pm.PMManager;
 //import reuse.pm.PMManager;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -40,7 +43,8 @@ public class Server {
     /**
      * 登录日志的路径.
      */
-    private static String loginLog = ReadJson.getStringConfig("loginLog");
+
+    private static String loginLog =new ReadJson("/Users/Sophie/Software-Reuse/NaughtyProject/test.json").getStringConfig("loginLog");
 
     /**
      * 转发消息路径
@@ -114,7 +118,8 @@ public class Server {
 
     public Server() {
         try {
-            this.baseConnect = new MQConnect(MQFactory.getConsumer(ReadJson.getStringConfig("baseQueueDestination")));
+
+            this.baseConnect = new MQConnect(MQFactory.getConsumer(new ReadJson("/Users/Sophie/Software-Reuse/NaughtyProject/test.json").getStringConfig("baseQueueDestination")));
             this.topicConnect = new MQConnect(MQFactory.getpublisher("Topic"));
 //            this.multiFrequencyRestriction = new MultiFrequencyRestriction(Integer.parseInt(ReadJson.getStringConfig("CSMessage")));
 //            this.multiMaxNumOfMessage = new MultiMaxNumOfMessage(Integer.parseInt(ReadJson.getStringConfig("CSSession")));
@@ -204,6 +209,32 @@ public class Server {
                                 String isMessageValidStr = isMessageValid(message, connect);
                                 if (isMessageValidStr.equals("ok")) {
                                     sendTopic(message);
+
+                                    //将信息输入到文件
+                                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                    String str = df.format(new Date()).split(" ")[0];
+                                    String contentStored = message.getStringProperty("userName")+"\t"+
+                                            message.getStringProperty("content")+"\t"+
+                                            message.getStringProperty("createdTime");
+                                    ReadJson readJson = new ReadJson("/Users/Sophie/Software-Reuse/NaughtyProject/test.json");
+                                    File file = new File(readJson.getStringConfig("sourcePath"));
+                                    File[] files = file.listFiles();
+                                    int flag = 0;
+                                    for(int i = 0;i < files.length;i++){
+                                       // System.out.println(files[i].getName());
+                                        if(files[i].getName().equals("yserver"+str))
+                                        {
+                                           // System.out.println("xiangdeng");
+                                            PMManager.Write("client"+str+"-v2",contentStored,readJson.getStringConfig("sourcePath")+"/");
+                                            flag = 1;
+                                            break;
+                                        }
+                                    }
+                                    if(flag == 0) {
+                                        PMManager.Write("client" + str, contentStored, readJson.getStringConfig("sourcePath") + "/");
+                                    }
+                                    PMManager.Write("server"+str,contentStored,readJson.getStringConfig("sourcePath"));
+
                                 } else {
                                     //TODO: invalidMessage +1
                                 }

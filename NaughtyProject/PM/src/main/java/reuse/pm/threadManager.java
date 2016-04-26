@@ -1,5 +1,4 @@
 package reuse.pm;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -9,10 +8,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.SynchronousQueue;
 
+import reuse.cm.ReadJson;
+
 /**
  * Created by Sophie on 16/4/25.
  */
 public abstract class threadManager {
+
 
         protected static final long NEVER = Long.MAX_VALUE;
 
@@ -153,8 +155,10 @@ public abstract class threadManager {
          System.out.println("Execute work ...");
          SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
          String fileName = df.format(new Date());
-         String sourceFilePath = "/Users/Sophie/Software-Reuse/NaughtyProject/sourcePath";
-         String zipFilePath = "/Users/Sophie/Software-Reuse/NaughtyProject/zipPath";
+
+         ReadJson readJson = new ReadJson("/Users/Sophie/Software-Reuse/NaughtyProject/test.json");
+         String sourceFilePath = (readJson.getStringConfig("sourcePath"));
+         String zipFilePath = (readJson.getStringConfig("zipPath"));
 
         boolean flag = PMManager.fileToZip(sourceFilePath, zipFilePath, fileName);
         if(flag){
@@ -169,7 +173,8 @@ public abstract class threadManager {
 
     protected long getNextTime()throws ParseException {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return System.currentTimeMillis()+24*60*60*1000L;
+        //return System.currentTimeMillis()+24*60*60*1000L;
+        return System.currentTimeMillis()+10000L;
     }
      public static void main(String argv[]) {
          MyDataGenerator generator = new MyDataGenerator();

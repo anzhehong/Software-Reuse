@@ -15,12 +15,12 @@ public class ReadJson{
 
     static  Map<String,Object> configmap;
 
-    static {
+    public ReadJson(String str) {
         Gson gson = new Gson();
         FileInputStream configIn = null;
         configmap  = new HashMap<String, Object>();
         try {
-            configIn = new FileInputStream("/Users/Sophie/Software-Reuse/NaughtyProject/config.json");
+            configIn = new FileInputStream(str);
             configmap = gson.fromJson(IOUtils.toString(configIn), configmap.getClass());
         } catch (JsonSyntaxException e) {
            // e.printStackTrace();
@@ -98,5 +98,6 @@ public class ReadJson{
     public static void main(String[] args){
 
 
+        System.out.println(new ReadJson("/Users/Sophie/Software-Reuse/NaughtyProject/config.json").getStringConfig("mqHost"));
     }
 }
