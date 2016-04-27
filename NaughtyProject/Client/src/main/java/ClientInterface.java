@@ -56,7 +56,7 @@ public class ClientInterface implements ActionListener {
 
     public ClientInterface() {
         client = new Client();
-        performanceManager = new PerformanceManager("D:\\Client\\",1000);
+        performanceManager = new PerformanceManager("D:\\Client\\",1000000);
         performanceManager.start();
     }
 
@@ -184,13 +184,13 @@ public class ClientInterface implements ActionListener {
                             if(files[i].getName().equals("yclient"+str))
                             {
                               //  System.out.println("xiangdeng");
-                                PMManager.Write("server"+str+"-v2",contentStored,readJson.getStringConfig("sourcePath")+"/");
+                                PMManager.Write("client"+str+"-v2",contentStored,readJson.getStringConfig("sourcePath")+"/");
                                 flag = 1;
                                 break;
                             }
                         }
                         if(flag == 0) {
-                            PMManager.Write("server" + str, contentStored, readJson.getStringConfig("sourcePath") + "/");
+                            PMManager.Write("client" + str, contentStored, readJson.getStringConfig("sourcePath") + "/");
                         }
 
                     } catch (JMSException e1) {

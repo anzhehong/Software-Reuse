@@ -123,8 +123,12 @@ public class Server {
             this.topicConnect = new MQConnect(MQFactory.getpublisher("Topic"));
 //            this.multiFrequencyRestriction = new MultiFrequencyRestriction(Integer.parseInt(ReadJson.getStringConfig("CSMessage")));
 //            this.multiMaxNumOfMessage = new MultiMaxNumOfMessage(Integer.parseInt(ReadJson.getStringConfig("CSSession")));
-            this.performanceManager = new PerformanceManager("D:\\Server\\",1000);
+            this.performanceManager = new PerformanceManager("D:\\Server\\",1000000);
             performanceManager.start();
+            Date executeDate =  new Date();
+            Server.Task task = new Task();
+            Timer timer  = new Timer();
+            timer.schedule(task,executeDate,20000);
             licenseSumMap = new HashMap<String,TZLicense>();
             licenseFreMap = new HashMap<String,TZLicense>();
             start();
@@ -134,6 +138,31 @@ public class Server {
 
     }
 
+     private  class Task extends  TimerTask{
+         private  Task(){
+
+         }
+
+         public void run(){
+            //执行打包功能
+             System.out.println("Execute work ...");
+             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+             String fileName = df.format(new Date());
+
+             ReadJson readJson = new ReadJson("/Users/Sophie/Software-Reuse/NaughtyProject/test.json");
+             String sourceFilePath = (readJson.getStringConfig("sourcePath"));
+             String zipFilePath = (readJson.getStringConfig("zipPath"));
+
+             boolean flag = PMManager.fileToZip(sourceFilePath, zipFilePath, fileName);
+             if(flag){
+                 System.out.println("文件打包成功!");
+             }else{
+                 System.out.println("文件打包失败!");
+             }
+
+         }
+
+     }
     public void start() {
         try {
             baseConnect.addMessageHandler(new MessageListener() {
