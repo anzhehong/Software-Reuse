@@ -165,26 +165,24 @@ public class ClientInterface implements ActionListener {
                     AAMessage sendChatMessage = new AAMessage(5, clientView.MessageEdit.getText().trim());
                     try {
                         client.SendMessage(sendChatMessage);
-                        //存储客户端发出去的消息
+                        //有可能新建用时间来命名的文件夹
                         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                        String str = df.format(new Date()).split(" ")[0];
-
-
-                        ReadJson readJson = new ReadJson("/Users/Sophie/Software-Reuse/NaughtyProject/test.json");
+                        String str = df.format(new Date());
+                        //存储的消息
                         String contentStored  = username_input.getText().trim()+"\t"+
                                 sendChatMessage.getFinalMessage().getStringProperty("content")+"\t"+
-
                                 sendChatMessage.getFinalMessage().getStringProperty("createdTime");
+                        //消息文件的路径
+                        ReadJson readJson = new ReadJson("/Users/Sophie/Software-Reuse/NaughtyProject/test.json");
                         File file = new File(readJson.getStringConfig("sourcePath"));
+
                         File[] files = file.listFiles();
+                        //判断是否要需要新建文件来存储信息.
                         int flag = 0;
-                       // System.out.println("files detectived"+files.length);
                         for(int i = 0;i < files.length;i++){
-                            System.out.println(files[i].getName());
-                            if(files[i].getName().equals("yclient"+str))
+                            if(files[i].getName().charAt(0)!='y' && files[i].getName().substring(0,6).equals("client"))
                             {
-                              //  System.out.println("xiangdeng");
-                                PMManager.Write("client"+str+"-v2",contentStored,readJson.getStringConfig("sourcePath")+"/");
+                                PMManager.Write(files[i].getName(),contentStored,readJson.getStringConfig("sourcePath")+"/");
                                 flag = 1;
                                 break;
                             }

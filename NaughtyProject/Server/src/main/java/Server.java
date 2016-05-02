@@ -151,9 +151,9 @@ public class Server {
 
              ReadJson readJson = new ReadJson("/Users/Sophie/Software-Reuse/NaughtyProject/test.json");
              String sourceFilePath = (readJson.getStringConfig("sourcePath"));
-             String zipFilePath = (readJson.getStringConfig("zipPath"));
+             String zipFilePath = (readJson.getStringConfig("zipDailyPath"));
 
-             boolean flag = PMManager.fileToZip(sourceFilePath, zipFilePath, fileName);
+             boolean flag = PMManager.DailyZip(sourceFilePath, zipFilePath, fileName);
              if(flag){
                  System.out.println("文件打包成功!");
              }else{
@@ -241,20 +241,22 @@ public class Server {
 
                                     //将信息输入到文件
                                     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                    String str = df.format(new Date()).split(" ")[0];
-                                    String contentStored = message.getStringProperty("userName")+"\t"+
+                                    String str = df.format(new Date());
+                                    //存储的消息
+                                    String contentStored  = message.getStringProperty("userName")+"\t"+
                                             message.getStringProperty("content")+"\t"+
                                             message.getStringProperty("createdTime");
+                                    //消息文件的路径
                                     ReadJson readJson = new ReadJson("/Users/Sophie/Software-Reuse/NaughtyProject/test.json");
                                     File file = new File(readJson.getStringConfig("sourcePath"));
+
                                     File[] files = file.listFiles();
+                                    //判断是否要需要新建文件来存储信息.
                                     int flag = 0;
                                     for(int i = 0;i < files.length;i++){
-                                       // System.out.println(files[i].getName());
-                                        if(files[i].getName().equals("yserver"+str))
+                                        if(files[i].getName().charAt(0)!='y' && files[i].getName().substring(0,6).equals("server"))
                                         {
-                                           // System.out.println("xiangdeng");
-                                            PMManager.Write("server"+str+"-v2",contentStored,readJson.getStringConfig("sourcePath")+"/");
+                                            PMManager.Write(files[i].getName(),contentStored,readJson.getStringConfig("sourcePath")+"/");
                                             flag = 1;
                                             break;
                                         }

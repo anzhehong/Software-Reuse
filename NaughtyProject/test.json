@@ -1,0 +1,23 @@
+{
+  "mqHost": "tcp://localhost:61616",
+  "baseQueueDestination": "testQueue",
+
+  "requestLogin":"0",
+  "loginPermitted":"1",
+  "loginRefused":"2",
+  "redoLogin":"999",
+  "reLoginPermitted":"888",
+
+  "CSMessage":"5",
+  "CSSession":"13",
+  "requestReLogin":"777",
+
+  "loginLog":"ServerLoginLog.txt",
+  "loginLogSecond":"1000",
+  "sourcePath":"/Users/Sophie/Software-Reuse/NaughtyProject/sourcePath",
+  "zipDailyPath":"/Users/Sophie/Software-Reuse/NaughtyProject/zipDailyPath",
+  "zipWeeklyPath":"/Users/Sophie/Software-Reuse/NaughtyProject/ZipWeeklyPath",
+  "tmpUnzippedPath":"/Users/Sophie/Software-Reuse/NaughtyProject/tmpUnzippedPath",
+  "fileZipDailyInterval":"30000",
+  "fileZipWeeklyInterval":"100000"
+}
