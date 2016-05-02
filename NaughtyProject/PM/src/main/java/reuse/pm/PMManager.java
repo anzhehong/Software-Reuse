@@ -257,6 +257,24 @@ public class PMManager {
 
     }
 
+ static void unzipAndzipWeekly(){
+        ReadJson readJson = new ReadJson("/Users/Sophie/Software-Reuse/NaughtyProject/test.json");
+        String zipDailyPath = readJson.getStringConfig("zipDailyPath");
+        String tmpUnzippedPath = readJson.getStringConfig("tmpUnzippedPath");
+        String zipWeeklyPath = readJson.getStringConfig("zipWeeklyPath");
+        File file = new File(zipDailyPath);
+        File[] files = file.listFiles();
+        for(int i = 0;i < files.length;i++) {
+            if(files[i].getName().charAt(0)!='y') {
+                PMManager.unZipFile(zipDailyPath + File.separator + files[i].getName(), tmpUnzippedPath);
+                files[i].renameTo(new File(zipDailyPath + File.separator + "y" + files[i].getName()));
+            }
+        }
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        PMManager.WeeklyZip(tmpUnzippedPath,zipWeeklyPath,df.format(new Date()));
+
+    }
     public static void main(String[] args) {
         // TODO Auto-generated method stub
       unzipAndzipWeekly();
