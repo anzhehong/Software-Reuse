@@ -126,9 +126,13 @@ public class Server {
             this.performanceManager = new PerformanceManager("D:\\Server\\",1000000);
             performanceManager.start();
             Date executeDate =  new Date();
-            Server.Task task = new Task();
-            Timer timer  = new Timer();
-            timer.schedule(task,executeDate,20000);
+            Server.TaskDaily taskDaily = new TaskDaily();
+            Server.TaskWeekly taskWeekly = new TaskWeekly();
+            Timer timerDaily  = new Timer();
+            Timer timerWeekly  = new Timer();
+            
+            timerDaily.schedule(taskDaily,executeDate,24*60*60*1000);
+            timerWeekly.schedule(taskWeekly,executeDate,7*24*60*60*1000);
             licenseSumMap = new HashMap<String,TZLicense>();
             licenseFreMap = new HashMap<String,TZLicense>();
             start();
@@ -138,14 +142,13 @@ public class Server {
 
     }
 
-     private  class Task extends  TimerTask{
-         private  Task(){
+     private  class TaskDaily extends  TimerTask{
+         private  TaskDaily(){
 
          }
 
          public void run(){
             //执行打包功能
-             System.out.println("Execute work ...");
              SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
              String fileName = df.format(new Date());
 
@@ -163,6 +166,17 @@ public class Server {
          }
 
      }
+    private  class TaskWeekly extends  TimerTask{
+        private  TaskWeekly(){
+
+        }
+
+        public void run(){
+            //解压再压缩
+            PMManager.unzipAndzipWeekly();
+        }
+
+    }
     public void start() {
         try {
             baseConnect.addMessageHandler(new MessageListener() {
