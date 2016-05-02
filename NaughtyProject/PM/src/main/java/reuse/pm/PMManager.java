@@ -200,7 +200,7 @@ public class PMManager {
         return flag;
     }
    //每周解压
-    static void unZipFile(String zipFilename,String unzipPath){
+    public static void unZipFile(String zipFilename,String unzipPath){
         long startTime=System.currentTimeMillis();
         try {
             ZipInputStream Zin=new ZipInputStream(new FileInputStream(zipFilename));
@@ -238,7 +238,7 @@ public class PMManager {
     }
 
     //每周解压又重新压缩
-    static void unzipAndzipWeekly(){
+    public  static void unzipAndzipWeekly(){
         ReadJson readJson = new ReadJson("/Users/Sophie/Software-Reuse/NaughtyProject/test.json");
         String zipDailyPath = readJson.getStringConfig("zipDailyPath");
         String tmpUnzippedPath = readJson.getStringConfig("tmpUnzippedPath");
@@ -259,7 +259,7 @@ public class PMManager {
 
     public static void main(String[] args) {
         // TODO Auto-generated method stub
-      unzipAndzipWeekly();
+    //  unzipAndzipWeekly();
     }
 
 }

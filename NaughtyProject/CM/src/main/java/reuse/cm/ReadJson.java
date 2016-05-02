@@ -78,6 +78,8 @@ public class ReadJson{
         throw new RuntimeException("Sorry there is no corresponding value...");
     }
 
+
+
     public static boolean getBooleanConfig(String str) throws RuntimeException{
         Iterator<String> iter = configmap.keySet().iterator();
         while (iter.hasNext()){
