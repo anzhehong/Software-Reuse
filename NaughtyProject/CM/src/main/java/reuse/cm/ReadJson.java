@@ -15,12 +15,12 @@ public class ReadJson{
 
     static  Map<String,Object> configmap;
 
-    public ReadJson(String str) {
+    static {
         Gson gson = new Gson();
         FileInputStream configIn = null;
         configmap  = new HashMap<String, Object>();
         try {
-            configIn = new FileInputStream(str);
+            configIn = new FileInputStream("/Users/fowafolo/Desktop/test.json");
             configmap = gson.fromJson(IOUtils.toString(configIn), configmap.getClass());
         } catch (JsonSyntaxException e) {
            // e.printStackTrace();
@@ -78,8 +78,6 @@ public class ReadJson{
         throw new RuntimeException("Sorry there is no corresponding value...");
     }
 
-
-
     public static boolean getBooleanConfig(String str) throws RuntimeException{
         Iterator<String> iter = configmap.keySet().iterator();
         while (iter.hasNext()){
@@ -100,6 +98,5 @@ public class ReadJson{
     public static void main(String[] args){
 
 
-        System.out.println(new ReadJson("/Users/Sophie/Software-Reuse/NaughtyProject/test.json").getStringConfig("mqHost"));
     }
 }

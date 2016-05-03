@@ -1,8 +1,4 @@
 import com.API.Controller.DBAPI;
-import com.HaroldLIU.PerformanceManager;
-import license.PerSecondCountLicense;
-import license.SumCountLicense;
-import license.TZLicense;
 import reuse.communication.entity.AAMessage;
 import reuse.communication.MQ.MQConnect;
 import reuse.communication.MQ.MQFactory;
@@ -10,13 +6,10 @@ import reuse.cm.ReadJson;
 import reuse.license.MultiFrequencyRestriction;
 import reuse.license.MultiMaxNumOfMessage;
 import reuse.pm.PMManager;
-//import reuse.pm.PMManager;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
-import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -26,25 +19,23 @@ public class Server {
 
     static public String outPath = "/Users/fowafolo/Desktop/Log/Server/";
     static public String jsonPath = "/Users/fowafolo/Desktop/test.json";
-    static private int Sum;
-    static private int Fre;
-//    /**
-//     * 合法输入次数/minutes.
-//     */
-//    private static int validLoginCount = 0;
-//    /**
-//     * 不合法输入次数/minute.
-//     */
-//    private static int inValidLoginCount = 0;
-//    /**
-//     * 转发消息数量.
-//     */
-//    private static int forwardedMessageCount = 0;
+
+    /**
+     * 合法输入次数/minutes.
+     */
+    private static int validLoginCount = 0;
+    /**
+     * 不合法输入次数/minute.
+     */
+    private static int inValidLoginCount = 0;
+    /**
+     * 转发消息数量.
+     */
+    private static int forwardedMessageCount = 0;
     /**
      * 登录日志的路径.
      */
-
-    private static String loginLog =new ReadJson("/Users/Sophie/Software-Reuse/NaughtyProject/test.json").getStringConfig("loginLog");
+    private static String loginLog = ReadJson.getStringConfig("loginLog");
 
     /**
      * 转发消息路径
@@ -81,60 +72,44 @@ public class Server {
      */
 //    private static Map<String, ArrayList<Date>> connectArrayListMap = new HashMap<String, ArrayList<Date>>();
 
-//    private MultiFrequencyRestriction multiFrequencyRestriction;
-//    private MultiMaxNumOfMessage multiMaxNumOfMessage;
-    private PerformanceManager performanceManager;
-    private Map<String,TZLicense> licenseSumMap;
-    private Map<String,TZLicense> licenseFreMap;
-//    /**
-//     * 写日志的定时器.
-//     */
-//    public static Timer timer;
-//
-//    /**
-//     * 定时器记录每分钟合法和不合法的消息个数.
-//     */
-//    static class WriteLoginTask extends TimerTask
-//    {
-//        public void run() {
-//            //TODO: 把validLogin和invalidLogin记录到文件中
-//            Date date = new Date();
-////            PMManager.Write(loginLog, date + "\tValid Login Count: " + validLoginCount + "\tInvalid Login Count: " + inValidLoginCount, outPath);
-////            PMManager.Write(forwardedMessageLog, date + "\tForwarded Message Count: " + forwardedMessageCount, outPath);
-//            inValidLoginCount = 0;
-//            validLoginCount = 0;
-//            forwardedMessageCount = 0;
-//
-//        }
-//    }
+    private MultiFrequencyRestriction multiFrequencyRestriction;
+    private MultiMaxNumOfMessage multiMaxNumOfMessage;
+
+    /**
+     * 写日志的定时器.
+     */
+    public static Timer timer;
+
+    /**
+     * 定时器记录每分钟合法和不合法的消息个数.
+     */
+    static class WriteLoginTask extends TimerTask
+    {
+        public void run() {
+            //TODO: 把validLogin和invalidLogin记录到文件中
+            Date date = new Date();
+            PMManager.Write(loginLog, date + "\tValid Login Count: " + validLoginCount + "\tInvalid Login Count: " + inValidLoginCount, outPath);
+            PMManager.Write(forwardedMessageLog, date + "\tForwarded Message Count: " + forwardedMessageCount, outPath);
+            inValidLoginCount = 0;
+            validLoginCount = 0;
+            forwardedMessageCount = 0;
+
+        }
+    }
 
 
     public static void main(String[] args) throws JMSException {
         Server server = new Server();
-
-//        server.timer = new Timer();
-//        server.timer.schedule(new WriteLoginTask(), 5 * second, 5 * second);
+        server.timer = new Timer();
+        server.timer.schedule(new WriteLoginTask(), 5 * second, 5 * second);
     }
 
     public Server() {
         try {
-
-            this.baseConnect = new MQConnect(MQFactory.getConsumer(new ReadJson("/Users/Sophie/Software-Reuse/NaughtyProject/test.json").getStringConfig("baseQueueDestination")));
+            this.baseConnect = new MQConnect(MQFactory.getConsumer(ReadJson.getStringConfig("baseQueueDestination")));
             this.topicConnect = new MQConnect(MQFactory.getpublisher("Topic"));
-//            this.multiFrequencyRestriction = new MultiFrequencyRestriction(Integer.parseInt(ReadJson.getStringConfig("CSMessage")));
-//            this.multiMaxNumOfMessage = new MultiMaxNumOfMessage(Integer.parseInt(ReadJson.getStringConfig("CSSession")));
-            this.performanceManager = new PerformanceManager("D:\\Server\\",1000000);
-            performanceManager.start();
-            Date executeDate =  new Date();
-            Server.TaskDaily taskDaily = new TaskDaily();
-            Server.TaskWeekly taskWeekly = new TaskWeekly();
-            Timer timerDaily  = new Timer();
-            Timer timerWeekly  = new Timer();
-
-            timerDaily.schedule(taskDaily,executeDate,24*60*60*1000);
-            timerWeekly.schedule(taskWeekly,executeDate,7*24*60*60*1000);
-            licenseSumMap = new HashMap<String,TZLicense>();
-            licenseFreMap = new HashMap<String,TZLicense>();
+            this.multiFrequencyRestriction = new MultiFrequencyRestriction(Integer.parseInt(ReadJson.getStringConfig("CSMessage")));
+            this.multiMaxNumOfMessage = new MultiMaxNumOfMessage(Integer.parseInt(ReadJson.getStringConfig("CSSession")));
             start();
         } catch (JMSException e) {
             e.printStackTrace();
@@ -142,41 +117,6 @@ public class Server {
 
     }
 
-     private  class TaskDaily extends  TimerTask{
-         private  TaskDaily(){
-
-         }
-
-         public void run(){
-            //执行打包功能
-             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-             String fileName = df.format(new Date());
-
-             ReadJson readJson = new ReadJson("/Users/Sophie/Software-Reuse/NaughtyProject/test.json");
-             String sourceFilePath = (readJson.getStringConfig("sourcePath"));
-             String zipFilePath = (readJson.getStringConfig("zipDailyPath"));
-
-             boolean flag = PMManager.DailyZip(sourceFilePath, zipFilePath, fileName);
-             if(flag){
-                 System.out.println("文件打包成功!");
-             }else{
-                 System.out.println("文件打包失败!");
-             }
-
-         }
-
-     }
-    private  class TaskWeekly extends  TimerTask{
-        private  TaskWeekly(){
-
-        }
-
-        public void run(){
-            //解压再压缩
-            PMManager.unzipAndzipWeekly();
-        }
-
-    }
     public void start() {
         try {
             baseConnect.addMessageHandler(new MessageListener() {
@@ -221,7 +161,7 @@ public class Server {
                 System.out.println("already");
                 AAMessage aaMessage = new AAMessage(2, "This Account has Already Logged in.");
                 connect.sendMessage(aaMessage.getFinalMessage());
-                performanceManager.failTime++;
+                inValidLoginCount += 1;
                 //TODO: 测试 删除此privateConnect
 //                boolean removeFlag = removeConnect(connect);
             } else {
@@ -230,12 +170,10 @@ public class Server {
                 connect.sendMessage(aaMessage.getFinalMessage());
                 mqConnects.add(connect);
 
-                licenseSumMap.put(aaMessage.getFinalMessage().getStringProperty("userName"), new SumCountLicense(Sum));
-                licenseFreMap.put(aaMessage.getFinalMessage().getStringProperty("userName"), new PerSecondCountLicense(Fre));
-//                multiMaxNumOfMessage.addMap(aaMessage.getFinalMessage().getStringProperty("userName"));
-//                multiFrequencyRestriction.addMap(aaMessage.getFinalMessage().getStringProperty("userName"));
+                multiMaxNumOfMessage.addMap(aaMessage.getFinalMessage().getStringProperty("userName"));
+                multiFrequencyRestriction.addMap(aaMessage.getFinalMessage().getStringProperty("userName"));
 //                connectArrayListMap.put(aaMessage.getFinalMessage().getStringProperty("userName"), new ArrayList<Date>());
-                performanceManager.successTime++;
+                validLoginCount += 1;
 
                 connect.addMessageHandler(new MessageListener() {
                     @Override
@@ -252,33 +190,6 @@ public class Server {
                                 String isMessageValidStr = isMessageValid(message, connect);
                                 if (isMessageValidStr.equals("ok")) {
                                     sendTopic(message);
-
-                                    //将信息输入到文件
-                                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                    String str = df.format(new Date());
-                                    //存储的消息
-                                    String contentStored  = message.getStringProperty("userName")+"\t"+
-                                            message.getStringProperty("content")+"\t"+
-                                            message.getStringProperty("createdTime");
-                                    //消息文件的路径
-                                    ReadJson readJson = new ReadJson("/Users/Sophie/Software-Reuse/NaughtyProject/test.json");
-                                    File file = new File(readJson.getStringConfig("sourcePath"));
-
-                                    File[] files = file.listFiles();
-                                    //判断是否要需要新建文件来存储信息.
-                                    int flag = 0;
-                                    for(int i = 0;i < files.length;i++){
-                                        if(files[i].getName().charAt(0)!='y' && files[i].getName().substring(0,6).equals("server"))
-                                        {
-                                            PMManager.Write(files[i].getName(),contentStored,readJson.getStringConfig("sourcePath")+"/");
-                                            flag = 1;
-                                            break;
-                                        }
-                                    }
-                                    if(flag == 0) {
-                                        PMManager.Write("server" + str, contentStored, readJson.getStringConfig("sourcePath") + "/");
-                                    }
-
                                 } else {
                                     //TODO: invalidMessage +1
                                 }
@@ -292,7 +203,7 @@ public class Server {
         } else {
             AAMessage aaMessage = new AAMessage(2, "Validation Failed.");
             connect.sendMessage(aaMessage.getFinalMessage());
-            performanceManager.failTime++;
+            inValidLoginCount += 1;
             //TODO: 测试 删除此privateConnect
 //            boolean removeFlag = removeConnect(privateConnect);
         }
@@ -305,7 +216,7 @@ public class Server {
      */
      public void sendTopic(Message message) throws JMSException {
         topicConnect.sendMessage(message);
-//        forwardedMessageCount += mqConnects.size();
+        forwardedMessageCount += mqConnects.size();
      }
 
 
@@ -334,8 +245,8 @@ public class Server {
      */
     public String isMessageValid(Message message, MQConnect connect) throws JMSException {
 
-        boolean sessionFlag =  licenseSumMap.get(message.getStringProperty("userName")).tryAcquire();
-        boolean secondFlag = licenseFreMap.get(message.getStringProperty("userName")).tryAcquire();
+        boolean sessionFlag =  multiMaxNumOfMessage.CheckByKey(message.getStringProperty("userName"));
+        boolean secondFlag = multiFrequencyRestriction.CheckByKey(message.getStringProperty("userName"));
 
         if (!secondFlag) {
             return "ignore";
@@ -343,8 +254,6 @@ public class Server {
             if (!sessionFlag) {
                 AAMessage aaMessage = new AAMessage(999, "Redo Login");
                 connect.sendMessage(aaMessage.getFinalMessage());
-                licenseSumMap.get(message.getStringProperty("userName")).reset();
-                licenseFreMap.get(message.getStringProperty("userName")).reset();
                 return "ignore";
             }else {
 

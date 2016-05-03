@@ -34,7 +34,7 @@ public class Client {
      */
     public Client() {
         try {
-            this.baseConnect = new MQConnect(MQFactory.getproducer(new ReadJson("/Users/Sophie/Software-Reuse/NaughtyProject/test.json").getStringConfig("baseQueueDestination")));
+            this.baseConnect = new MQConnect(MQFactory.getproducer(ReadJson.getStringConfig("baseQueueDestination")));
         } catch (JMSException e) {
             e.printStackTrace();
         }

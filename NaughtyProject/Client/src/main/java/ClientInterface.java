@@ -1,14 +1,10 @@
 import GUI.ClientView;
-import com.HaroldLIU.PerformanceManager;
+import reuse.communication.entity.AAMessage;
+import reuse.communication.InterfaceEvent;
+import reuse.communication.entity.User;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
-import com.openreuse.common.config.ConfigUtil;
-import com.openreuse.common.config.coef.AbstractCoef;
-import com.openreuse.common.config.coef.type.CoefType;
 import reuse.cm.ReadJson;
-import reuse.communication.InterfaceEvent;
-import reuse.communication.entity.AAMessage;
-import reuse.communication.entity.User;
 import reuse.pm.PMManager;
 import reuse.utility.EventController;
 
@@ -19,9 +15,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by MSI on 2016/3/23.
@@ -39,15 +35,15 @@ public class ClientInterface implements ActionListener {
     private JTextField password_input = new JTextField();
     private JButton login_btn = new JButton();
     private JButton signup_btn = new JButton();
-//    private static int validLoginCount = 0;
-//    private static int inValidLoginCount = 0;
+    private static int validLoginCount = 0;
+    private static int inValidLoginCount = 0;
     private static int receivedMessageCount = 0;
     private static int second = 1000;
     private static String loginLog = "ClientLoginLog.txt";
     private static String receiveMessageLog = "ClientMesReceived.txt";
-    private PerformanceManager performanceManager;
 
-    static public String jsonPath = "/Users/Sophie/Software-Reuse/NaughtyProject/config.json";
+
+    static public String jsonPath = "/Users/fowafolo/Desktop/test.json";
     static public String outPath = "/Users/fowafolo/Desktop/Log/Client/";
 
     public void setSession(Session session) {
@@ -56,8 +52,6 @@ public class ClientInterface implements ActionListener {
 
     public ClientInterface() {
         client = new Client();
-        performanceManager = new PerformanceManager("D:\\Client\\",1000000);
-        performanceManager.start();
     }
 
     public String getUsername() {
@@ -106,7 +100,7 @@ public class ClientInterface implements ActionListener {
         this.jFrame.setSize(400,300);
         this.jFrame.setResizable(false);
         this.jFrame.setVisible(true);
-        this.jFrame.setTitle(new ReadJson("/Users/Sophie/Software-Reuse/NaughtyProject/test.json").getStringConfig("mqHost"));
+        this.jFrame.setTitle(ReadJson.getStringConfig("mqHost"));
         this.jFrame.setLocation(200,100);
         this.jFrame.show();
 
@@ -153,7 +147,7 @@ public class ClientInterface implements ActionListener {
              *  关掉登录界面， 打开聊天界面
              */
 
-            performanceManager.successTime++;
+            validLoginCount +=1;
             uninit();
             clientView = new ClientView();
             clientView.ConfirmButton.addActionListener(new ActionListener() {
@@ -165,32 +159,6 @@ public class ClientInterface implements ActionListener {
                     AAMessage sendChatMessage = new AAMessage(5, clientView.MessageEdit.getText().trim());
                     try {
                         client.SendMessage(sendChatMessage);
-                        //有可能新建用时间来命名的文件夹
-                        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                        String str = df.format(new Date());
-                        //存储的消息
-                        String contentStored  = username_input.getText().trim()+"\t"+
-                                sendChatMessage.getFinalMessage().getStringProperty("content")+"\t"+
-                                sendChatMessage.getFinalMessage().getStringProperty("createdTime");
-                        //消息文件的路径
-                        ReadJson readJson = new ReadJson("/Users/Sophie/Software-Reuse/NaughtyProject/test.json");
-                        File file = new File(readJson.getStringConfig("sourcePath"));
-
-                        File[] files = file.listFiles();
-                        //判断是否要需要新建文件来存储信息.
-                        int flag = 0;
-                        for(int i = 0;i < files.length;i++){
-                            if(files[i].getName().charAt(0)!='y' && files[i].getName().substring(0,6).equals("client"))
-                            {
-                                PMManager.Write(files[i].getName(),contentStored,readJson.getStringConfig("sourcePath")+"/");
-                                flag = 1;
-                                break;
-                            }
-                        }
-                        if(flag == 0) {
-                            PMManager.Write("client" + str, contentStored, readJson.getStringConfig("sourcePath") + "/");
-                        }
-
                     } catch (JMSException e1) {
                         e1.printStackTrace();
                     }
@@ -222,7 +190,7 @@ public class ClientInterface implements ActionListener {
             clientView.ConfirmButton.setVisible(true);
             clientView.setTitle("连接正常");
         } else {
-            performanceManager.failTime++;
+            inValidLoginCount += 1;
             String errorMsg = interfaceEvent.getStr().toString();
 
             /**
@@ -237,46 +205,27 @@ public class ClientInterface implements ActionListener {
 
     public static void main(String[] args) throws JMSException{
         ClientInterface clientInterface1 = new ClientInterface();
-//        clientInterface1.timer = new Timer();
-//        clientInterface1.timer.schedule(new WriteLoginTask(), 5 * second, 5 * second);
-
-        clientInterface1.init(new ReadJson("/Users/Sophie/Software-Reuse/NaughtyProject/test.json").getStringConfig("baseQueueDestination"));
+        clientInterface1.timer = new Timer();
+        clientInterface1.timer.schedule(new WriteLoginTask(), 5 * second, 5 * second);
+        clientInterface1.init(ReadJson.getStringConfig("baseQueueDestination"));
         EventBus eventBus = EventController.eventBus;
         eventBus.register(clientInterface1);
-
-        /**
-         * 设置参数
-         */
-        ConfigUtil.setBasicCoef("35", 1);
-        File jsonFile = new File(jsonPath);
-        ConfigUtil.dumpBasicCoef(jsonFile);
-
-        /**
-         * 获取参数
-         */
-        File jsonFile2 = new File(jsonPath);
-        ConfigUtil.loadBasicCoef(jsonFile2);
-        ConfigUtil.setBasicCoef("1", "2");
-        AbstractCoef ac = ConfigUtil.getBasicCoef("1");
-        if(ac.getType().equals(CoefType.VARCHAR)){
-            System.out.println((String) ac.getValue());
-        }
     }
 
-//    public static Timer timer;
-//    static class WriteLoginTask extends TimerTask
-//    {
-//        public void run() {
-//            /**
-//             *   把validLogin和invalidLogin记录到文件中
-//             */
-//
-//            Date date = new Date();
-//            PMManager.Write(loginLog, date + "\tValid Login Count: " + validLoginCount + "\tInvalid Login Count: " + inValidLoginCount, ClientInterface.outPath);
-//            PMManager.Write(receiveMessageLog,date + "\tReceived message Count: " + receivedMessageCount, ClientInterface.outPath);
-//            inValidLoginCount = 0;
-//            validLoginCount = 0;
-//            receivedMessageCount = 0;
-//        }
-//    }
+    public static Timer timer;
+    static class WriteLoginTask extends TimerTask
+    {
+        public void run() {
+            /**
+             *   把validLogin和invalidLogin记录到文件中
+             */
+
+            Date date = new Date();
+            PMManager.Write(loginLog, date + "\tValid Login Count: " + validLoginCount + "\tInvalid Login Count: " + inValidLoginCount, ClientInterface.outPath);
+            PMManager.Write(receiveMessageLog,date + "\tReceived message Count: " + receivedMessageCount, ClientInterface.outPath);
+            inValidLoginCount = 0;
+            validLoginCount = 0;
+            receivedMessageCount = 0;
+        }
+    }
 }
