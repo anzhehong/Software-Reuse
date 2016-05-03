@@ -13,12 +13,20 @@ import javax.persistence.Table;
 @Table
 @Entity
 public class User {
+    public int getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
+    }
 
     @Id
     private int id;
 
     private String userName;
     private String userPassword;
+    private int groupId;
 
     public User() {
 

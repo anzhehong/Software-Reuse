@@ -1,8 +1,8 @@
-import reuse.communication.entity.AAMessage;
+import reuse.cm.ReadJson;
 import reuse.communication.InterfaceEvent;
 import reuse.communication.MQ.MQConnect;
 import reuse.communication.MQ.MQFactory;
-import reuse.cm.ReadJson;
+import reuse.communication.entity.AAMessage;
 import reuse.utility.EventController;
 
 import javax.jms.JMSException;
@@ -14,6 +14,7 @@ import javax.jms.MessageListener;
  */
 public class Client {
 
+    private String jsonPath = "../Resources/test.json";
     /**
      * 登录请求
      */
@@ -34,7 +35,7 @@ public class Client {
      */
     public Client() {
         try {
-            this.baseConnect = new MQConnect(MQFactory.getproducer(ReadJson.getStringConfig("baseQueueDestination")));
+            this.baseConnect = new MQConnect(MQFactory.getproducer(new ReadJson(jsonPath).getStringConfig("baseQueueDestination")));
         } catch (JMSException e) {
             e.printStackTrace();
         }
@@ -60,7 +61,8 @@ public class Client {
                 try {
                     type = message.getIntProperty("type");
                     if (type == 1) {
-                        loginSuccessHandler();
+                        loginSuccessHandler(message.getStringProperty("groupId"));
+                        System.out.println("groupid:"+ message.getStringProperty("groupId"));
                     }else if (type == 999){
                         getReDoLogInHandler();
 
@@ -91,9 +93,9 @@ public class Client {
         }
     }
 
-    public void loginSuccessHandler()throws JMSException{
+    public void loginSuccessHandler(String topic)throws JMSException{
         //TODO:登录成功写入文件
-        topicConenct = new MQConnect(MQFactory.getSubscriber("Topic"));
+        topicConenct = new MQConnect(MQFactory.getSubscriber(topic));
         topicListener();
         EventController.eventBus.post(new InterfaceEvent("loginSuccessfully"));
     }

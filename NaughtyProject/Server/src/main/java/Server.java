@@ -1,8 +1,8 @@
 import com.API.Controller.DBAPI;
-import reuse.communication.entity.AAMessage;
+import reuse.cm.ReadJson;
 import reuse.communication.MQ.MQConnect;
 import reuse.communication.MQ.MQFactory;
-import reuse.cm.ReadJson;
+import reuse.communication.entity.AAMessage;
 import reuse.license.MultiFrequencyRestriction;
 import reuse.license.MultiMaxNumOfMessage;
 import reuse.pm.PMManager;
@@ -17,8 +17,8 @@ import java.util.*;
  */
 public class Server {
 
-    static public String outPath = "/Users/fowafolo/Desktop/Log/Server/";
-    static public String jsonPath = "/Users/fowafolo/Desktop/test.json";
+    static public String outPath = "../Resources/out/Log/Server/";
+    static public String jsonPath = "../Resources/test.json";
 
     /**
      * 合法输入次数/minutes.
@@ -35,7 +35,7 @@ public class Server {
     /**
      * 登录日志的路径.
      */
-    private static String loginLog = ReadJson.getStringConfig("loginLog");
+    private static String loginLog = new ReadJson(jsonPath).getStringConfig("loginLog");
 
     /**
      * 转发消息路径
@@ -61,8 +61,10 @@ public class Server {
     /**
      * 公用topic连接.
      */
-    public MQConnect topicConnect;
-
+//    public MQConnect topicConnect;
+//    public ArrayList<Integer> topicGroups;
+//    public ArrayList<MQConnect> topicConnects;
+    public Map<Integer, MQConnect> topicConnects = new HashMap<Integer, MQConnect>();
     /**
      * 用来存收发消息的MQConnect.
      */
@@ -106,10 +108,10 @@ public class Server {
 
     public Server() {
         try {
-            this.baseConnect = new MQConnect(MQFactory.getConsumer(ReadJson.getStringConfig("baseQueueDestination")));
-            this.topicConnect = new MQConnect(MQFactory.getpublisher("Topic"));
-            this.multiFrequencyRestriction = new MultiFrequencyRestriction(Integer.parseInt(ReadJson.getStringConfig("CSMessage")));
-            this.multiMaxNumOfMessage = new MultiMaxNumOfMessage(Integer.parseInt(ReadJson.getStringConfig("CSSession")));
+            this.baseConnect = new MQConnect(MQFactory.getConsumer(new ReadJson(jsonPath).getStringConfig("baseQueueDestination")));
+//            this.topicConnect = new MQConnect(MQFactory.getpublisher("Topic"));
+            this.multiFrequencyRestriction = new MultiFrequencyRestriction(Integer.parseInt(new ReadJson(jsonPath).getStringConfig("CSMessage")));
+            this.multiMaxNumOfMessage = new MultiMaxNumOfMessage((new ReadJson(jsonPath).getIntConfig("CSSession")));
             start();
         } catch (JMSException e) {
             e.printStackTrace();
@@ -140,10 +142,16 @@ public class Server {
             System.out.println("receiveQueue");
             String userName = message.getStringProperty("userName");
             String userPassword = message.getStringProperty("userPassword");
-            boolean flag = DBAPI.CheckPassword(userName, userPassword);
+
+            Map<String, Object> dbResult = DBAPI.checkPasswordAndGetGroup(userName, userPassword);
+            boolean flag = ((Boolean)dbResult.get("error")).booleanValue();
             System.out.println("flag : " + flag);
             privateConnect = new MQConnect(MQFactory.getproducer("SC_" + userName), MQFactory.getConsumer("CS_" + userName));
-            sendQueue(flag, privateConnect);
+            if (!flag) {
+                sendQueue(!flag, privateConnect, dbResult.get("groupId"));
+            }else {
+                sendQueue(!flag, privateConnect, dbResult.get("errorMsg"));
+            }
         } catch (JMSException e) {
             e.printStackTrace();
         }
@@ -155,7 +163,7 @@ public class Server {
      * @param connect
      * @throws JMSException
      */
-    public void sendQueue(boolean flag, final MQConnect connect) throws JMSException {
+    public void sendQueue(boolean flag, final MQConnect connect, Object thisObject) throws JMSException {
         if (flag) {
             if (isConnectExist(connect)) {
                 System.out.println("already");
@@ -167,7 +175,10 @@ public class Server {
             } else {
                 System.out.println("sendQueue");
                 AAMessage aaMessage = new AAMessage(1, "Login Successfully");
-                connect.sendMessage(aaMessage.getFinalMessage());
+                Message messageToSend = aaMessage.getFinalMessage();
+                int groupId = (int) thisObject;
+                messageToSend.setStringProperty("groupId","Topic_"+ groupId);
+                connect.sendMessage(messageToSend);
                 mqConnects.add(connect);
 
                 multiMaxNumOfMessage.addMap(aaMessage.getFinalMessage().getStringProperty("userName"));
@@ -189,7 +200,9 @@ public class Server {
                                 //TODO: 做次数检测
                                 String isMessageValidStr = isMessageValid(message, connect);
                                 if (isMessageValidStr.equals("ok")) {
-                                    sendTopic(message);
+                                    //TODO: hhhhhhhhhhhhhhhhailsdfjlasdfjaiosdfjoadsifjaeoirfjaeiorwf
+
+                                    sendTopic(message, groupId);
                                 } else {
                                     //TODO: invalidMessage +1
                                 }
@@ -201,7 +214,8 @@ public class Server {
                 });
             }
         } else {
-            AAMessage aaMessage = new AAMessage(2, "Validation Failed.");
+            String errorMsg = String.valueOf(thisObject);
+            AAMessage aaMessage = new AAMessage(2, errorMsg);
             connect.sendMessage(aaMessage.getFinalMessage());
             inValidLoginCount += 1;
             //TODO: 测试 删除此privateConnect
@@ -214,8 +228,15 @@ public class Server {
      * @param message
      * @throws JMSException
      */
-     public void sendTopic(Message message) throws JMSException {
-        topicConnect.sendMessage(message);
+     public void sendTopic(Message message, int groupId) throws JMSException {
+         MQConnect thisConnect;
+         if (topicConnects.containsKey(groupId)) {
+             thisConnect = topicConnects.get(groupId);
+         }else {
+             thisConnect = new MQConnect((MQFactory.getpublisher("Topic_" + groupId)));
+             topicConnects.put(groupId, thisConnect);
+         }
+        thisConnect.sendMessage(message);
         forwardedMessageCount += mqConnects.size();
      }
 

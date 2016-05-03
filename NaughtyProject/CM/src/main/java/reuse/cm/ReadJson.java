@@ -15,15 +15,15 @@ public class ReadJson{
 
     static  Map<String,Object> configmap;
 
-    static {
+    public ReadJson(String str) {
         Gson gson = new Gson();
         FileInputStream configIn = null;
         configmap  = new HashMap<String, Object>();
         try {
-            configIn = new FileInputStream("/Users/fowafolo/Desktop/test.json");
+            configIn = new FileInputStream(str);
             configmap = gson.fromJson(IOUtils.toString(configIn), configmap.getClass());
         } catch (JsonSyntaxException e) {
-           // e.printStackTrace();
+            // e.printStackTrace();
             System.out.println("file format error...");             //文件格式有误
         } catch (IOException e) {
             //e.printStackTrace();
@@ -52,7 +52,7 @@ public class ReadJson{
             String key = iter.next();
             if(str.compareTo(key) == 0){
                 try{
-                return (int)(Double.parseDouble(configmap.get(key).toString()));}
+                    return (int)(Double.parseDouble(configmap.get(key).toString()));}
                 catch (NumberFormatException e){
                     System.out.println("maybe the type you defined is not int,please have a check...");       //找到值但是不可以转化为int
                 }
@@ -68,7 +68,7 @@ public class ReadJson{
             String key = iter.next();
             if(str.compareTo(key) == 0){
                 try{
-                return Double.parseDouble(configmap.get(key).toString());}
+                    return Double.parseDouble(configmap.get(key).toString());}
                 catch (NumberFormatException e){
                     System.out.println("maybe the type you defined is not double,please have a check...");      //找到值但是不可以转化为double
                 }
@@ -77,6 +77,8 @@ public class ReadJson{
 
         throw new RuntimeException("Sorry there is no corresponding value...");
     }
+
+
 
     public static boolean getBooleanConfig(String str) throws RuntimeException{
         Iterator<String> iter = configmap.keySet().iterator();
@@ -96,7 +98,6 @@ public class ReadJson{
     }
 
     public static void main(String[] args){
-
-
+        System.out.println(new ReadJson("../Resources/test.json").getStringConfig("mqHost"));
     }
 }

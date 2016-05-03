@@ -35,6 +35,7 @@ public class ClientInterface implements ActionListener {
     private JTextField password_input = new JTextField();
     private JButton login_btn = new JButton();
     private JButton signup_btn = new JButton();
+
     private static int validLoginCount = 0;
     private static int inValidLoginCount = 0;
     private static int receivedMessageCount = 0;
@@ -43,8 +44,8 @@ public class ClientInterface implements ActionListener {
     private static String receiveMessageLog = "ClientMesReceived.txt";
 
 
-    static public String jsonPath = "/Users/fowafolo/Desktop/test.json";
-    static public String outPath = "/Users/fowafolo/Desktop/Log/Client/";
+    static public String jsonPath = "../Resources/test.json";
+    static public String outPath = "../Resources/out/Log/Client/";
 
     public void setSession(Session session) {
         this.session = session;
@@ -100,7 +101,7 @@ public class ClientInterface implements ActionListener {
         this.jFrame.setSize(400,300);
         this.jFrame.setResizable(false);
         this.jFrame.setVisible(true);
-        this.jFrame.setTitle(ReadJson.getStringConfig("mqHost"));
+        this.jFrame.setTitle(new ReadJson(jsonPath).getStringConfig("mqHost"));
         this.jFrame.setLocation(200,100);
         this.jFrame.show();
 

@@ -10,6 +10,15 @@ public class User {
 
     private String userName;
     private String userPassword;
+    private int groupId;
+
+    public int getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
+    }
 
     public User() {
 

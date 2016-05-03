@@ -101,3 +101,37 @@ This Database component encapsulates many files, but you just need to know `DBAP
 
 * More commen functions for more usages.
 * Demo to illustrate.
+
+
+
+# Update
+
+> 2016.05.03
+
+For this week's homework, we modified the DBAPI by adding a new API into DBAPI so that we can get the user's group id while logged in successfully.
+
+**Usage**
+
+```java
+/**
+ * new interface for checking the password and username and return the group id of the user if exists
+ * @param username
+ * @param password
+ * @return if log-in fails, error will be true and errorMsg will be returned; On the contrary, error will be false and groupId will be returned.
+ */
+static public Map<String, Object> checkPasswordAndGetGroup(String username, String password)
+```
+
+**Example**
+
+```java
+Map<String, Object> dbResult = DBAPI.checkPasswordAndGetGroup(userName, userPassword);
+boolean flag = ((Boolean)dbResult.get("error")).booleanValue();
+
+privateConnect = new MQConnect(MQFactory.getproducer("SC_" + userName), MQFactory.getConsumer("CS_" + userName));
+if (!flag) {
+    sendQueue(!flag, privateConnect, dbResult.get("groupId"));
+}else {
+    sendQueue(!flag, privateConnect, dbResult.get("errorMsg"));
+}
+```

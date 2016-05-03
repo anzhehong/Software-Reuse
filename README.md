@@ -19,6 +19,18 @@ In the main Directory of our Git project, you will see two main directories:
 
 1. `NaughtyProject` is the main project directory, including all of the source code and test code.
 2. `Documents` is the directory for project documents, written in Chinese, for better explanating our thoughts without misunderstanding...
+> This directory includes the following files: 
+> 
+|Name|URL|
+|---|---|
+|测试文档|[测试文档](https://github.com/anzhehong/Software-Reuse/blob/master/Documents/%E6%B5%8B%E8%AF%95%E6%96%87%E6%A1%A3.md)|
+|程序文档|[程序文档](https://github.com/anzhehong/Software-Reuse/blob/master/Documents/%E7%A8%8B%E5%BA%8F%E6%96%87%E6%A1%A3.md)|
+|复用文档|[复用文档](https://github.com/anzhehong/Software-Reuse/blob/master/Documents/%E5%A4%8D%E7%94%A8%E6%96%87%E6%A1%A3.md)|
+|软件复用管理文档|[软件复用管理文档](https://github.com/anzhehong/Software-Reuse/blob/master/Documents/%E8%BD%AF%E4%BB%B6%E5%A4%8D%E7%94%A8%E7%AE%A1%E7%90%86%E6%96%87%E6%A1%A3.md)|
+|构件使用文档|[构件使用文档](https://github.com/anzhehong/Software-Reuse/blob/master/Documents/%E6%9E%84%E4%BB%B6%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3.md)|
+|构件选择文档|[构件选择文档](https://github.com/anzhehong/Software-Reuse/blob/master/Documents/%E6%9E%84%E4%BB%B6%E9%80%89%E6%8B%A9%E6%96%87%E6%A1%A3.md)|
+|本组构件反馈跟踪|[本组构件反馈跟踪](https://github.com/anzhehong/Software-Reuse/blob/master/Documents/%E6%9C%AC%E7%BB%84%E6%9E%84%E4%BB%B6%E5%8F%8D%E9%A6%88%E8%B7%9F%E8%B8%AA.md)|
+	
 3. `Disscussion` is the direcotry for in-class discussion homework, which is finished independently.
 4. `Resources` is the directory for an example of `CM` component file. Anyone can modify a Json file by adding some properties in it and then they can use the properties by calling `ReadJson` 's functions. And `test.json` is our group's basic configuration file.
 5. `Components` is the direcotory for documents and `.jar` file of our components.
@@ -53,6 +65,6 @@ You can refer to the document below for detail.
 |Communication|[Communication Document](https://github.com/anzhehong/Software-Reuse/blob/master/Components/Communication/Communication%20Component%20Document.md)|[Communication Jar](http://7xsf2g.com1.z0.glb.clouddn.com/jar0414_Communication-1.0-SNAPSHOT-jar-with-dependencies.jar)|
 |Database|[Database Document](https://github.com/anzhehong/Software-Reuse/blob/master/Components/Database/Database%20Component%20Document.md)|[Database Jar](http://7xsf2g.com1.z0.glb.clouddn.com/jar0414_Database-1.0-SNAPSHOT-jar-with-dependencies.jar)|
 |License|[License Document](https://github.com/anzhehong/Software-Reuse/blob/master/Components/License/License%20Component%20Document.md)|[License Jar](http://7xsf2g.com1.z0.glb.clouddn.com/jar0414_License-1.0-SNAPSHOT-jar-with-dependencies.jar)|
-|PM|[PM Document](https://github.com/anzhehong/Software-Reuse/blob/master/Components/PM/PM%20Component%20Document.md)|[PM Jar]((http://7xsf2g.com1.z0.glb.clouddn.com/jar_version0417_PM-1.0-SNAPSHOT.jar)|
+|PM|[PM Document](https://github.com/anzhehong/Software-Reuse/blob/master/Components/PM/PM%20Component%20Document.md)|[PM Jar](http://7xsf2g.com1.z0.glb.clouddn.com/jar_version0417_PM-1.0-SNAPSHOT.jar)|
 
 
