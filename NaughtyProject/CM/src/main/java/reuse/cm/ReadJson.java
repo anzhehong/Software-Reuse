@@ -78,6 +78,8 @@ public class ReadJson{
         throw new RuntimeException("Sorry there is no corresponding value...");
     }
 
+
+
     public static boolean getBooleanConfig(String str) throws RuntimeException{
         Iterator<String> iter = configmap.keySet().iterator();
         while (iter.hasNext()){
@@ -98,6 +100,6 @@ public class ReadJson{
     public static void main(String[] args){
 
 
-        System.out.println(new ReadJson("/Users/Sophie/Software-Reuse/NaughtyProject/config.json").getStringConfig("mqHost"));
+        System.out.println(new ReadJson("/Users/Sophie/Software-Reuse/NaughtyProject/test.json").getStringConfig("mqHost"));
     }
 }

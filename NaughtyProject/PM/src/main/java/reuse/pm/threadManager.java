@@ -160,7 +160,7 @@ public abstract class threadManager {
          String sourceFilePath = (readJson.getStringConfig("sourcePath"));
          String zipFilePath = (readJson.getStringConfig("zipPath"));
 
-        boolean flag = PMManager.fileToZip(sourceFilePath, zipFilePath, fileName);
+        boolean flag = PMManager.DailyZip(sourceFilePath, zipFilePath, fileName);
         if(flag){
             System.out.println("文件打包成功!");
         }else{
