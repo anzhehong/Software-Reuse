@@ -10,6 +10,7 @@ import reuse.pm.PMManager;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -249,6 +250,32 @@ public class Server {
                                     //TODO: hhhhhhhhhhhhhhhhailsdfjlasdfjaiosdfjoadsifjaeoirfjaeiorwf
 
                                     sendTopic(message, groupId);
+                                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                    String str = df.format(new Date());
+                                    //存储的消息
+                                    String contentStored  = groupId+"\t"+message.getStringProperty("userName")+"\t"+
+                                            message.getStringProperty("content")+"\t"+
+                                            message.getStringProperty("createdTime");
+                                    //消息文件的路径
+                                    ReadJson readJson = new ReadJson(jsonPath);
+                                    File file = new File(readJson.getStringConfig("sourcePath"));
+
+                                    File[] files = file.listFiles();
+                                    //判断是否要需要新建文件来存储信息.
+                                    int flag = 0;
+                                    for(int i = 0;i < files.length;i++){
+                                        if(files[i].getName().charAt(0)!='y' && files[i].getName().substring(0,6).equals("server"))
+                                        {
+                                            PMManager.Write(files[i].getName(),contentStored,readJson.getStringConfig("sourcePath")+"/");
+                                            flag = 1;
+                                            break;
+                                        }
+                                    }
+                                    if(flag == 0) {
+                                        PMManager.Write("server" + str, contentStored, readJson.getStringConfig("sourcePath") + "/");
+                                    }
+
+
                                 } else {
                                     //TODO: invalidMessage +1
                                 }
