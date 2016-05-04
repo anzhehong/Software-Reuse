@@ -10,6 +10,7 @@ import reuse.pm.PMManager;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -112,9 +113,54 @@ public class Server {
 //            this.topicConnect = new MQConnect(MQFactory.getpublisher("Topic"));
             this.multiFrequencyRestriction = new MultiFrequencyRestriction(Integer.parseInt(new ReadJson(jsonPath).getStringConfig("CSMessage")));
             this.multiMaxNumOfMessage = new MultiMaxNumOfMessage((new ReadJson(jsonPath).getIntConfig("CSSession")));
+
+            Date executeDate =  new Date();
+            Server.TaskDaily taskDaily = new TaskDaily();
+            Server.TaskWeekly taskWeekly = new TaskWeekly();
+            Timer timerDaily  = new Timer();
+            Timer timerWeekly  = new Timer();
+
+            timerDaily.schedule(taskDaily,executeDate,10000);
+            timerWeekly.schedule(taskWeekly,executeDate,30000);
             start();
         } catch (JMSException e) {
             e.printStackTrace();
+        }
+
+    }
+
+    private  class TaskDaily extends  TimerTask{
+        private  TaskDaily(){
+
+        }
+
+        public void run(){
+            //执行打包功能
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String fileName = df.format(new Date());
+
+            ReadJson readJson = new ReadJson(jsonPath);
+            String sourceFilePath = (readJson.getStringConfig("sourcePath"));
+            String zipFilePath = (readJson.getStringConfig("zipDailyPath"));
+
+            boolean flag = PMManager.DailyZip(sourceFilePath, zipFilePath, fileName);
+            if(flag){
+                System.out.println("文件打包成功!");
+            }else{
+                System.out.println("文件打包失败!");
+            }
+
+        }
+
+    }
+    private  class TaskWeekly extends  TimerTask{
+        private  TaskWeekly(){
+
+        }
+
+        public void run(){
+            //解压再压缩
+            PMManager.unzipAndzipWeekly();
         }
 
     }
