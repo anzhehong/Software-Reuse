@@ -3,9 +3,11 @@ package reuse.utility;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.DESKeySpec;
+import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 
 /**
  * Created by fowafolo
@@ -16,9 +18,9 @@ public class AAEncryption {
     /**
      * 密钥算法
      */
-    private static final String KEY_ALGORITHM = "DES";
+    private static final String KEY_ALGORITHM = "AES";
 
-    private static final String DEFAULT_CIPHER_ALGORITHM = "DES/ECB/PKCS5Padding";
+    private static final String DEFAULT_CIPHER_ALGORITHM = "AES/ECB/PKCS5Padding";
 
     /**
      * 初始化密钥
@@ -26,11 +28,18 @@ public class AAEncryption {
      * @return byte[] 密钥
      * @throws Exception
      */
-    public static byte[] initSecretKey(String customerKey) throws Exception{
+    public static byte[] initSecretKey() {
         //返回生成指定算法的秘密密钥的 KeyGenerator 对象
-        KeyGenerator kg = KeyGenerator.getInstance(KEY_ALGORITHM);
+        KeyGenerator kg = null;
+        try {
+            kg = KeyGenerator.getInstance(KEY_ALGORITHM);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return new byte[0];
+        }
         //初始化此密钥生成器，使其具有确定的密钥大小
-        kg.init(56);
+        //AES 要求密钥长度为 128
+        kg.init(128);
         //生成一个密钥
         SecretKey secretKey = kg.generateKey();
         return secretKey.getEncoded();
@@ -40,17 +49,11 @@ public class AAEncryption {
      * 转换密钥
      *
      * @param key   二进制密钥
-     * @return Key  密钥
-     * @throws Exception
+     * @return 密钥
      */
-    protected static Key toKey(byte[] key) throws Exception{
-        //实例化DES密钥规则
-        DESKeySpec dks = new DESKeySpec(key);
-        //实例化密钥工厂
-        SecretKeyFactory skf = SecretKeyFactory.getInstance(KEY_ALGORITHM);
+    protected static Key toKey(byte[] key){
         //生成密钥
-        SecretKey  secretKey = skf.generateSecret(dks);
-        return secretKey;
+        return new SecretKeySpec(key, KEY_ALGORITHM);
     }
 
     /**
@@ -183,7 +186,51 @@ public class AAEncryption {
         return sb.toString();
     }
 
+    /**
+     * 默认加密方法
+     * @param str
+     * @return 第一项为加密后的密文,第二项为密钥
+     */
+    static public ArrayList<Object> DefaultEncryptString(String str) {
+        String result = "";
+        AAEncryption aaEncryption = new AAEncryption();
+        byte[] key = aaEncryption.initSecretKey();
+        Key k = aaEncryption.toKey(key);
+        try {
+            byte[] encriptString = encrypt(str.getBytes(), k);
+            result = Hex.byteToHexString(encriptString);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ArrayList<Object> list = new ArrayList<>();
+        list.add(result);
+        list.add(k);
+        return list;
+    }
+
+    /**
+     * 默认解密方法
+     * @param data 密文
+     * @param key 密码
+     * @return 原先的字符串
+     */
+    static public String DefaultDecodeStringByStrAndKey(String data, Key key) {
+        String result = "";
+        byte[] encryptByte = Hex.hexStringToByteArray(data);
+        try {
+            byte[] decryptData = decrypt(encryptByte, key);
+            result = new String(decryptData);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     public static void main(String[] args) throws Exception {
+        String result = "";
+        AAEncryption aaEncryption = new AAEncryption();
+        byte[] key = aaEncryption.initSecretKey();
+        Key k = aaEncryption.toKey(key);
 
     }
 }
@@ -255,7 +302,7 @@ class Hex {
      * @return 十六进制String
      */
     public static String encodeHexStr(byte[] data) {
-        return encodeHexStr(data, true);
+        return encodeHexStr(data, false);
     }
 
     /**
@@ -269,6 +316,14 @@ class Hex {
      */
     public static String encodeHexStr(byte[] data, boolean toLowerCase) {
         return encodeHexStr(data, toLowerCase ? DIGITS_LOWER : DIGITS_UPPER);
+    }
+
+    public static String byteToHexString(byte[] array) {
+        return DatatypeConverter.printHexBinary(array);
+    }
+
+    public static byte[] hexStringToByteArray(String s) {
+        return DatatypeConverter.parseHexBinary(s);
     }
 
     /**
