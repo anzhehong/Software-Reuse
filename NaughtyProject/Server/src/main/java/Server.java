@@ -10,6 +10,8 @@ import reuse.pm.PMManager;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -112,9 +114,54 @@ public class Server {
 //            this.topicConnect = new MQConnect(MQFactory.getpublisher("Topic"));
             this.multiFrequencyRestriction = new MultiFrequencyRestriction(Integer.parseInt(new ReadJson(jsonPath).getStringConfig("CSMessage")));
             this.multiMaxNumOfMessage = new MultiMaxNumOfMessage((new ReadJson(jsonPath).getIntConfig("CSSession")));
+
+            Date executeDate =  new Date();
+            Server.TaskDaily taskDaily = new TaskDaily();
+            Server.TaskWeekly taskWeekly = new TaskWeekly();
+            Timer timerDaily  = new Timer();
+            Timer timerWeekly  = new Timer();
+
+            timerDaily.schedule(taskDaily,executeDate,10000);
+            timerWeekly.schedule(taskWeekly,executeDate,30000);
             start();
         } catch (JMSException e) {
             e.printStackTrace();
+        }
+
+    }
+
+    private  class TaskDaily extends  TimerTask{
+        private  TaskDaily(){
+
+        }
+
+        public void run(){
+            //执行打包功能
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String fileName = df.format(new Date());
+
+            ReadJson readJson = new ReadJson(jsonPath);
+            String sourceFilePath = (readJson.getStringConfig("sourcePath"));
+            String zipFilePath = (readJson.getStringConfig("zipDailyPath"));
+
+            boolean flag = PMManager.DailyZip(sourceFilePath, zipFilePath, fileName);
+            if(flag){
+                System.out.println("文件打包成功!");
+            }else{
+                System.out.println("文件打包失败!");
+            }
+
+        }
+
+    }
+    private  class TaskWeekly extends  TimerTask{
+        private  TaskWeekly(){
+
+        }
+
+        public void run(){
+            //解压再压缩
+            PMManager.unzipAndzipWeekly();
         }
 
     }
@@ -203,6 +250,32 @@ public class Server {
                                     //TODO: hhhhhhhhhhhhhhhhailsdfjlasdfjaiosdfjoadsifjaeoirfjaeiorwf
 
                                     sendTopic(message, groupId);
+                                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                    String str = df.format(new Date());
+                                    //存储的消息
+                                    String contentStored  = groupId+"\t"+message.getStringProperty("userName")+"\t"+
+                                            message.getStringProperty("content")+"\t"+
+                                            message.getStringProperty("createdTime");
+                                    //消息文件的路径
+                                    ReadJson readJson = new ReadJson(jsonPath);
+                                    File file = new File(readJson.getStringConfig("sourcePath"));
+
+                                    File[] files = file.listFiles();
+                                    //判断是否要需要新建文件来存储信息.
+                                    int flag = 0;
+                                    for(int i = 0;i < files.length;i++){
+                                        if(files[i].getName().charAt(0)!='y' && files[i].getName().substring(0,6).equals("server"))
+                                        {
+                                            PMManager.Write(files[i].getName(),contentStored,readJson.getStringConfig("sourcePath")+"/");
+                                            flag = 1;
+                                            break;
+                                        }
+                                    }
+                                    if(flag == 0) {
+                                        PMManager.Write("server" + str, contentStored, readJson.getStringConfig("sourcePath") + "/");
+                                    }
+
+
                                 } else {
                                     //TODO: invalidMessage +1
                                 }

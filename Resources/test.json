@@ -13,5 +13,10 @@
 "requestReLogin":"777",
 
 "loginLog":"ServerLoginLog.txt",
-"loginLogSecond":"1000"
+"loginLogSecond":"1000",
+"sourcePath":"../Resources/sourcePath",
+"zipDailyPath":"../Resources/zipDailyPath",
+"zipWeeklyPath":"../Resources/ZipWeeklyPath",
+"tmpUnzippedPath":"../Resources/tmpUnzippedPath"
+
 }
