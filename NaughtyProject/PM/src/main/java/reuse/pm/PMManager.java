@@ -1,6 +1,7 @@
 package reuse.pm;
 
 import com.sun.corba.se.spi.activation.Server;
+import com.sun.org.apache.xerces.internal.impl.xs.SchemaSymbols;
 import reuse.cm.ReadJson;
 
 import java.io.IOException;
@@ -27,6 +28,10 @@ public class PMManager {
      * @param content  内容
      */
     static public String jsonPath = "../Resources/test.json";
+    static public ReadJson readJson = new ReadJson(jsonPath);
+    static public String sourcePath = readJson.getStringConfig("sourcePath");
+    static public String zipDailyPath = readJson.getStringConfig("zipDailyPath");
+    static public String zipWeeklyPath = readJson.getStringConfig("zipWeeklyPath");
     public static void Write(String fileName, String content, String outPath) {
         try {
             // 打开一个随机访问文件流，按读写方式
@@ -59,7 +64,10 @@ public class PMManager {
      @param fileName 压缩包文件名
      */
 
-    public static boolean DailyZip(String sourceFilePath,String zipFilePath,String fileName){
+
+
+    //压缩
+    public static boolean Zip(String sourceFilePath,String zipFilePath,String fileName){
         boolean flag = false;
         File sourceFile = new File(sourceFilePath);
         FileInputStream fis = null;
@@ -72,14 +80,8 @@ public class PMManager {
             System.out.println("待压缩的文件目录："+sourceFilePath+"不存在.");
         }else {
             File[] sourceFiles = sourceFile.listFiles();
-            int tmpCount = 0;
-            for(int i = 0;i < sourceFiles.length;i++){
-                if(sourceFiles[i].getName().charAt(0) != 'y')
-                    tmpCount++;
-            }
-            if (null == sourceFiles || tmpCount == 0) {
+            if (null == sourceFiles || sourceFiles.length == 0) {
                 System.out.println("待压缩的文件目录：" + sourceFilePath + "里面不存在文件，无需压缩.");
-
             } else {
                 try {
                     File zipFile = new File(zipFilePath + "/" + fileName + ".zip");
@@ -90,21 +92,39 @@ public class PMManager {
                         zos = new ZipOutputStream(new BufferedOutputStream(fos));
                         byte[] bufs = new byte[1024 * 10];
                         for (int i = 0; i < sourceFiles.length; i++) {
-                            //创建ZIP实体，并添加进压缩包
-                            if (sourceFiles[i].getName().charAt(0) != 'y') {
-                                //更改文件名字
-                                ZipEntry zipEntry = new ZipEntry(sourceFiles[i].getName());
-                                zos.putNextEntry(zipEntry);
-                                //读取待压缩的文件并写进压缩包里
-                                fis = new FileInputStream(sourceFiles[i]);
-                                bis = new BufferedInputStream(fis, 1024 * 10);
-                                int read = 0;
-                                while ((read = bis.read(bufs, 0, 1024 * 10)) != -1) {
-                                    zos.write(bufs, 0, read);
+                                if(sourceFiles[i].isDirectory()){
+//                                     Zip(sourceFilePath+File.separator+sourceFiles[i].getName(),zipFilePath,sourceFiles[i].getName());
+//                                    sourceFiles[i].delete();
+                                    File[] singlefiles = sourceFiles[i].listFiles();
+                                    for(int k = 0 ;k < singlefiles.length;k++){
+                                        ZipEntry zipEntry = new ZipEntry(singlefiles[k].getName());
+                                        zos.putNextEntry(zipEntry);
+                                        fis = new FileInputStream(singlefiles[k]);
+                                        bis = new BufferedInputStream(fis, 1024 * 10);
+                                        int read = 0;
+                                        while ((read = bis.read(bufs, 0, 1024 * 10)) != -1) {
+                                            zos.write(bufs, 0, read);
+                                        }
+                                        singlefiles[k].delete();
+                                        flag = true;
+
+                                    }
+                                    sourceFiles[i].delete();
                                 }
-                                sourceFiles[i].renameTo(new File(sourceFilePath + "/y" + sourceFiles[i].getName()));
-                                flag = true;
-                            }
+                                else{
+                                    ZipEntry zipEntry = new ZipEntry(sourceFiles[i].getName());
+                                    zos.putNextEntry(zipEntry);
+                                    fis = new FileInputStream(sourceFiles[i]);
+                                    bis = new BufferedInputStream(fis, 1024 * 10);
+                                    int read = 0;
+                                    while ((read = bis.read(bufs, 0, 1024 * 10)) != -1) {
+                                        zos.write(bufs, 0, read);
+                                    }
+                                    sourceFiles[i].delete();
+                                    flag = true;
+                                }
+
+
                         }
                     }
                 }
@@ -129,140 +149,90 @@ public class PMManager {
         return flag;
     }
 
-
-    //每周压缩
-    public static boolean WeeklyZip(String sourceFilePath,String zipFilePath,String fileName){
-        boolean flag = false;
-        File sourceFile = new File(sourceFilePath);
-        FileInputStream fis = null;
-        BufferedInputStream bis = null;
-
-        FileOutputStream fos = null;
-        ZipOutputStream zos = null;
-
-        if(sourceFile.exists() == false){
-            System.out.println("待压缩的文件目录："+sourceFilePath+"不存在.");
-        }else {
-            File[] sourceFiles = sourceFile.listFiles();
-            int tmpCount = 0;
-            for(int i = 0;i < sourceFiles.length;i++){
-                if(sourceFiles[i].getName().charAt(0) != 'y')
-                    tmpCount++;
-            }
-            if (null == sourceFiles || tmpCount == 0) {
-                System.out.println("待压缩的文件目录：" + sourceFilePath + "里面不存在文件，无需压缩.");
-
-            } else {
-                try {
-                    File zipFile = new File(zipFilePath + "/" + fileName + ".zip");
-                    if (zipFile.exists()) {
-                        System.out.println(zipFilePath + "目录下存在名字为:" + fileName + ".zip" + "打包文件.");
-                    } else {
-                        fos = new FileOutputStream(zipFile);
-                        zos = new ZipOutputStream(new BufferedOutputStream(fos));
-                        byte[] bufs = new byte[1024 * 10];
-                        for (int i = 0; i < sourceFiles.length; i++) {
-                            //创建ZIP实体，并添加进压缩包
-                            if (sourceFiles[i].getName().charAt(0) != 'y') {
-                                //更改文件名字
-                                ZipEntry zipEntry = new ZipEntry(sourceFiles[i].getName());
-                                zos.putNextEntry(zipEntry);
-                                //读取待压缩的文件并写进压缩包里
-                                fis = new FileInputStream(sourceFiles[i]);
-                                bis = new BufferedInputStream(fis, 1024 * 10);
-                                int read = 0;
-                                while ((read = bis.read(bufs, 0, 1024 * 10)) != -1) {
-                                    zos.write(bufs, 0, read);
-                                }
-                                sourceFiles[i].delete();
-                                //sourceFiles[i].renameTo(new File(sourceFilePath + "/y" + sourceFiles[i].getName()));
-                                flag = true;
-                            }
-                        }
-                    }
-                }
-                catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e);
-                } finally {
-                    //关闭流
-                    try {
-                        if (null != bis) bis.close();
-                        if (null != zos) zos.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
+    //解压
+    public static void unZip(String sourceFilePath,String unzipFilePath) {
+        long startTime = System.currentTimeMillis();
+        File[] sourceFiles = new File(sourceFilePath).listFiles();
+        System.out.println(sourceFiles.length);
+        for (int j = 0;j < sourceFiles.length;j++){
+            System.out.println(sourceFiles[j].getName());
         }
-        return flag;
-    }
-    //每周解压
-    public static void unZipFile(String zipFilename,String unzipPath){
-        long startTime=System.currentTimeMillis();
-        try {
-            ZipInputStream Zin=new ZipInputStream(new FileInputStream(zipFilename));
-            BufferedInputStream Bin=new BufferedInputStream(Zin);
-            File Fout=null;
-            ZipEntry entry;
+        if (sourceFiles.length > 0) {
             try {
-                while((entry = Zin.getNextEntry())!=null && !entry.isDirectory()){
-                    Fout=new File(unzipPath,entry.getName());
-                    if(!Fout.exists()){
-                        (new File(Fout.getParent())).mkdirs();
+                for(int i = 0;i < sourceFiles.length;i++){
+                    ZipInputStream Zin = new ZipInputStream(new FileInputStream(sourceFilePath+File.separator+sourceFiles[i].getName()));
+                    BufferedInputStream Bin = new BufferedInputStream(Zin);
+                    File Fout = null;
+                    ZipEntry entry;
+                    try {
+                        while ((entry = Zin.getNextEntry()) != null && !entry.isDirectory()) {
+                            Fout = new File(unzipFilePath, entry.getName());
+                            if (!Fout.exists()) {
+                                (new File(Fout.getParent())).mkdirs();
+                            }
+                            FileOutputStream out = new FileOutputStream(Fout);
+                            BufferedOutputStream Bout = new BufferedOutputStream(out);
+                            int b;
+                            while ((b = Bin.read()) != -1) {
+                                Bout.write(b);
+                            }
+                            Bout.close();
+                            out.close();
+                            System.out.println(Fout + "解压成功");
+                            sourceFiles[i].delete();
+                        }
+                        Bin.close();
+                        Zin.close();
+
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
                     }
-                    FileOutputStream out=new FileOutputStream(Fout);
-                    BufferedOutputStream Bout=new BufferedOutputStream(out);
-                    int b;
-                    while((b=Bin.read())!=-1){
-                        Bout.write(b);
-                    }
-                    Bout.close();
-                    out.close();
-                    System.out.println(Fout+"解压成功");
                 }
-                Bin.close();
-                Zin.close();
-            } catch (IOException e) {
+
+            } catch (FileNotFoundException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            long endTime = System.currentTimeMillis();
+            System.out.println("耗费时间： " + (endTime - startTime) + " ms");
         }
-        long endTime=System.currentTimeMillis();
-        System.out.println("耗费时间： "+(endTime-startTime)+" ms");
     }
 
-    //每周解压又重新压缩
-    public  static void unzipAndzipWeekly(){
-        ReadJson readJson = new ReadJson(jsonPath);
-        String zipDailyPath = readJson.getStringConfig("zipDailyPath");
-        String tmpUnzippedPath = readJson.getStringConfig("tmpUnzippedPath");
-        String zipWeeklyPath = readJson.getStringConfig("zipWeeklyPath");
-        File file = new File(zipDailyPath);
-        File[] files = file.listFiles();
-        for(int i = 0;i < files.length;i++) {
-            if(files[i].getName().charAt(0)!='y') {
-                PMManager.unZipFile(zipDailyPath + File.separator + files[i].getName(), tmpUnzippedPath);
-                files[i].renameTo(new File(zipDailyPath + File.separator + "y" + files[i].getName()));
-            }
-        }
+    //小周期压缩
+    public static void zipDaily(){
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-        PMManager.WeeklyZip(tmpUnzippedPath,zipWeeklyPath,df.format(new Date()));
+        Zip(sourcePath,zipDailyPath,df.format( new Date()));
 
     }
 
+    //大周期压缩
+    public  static void zipWeekly(){
+        unZip(zipDailyPath,zipDailyPath);
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        PMManager.Zip(zipDailyPath,zipWeeklyPath,df.format(new Date()));
+
+    }
+
+    public static long getFileLength(String filename){
+        File file = new File(filename);
+        return file.length();
+    }
 
     public static void main(String[] args) {
         // TODO Auto-generated method stub
+       // zipDaily(); unZip1(zipDailyPath,zipDailyPath);
+//        Zip(zipDailyPath,zipWeeklyPath,"h");
+      // zipWeekly();
         //  unzipAndzipWeekly();
+//        ReadJson readJson = new ReadJson("../Resources/test.json");
+//        String path = readJson.getStringConfig("sourcePath");
+//        File f = new File(path,"ha");
+//        f.mkdir();
+//        PMManager.Write("client","ji",(f+File.separator));
+
+       // System.out.println(tef.getBytes().length);
+       // System.out.println(getFileLength(str));
     }
 
 }

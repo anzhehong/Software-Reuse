@@ -61,7 +61,20 @@ public class ReadJson{
         throw new RuntimeException("Sorry there is no corresponding value...");
     }
 
-
+    public static long getLongConfig(String str) throws RuntimeException{
+        Iterator<String> iter = configmap.keySet().iterator();
+        while(iter.hasNext()){
+            String key = iter.next();
+            if(str.compareTo(key) == 0){
+                try{
+                    return (long)(Double.parseDouble(configmap.get(key).toString()));}
+                catch (NumberFormatException e){
+                    System.out.println("maybe the type you defined is not int,please have a check...");       //找到值但是不可以转化为int
+                }
+            }
+        }
+        throw new RuntimeException("Sorry there is no corresponding value...");
+    }
     public static double getDoubleConfig(String str) throws RuntimeException{
         Iterator<String> iter =  configmap.keySet().iterator();
         while(iter.hasNext()){
@@ -96,6 +109,8 @@ public class ReadJson{
         }
         throw new RuntimeException("Sorry there is no corresponding value...");
     }
+
+
 
     public static void main(String[] args){
         System.out.println(new ReadJson("../Resources/test.json").getStringConfig("mqHost"));

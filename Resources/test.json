@@ -16,7 +16,11 @@
 "loginLogSecond":"1000",
 "sourcePath":"../Resources/sourcePath",
 "zipDailyPath":"../Resources/zipDailyPath",
-"zipWeeklyPath":"../Resources/ZipWeeklyPath",
-"tmpUnzippedPath":"../Resources/tmpUnzippedPath"
+"zipWeeklyPath":"../Resources/zipWeeklyPath",
+"tmpUnzippedPath":"../Resources/tmpUnzippedPath",
+"FirsrZipInterval":30000,
+"SecondZipInterval":100000,
+"SingleFileMaxSize":100,
+"OverallFileMaxSize":1000
 
 }

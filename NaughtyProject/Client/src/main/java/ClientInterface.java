@@ -164,29 +164,41 @@ public class ClientInterface implements ActionListener {
                         client.SendMessage(sendChatMessage);
                         //有可能新建用时间来命名的文件夹
                         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                        String str = df.format(new Date());
+                        String DateStr = df.format(new Date());
                         //存储的消息
                         String contentStored  = username_input.getText().trim()+"\t"+
                                 sendChatMessage.getFinalMessage().getStringProperty("content")+"\t"+
                                 sendChatMessage.getFinalMessage().getStringProperty("createdTime");
                         //消息文件的路径
                         ReadJson readJson = new ReadJson(jsonPath);
-                        File file = new File(readJson.getStringConfig("sourcePath"));
+                        File overallfile = new File(readJson.getStringConfig("sourcePath"));
+                        File[] overallfiles = overallfile.listFiles();
+                        int overallfilesFlag = 0;
+                        for(int k = 0;k< overallfiles.length;k++){
 
-                        File[] files = file.listFiles();
-                        //判断是否要需要新建文件来存储信息.
-                        int flag = 0;
-                        for(int i = 0;i < files.length;i++){
-                            if(files[i].getName().charAt(0)!='y' && files[i].getName().substring(0,6).equals("client"))
-                            {
-                                PMManager.Write(files[i].getName(),contentStored,readJson.getStringConfig("sourcePath")+"/");
-                                flag = 1;
-                                break;
+                            if(overallfiles[k].length() + contentStored.getBytes().length <= readJson.getLongConfig("OverallFileMaxSize") ){
+                                File[] singlefiles = overallfiles[k].listFiles();
+                                int singlefilesFlag = 0;
+                                for(int i = 0; i < singlefiles.length;i++){
+                                    if(singlefiles[i].getName().substring(0,6).equals("client")&&singlefiles[i].length()+contentStored.getBytes().length <= readJson.getLongConfig("SingleFileMaxSize")){
+                                        PMManager.Write(singlefiles[i].getName(),contentStored,readJson.getStringConfig("sourcePath")+File.separator+overallfiles[k].getName()+File.separator);
+                                        singlefilesFlag = 1;
+                                        break;
+                                    }
+                                }
+                                if(singlefilesFlag == 0){
+                                    PMManager.Write("client"+DateStr,contentStored,readJson.getStringConfig("sourcePath")+File.separator+overallfiles[k].getName()+File.separator);
+                                }
                             }
+                            overallfilesFlag = 1;
+                            break;
                         }
-                        if(flag == 0) {
-                            PMManager.Write("client" + str, contentStored, readJson.getStringConfig("sourcePath") + "/");
+                        if(overallfilesFlag == 0){
+                            File tmp = new File(readJson.getStringConfig("sourcePath"),DateStr);
+                            tmp.mkdir();
+                            PMManager.Write("client"+DateStr,contentStored,tmp+File.separator);
                         }
+
                     } catch (JMSException e1) {
                         e1.printStackTrace();
                     }
