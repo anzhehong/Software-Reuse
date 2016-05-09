@@ -50,7 +50,7 @@ public class AAEncryptionTest {
         System.out.println("解密后数据: string:"+new String(decryptData));
 
         /**
-         * 本次常用方法
+         * 本次常用方法1
          */
         String originStr = "我是一个测试string";
         ArrayList<Object> result = AAEncryption.DefaultEncryptString(originStr);
@@ -58,5 +58,25 @@ public class AAEncryptionTest {
         Key codeKey = (Key) result.get(1);
         System.out.println("加密后String:" + code);
         System.out.println("解密后String:"+ AAEncryption.DefaultDecodeStringByStrAndKey(code, codeKey));
+
+        /**
+         * 本次常用方法2
+         */
+        Key tempKey = AAEncryption.getRandomKey();
+        String oldStr = "试一下新的方法";
+        String encriptedStr= AAEncryption.DefaultEncryptStringWithKey(oldStr, tempKey);
+        System.out.println("-----");
+        System.out.println(encriptedStr);
+        System.out.println("-----");
+        System.out.println(AAEncryption.DefaultDecodeStringByStrAndKey(encriptedStr, tempKey));
+
+        String oldStr2 = "试一下新的方法2";
+        String encriptedStr2= AAEncryption.DefaultEncryptStringWithKey(oldStr2, tempKey);
+        System.out.println("-----");
+        System.out.println(encriptedStr2);
+        System.out.println("-----");
+        System.out.println(AAEncryption.DefaultDecodeStringByStrAndKey(encriptedStr2, tempKey));
+
+        System.out.println("Key  "+tempKey);
     }
 }

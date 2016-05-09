@@ -12,6 +12,14 @@
     <artifactId>PM</artifactId>
     <packaging>jar</packaging>
 
+    <dependencies>
+        <dependency>
+            <groupId>tj.sse.reuse.group2</groupId>
+            <artifactId>CM</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>

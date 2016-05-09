@@ -23,6 +23,17 @@ public class AAEncryption {
     private static final String DEFAULT_CIPHER_ALGORITHM = "AES/ECB/PKCS5Padding";
 
     /**
+     * 获取随机Key
+     */
+    public static Key getRandomKey() {
+        AAEncryption aaEncryption = new AAEncryption();
+        byte[] key = aaEncryption.initSecretKey();
+        System.out.println("key："+ showByteArray(key));
+        Key k = aaEncryption.toKey(key);
+        return k;
+    }
+
+    /**
      * 初始化密钥
      *
      * @return byte[] 密钥
@@ -206,6 +217,22 @@ public class AAEncryption {
         list.add(result);
         list.add(k);
         return list;
+    }
+
+    /**
+     * 默认加密方法加Key
+     * @param str, 密钥
+     * @return 加密后的密文
+     */
+    static public String DefaultEncryptStringWithKey(String str, Key k) {
+        String result = "";
+        try {
+            byte[] encriptString = encrypt(str.getBytes(), k);
+            result = Hex.byteToHexString(encriptString);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     /**
