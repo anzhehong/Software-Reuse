@@ -44,6 +44,43 @@ public class PMManager {
     }
 
     /**
+     * 写加密文件
+     * @param fileName 文件路径
+     * @param content  内容
+     */
+    public static void encipherWrite(String fileName, String content, String outPath) {
+        try {
+            // 打开一个随机访问文件流，按读写方式
+            RandomAccessFile randomFile = new RandomAccessFile(outPath + fileName, "rw");
+            // 文件长度，字节数
+            long fileLength = randomFile.length();
+            // 将写文件指针移到文件尾。
+            randomFile.seek(fileLength);
+            content = encipher(content);
+            randomFile.writeBytes(content+"\r\n");
+            randomFile.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    /**
+     * String 加密
+     * @param content 内容
+     * @return 加密后的 String
+     */
+    private static String encipher(String content){
+        return Hex.encodeHexStr(content.getBytes());
+    }
+
+    /**
+     * String 解密
+     * @param content 加密内容
+     * @return 解密后的 String
+     */
+    private static String decodeHex(String content){
+        return new String(Hex.decodeHex(content.toCharArray()));
+    }
+    /**
      * 记录登录记录，包括时间、client使用的username、是否成功
      * @param ClientName
      * @param result
@@ -54,6 +91,10 @@ public class PMManager {
     }
 
     public static void main(String[] args) {
+        String test = "test";
+        System.out.println("转换前：" + test);
+        System.out.println("转换后：" + Hex.encodeHexStr(test.getBytes()));
+        System.out.println("解密:" + new String(Hex.decodeHex(Hex.encodeHexStr(test.getBytes()).toCharArray())));
 
     }
 
