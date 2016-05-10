@@ -6,6 +6,7 @@ import reuse.communication.entity.AAMessage;
 import reuse.license.MultiFrequencyRestriction;
 import reuse.license.MultiMaxNumOfMessage;
 import reuse.pm.PMManager;
+import reuse.utility.Zip;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -93,8 +94,8 @@ public class Server {
         public void run() {
             //TODO: 把validLogin和invalidLogin记录到文件中
             Date date = new Date();
-            PMManager.Write(loginLog, date + "\tValid Login Count: " + validLoginCount + "\tInvalid Login Count: " + inValidLoginCount, outPath);
-            PMManager.Write(forwardedMessageLog, date + "\tForwarded Message Count: " + forwardedMessageCount, outPath);
+            PMManager.encipherWrite(loginLog, date + "\tValid Login Count: " + validLoginCount + "\tInvalid Login Count: " + inValidLoginCount, outPath);
+            PMManager.encipherWrite(forwardedMessageLog, date + "\tForwarded Message Count: " + forwardedMessageCount, outPath);
             inValidLoginCount = 0;
             validLoginCount = 0;
             forwardedMessageCount = 0;
@@ -145,7 +146,7 @@ public class Server {
             String sourceFilePath = (readJson.getStringConfig("sourcePath"));
             String zipFilePath = (readJson.getStringConfig("zipDailyPath"));
 
-            boolean flag = PMManager.Zip(sourceFilePath, zipFilePath, fileName);
+            boolean flag = Zip.Zip(sourceFilePath, zipFilePath, fileName);
             if(flag){
                 System.out.println("文件打包成功!");
             }else{
@@ -162,7 +163,7 @@ public class Server {
 
         public void run(){
             //解压再压缩
-            PMManager.zipWeekly();
+            Zip.zipWeekly();
         }
 
     }
@@ -271,13 +272,13 @@ public class Server {
                                             int singlefilesFlag = 0;
                                             for(int i = 0; i < singlefiles.length;i++){
                                                 if(singlefiles[i].getName().substring(0,6).equals("server")&&singlefiles[i].length()+contentStored.getBytes().length <= readJson.getLongConfig("SingleFileMaxSize")){
-                                                    PMManager.Write(singlefiles[i].getName(),contentStored,readJson.getStringConfig("sourcePath")+File.separator+overallfiles[k].getName()+File.separator);
+                                                    PMManager.encipherWrite(singlefiles[i].getName(), contentStored, readJson.getStringConfig("sourcePath") + File.separator + overallfiles[k].getName() + File.separator);
                                                     singlefilesFlag = 1;
                                                     break;
                                                 }
                                             }
                                             if(singlefilesFlag == 0){
-                                                PMManager.Write("server"+DateStr,contentStored,readJson.getStringConfig("sourcePath")+File.separator+overallfiles[k].getName()+File.separator);
+                                                PMManager.encipherWrite("server" + DateStr, contentStored, readJson.getStringConfig("sourcePath") + File.separator + overallfiles[k].getName() + File.separator);
                                             }
                                         }
                                         overallfilesFlag = 1;
@@ -286,7 +287,7 @@ public class Server {
                                     if(overallfilesFlag == 0){
                                         File tmp = new File(readJson.getStringConfig("sourcePath"),DateStr);
                                         tmp.mkdir();
-                                        PMManager.Write("server"+DateStr,contentStored,tmp+File.separator);
+                                        PMManager.encipherWrite("server" + DateStr, contentStored, tmp + File.separator);
                                     }
 
                                 } else {
