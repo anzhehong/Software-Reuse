@@ -1,0 +1,115 @@
+# 软件复用管理文档
+
+
+# 项目组成员
+
+| 姓名        | 学生账号           | Github Id  |
+| ------------- |:-------------:| -----:|
+| 林思妙| 1352849 | [linsimiao](https://github.com/linsimiao) | 
+|  康慧琳     | 1352871      |   [1352871](https://github.com/1352871)|
+| 安哲宏 | 1352834 | [anzhehong](https://github.com/anzhehong) |
+| 张嘉琦 | 1352863      |   [kobpko](https://github.com/kobpko)  |
+
+***
+
+
+# 输出文件控制实现
+
+>2016.05.10
+
+## 文件大小限制、总文件大小限制
+
+### 关键代码
+
+```java
+      /**
+     * 写文件
+     * @param fileName 文件路径
+     * @param content  内容
+     */
+     
+     //文件大小限制 
+    private static int maxSize = 2;
+     //总文件大小限制
+    private static double maxSumSize = 10;
+
+    
+    /**
+     * 检查文件夹大小
+     * @param path 文件路径
+     */
+    private static double getDirSize(String path){
+        return _getDirSize(new File(path));
+    }
+
+    //获取文件大小
+    private static double _getDirSize(File file) {
+    }
+  
+     //对于文件的写入进行 文件大小限制、总文件大小限制
+     
+    /*
+    文件大小限制：如果超过文件大小限制，则会新建一个文件。命名规则：“#+filename”;
+    文件夹大小限制：如果超过文件夹大小限制，报错处理。
+    */
+    public static void Write(String fileName, String content, String outPath) {
+    }
+    
+```
+## 实现参数可配置
+
+### 关键代码
+```java
+/**
+     * 写文件
+     * @param fileName 文件路径
+     * @param content  内容
+     */
+    
+    
+     //文件大小限制 
+    private static int maxSize = 2;
+    
+     //总文件大小限制 
+    private static double maxSumSize = 10;
+
+    public static void setMaxSize(int maxSize) {
+        PMManager.maxSize = maxSize;
+    }
+
+    public static void setMaxSumSize(double maxSumSize) {
+        PMManager.maxSumSize = maxSumSize;
+    }
+
+```
+
+
+## 归档文件加密
+
+### 关键代码
+
+```java
+    /**
+     * 写加密文件
+     * @param fileName 文件路径
+     * @param content  内容
+     */
+    public static void encipherWrite(String fileName, String content, String outPath) {};
+    /**
+     * String 加密
+     * @param content 内容
+     * @return 加密后的 String
+     */
+    private static String encipher(String content){
+        return Hex.encodeHexStr(content.getBytes());
+    }
+
+    /**
+     * String 解密
+     * @param content 加密内容
+     * @return 解密后的 String
+     */
+    private static String decodeHex(String content){
+        return new String(Hex.decodeHex(content.toCharArray()));
+    }
+```

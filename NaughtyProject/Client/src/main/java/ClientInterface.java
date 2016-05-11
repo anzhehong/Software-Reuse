@@ -6,6 +6,7 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import reuse.cm.ReadJson;
 import reuse.pm.PMManager;
+import reuse.utility.AAEncryption;
 import reuse.utility.EventController;
 
 import javax.jms.JMSException;
@@ -17,6 +18,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -166,9 +168,14 @@ public class ClientInterface implements ActionListener {
                         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         String DateStr = df.format(new Date());
                         //存储的消息
-                        String contentStored  = username_input.getText().trim()+"\t"+
+
+                        String contentStoredUnencrypted  = username_input.getText().trim()+"\t"+
                                 sendChatMessage.getFinalMessage().getStringProperty("content")+"\t"+
                                 sendChatMessage.getFinalMessage().getStringProperty("createdTime");
+
+                        ArrayList<Object> result = AAEncryption.DefaultEncryptString(contentStoredUnencrypted);
+
+                        String contentStored = (String)result.get(0);
                         //消息文件的路径
                         ReadJson readJson = new ReadJson(jsonPath);
                         File overallfile = new File(readJson.getStringConfig("sourcePath"));
@@ -181,13 +188,13 @@ public class ClientInterface implements ActionListener {
                                 int singlefilesFlag = 0;
                                 for(int i = 0; i < singlefiles.length;i++){
                                     if(singlefiles[i].getName().substring(0,6).equals("client")&&singlefiles[i].length()+contentStored.getBytes().length <= readJson.getLongConfig("SingleFileMaxSize")){
-                                        PMManager.Write(singlefiles[i].getName(),contentStored,readJson.getStringConfig("sourcePath")+File.separator+overallfiles[k].getName()+File.separator);
+                                        PMManager.encipherWrite(singlefiles[i].getName(), contentStored, readJson.getStringConfig("sourcePath") + File.separator + overallfiles[k].getName() + File.separator);
                                         singlefilesFlag = 1;
                                         break;
                                     }
                                 }
                                 if(singlefilesFlag == 0){
-                                    PMManager.Write("client"+DateStr,contentStored,readJson.getStringConfig("sourcePath")+File.separator+overallfiles[k].getName()+File.separator);
+                                    PMManager.encipherWrite("client" + DateStr, contentStored, readJson.getStringConfig("sourcePath") + File.separator + overallfiles[k].getName() + File.separator);
                                 }
                             }
                             overallfilesFlag = 1;
@@ -196,7 +203,7 @@ public class ClientInterface implements ActionListener {
                         if(overallfilesFlag == 0){
                             File tmp = new File(readJson.getStringConfig("sourcePath"),DateStr);
                             tmp.mkdir();
-                            PMManager.Write("client"+DateStr,contentStored,tmp+File.separator);
+                            PMManager.encipherWrite("client"+DateStr,contentStored,tmp+File.separator);
                         }
 
                     } catch (JMSException e1) {
@@ -261,8 +268,8 @@ public class ClientInterface implements ActionListener {
              */
 
             Date date = new Date();
-            PMManager.Write(loginLog, date + "\tValid Login Count: " + validLoginCount + "\tInvalid Login Count: " + inValidLoginCount, ClientInterface.outPath);
-            PMManager.Write(receiveMessageLog,date + "\tReceived message Count: " + receivedMessageCount, ClientInterface.outPath);
+            PMManager.encipherWrite(loginLog, date + "\tValid Login Count: " + validLoginCount + "\tInvalid Login Count: " + inValidLoginCount, ClientInterface.outPath);
+            PMManager.encipherWrite(receiveMessageLog, date + "\tReceived message Count: " + receivedMessageCount, ClientInterface.outPath);
             inValidLoginCount = 0;
             validLoginCount = 0;
             receivedMessageCount = 0;
