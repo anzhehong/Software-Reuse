@@ -6,12 +6,14 @@ import reuse.communication.entity.AAMessage;
 import reuse.license.MultiFrequencyRestriction;
 import reuse.license.MultiMaxNumOfMessage;
 import reuse.pm.PMManager;
+import reuse.utility.AAEncryption;
 import reuse.utility.Zip;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import java.io.File;
+import java.security.Key;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -55,6 +57,7 @@ public class Server {
      * queue用来发送登录请求.
      * TODO: 注册
      */
+
     public  MQConnect baseConnect;
 
     /**
@@ -139,19 +142,7 @@ public class Server {
 
         public void run(){
             //执行打包功能
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String fileName = df.format(new Date());
-
-            ReadJson readJson = new ReadJson(jsonPath);
-            String sourceFilePath = (readJson.getStringConfig("sourcePath"));
-            String zipFilePath = (readJson.getStringConfig("zipDailyPath"));
-
-            boolean flag = Zip.Zip(sourceFilePath, zipFilePath, fileName);
-            if(flag){
-                System.out.println("文件打包成功!");
-            }else{
-                System.out.println("文件打包失败!");
-            }
+         Zip.zipWeekly();
 
         }
 
@@ -255,9 +246,12 @@ public class Server {
                                     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                     String DateStr = df.format(new Date());
                                     //存储的消息
-                                    String contentStored  = groupId+"\t"+message.getStringProperty("userName")+"\t"+
+                                    String contentStoredUnencrypted  = groupId+"\t"+message.getStringProperty("userName")+"\t"+
                                             message.getStringProperty("content")+"\t"+
                                             message.getStringProperty("createdTime");
+                                    ArrayList<Object> result = AAEncryption.DefaultEncryptString(contentStoredUnencrypted);
+
+                                    String contentStored = (String)result.get(0);
                                     //消息文件的路径
                                     ReadJson readJson = new ReadJson(jsonPath);
 

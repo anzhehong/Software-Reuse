@@ -6,6 +6,7 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import reuse.cm.ReadJson;
 import reuse.pm.PMManager;
+import reuse.utility.AAEncryption;
 import reuse.utility.EventController;
 
 import javax.jms.JMSException;
@@ -17,6 +18,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -166,9 +168,14 @@ public class ClientInterface implements ActionListener {
                         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         String DateStr = df.format(new Date());
                         //存储的消息
-                        String contentStored  = username_input.getText().trim()+"\t"+
+
+                        String contentStoredUnencrypted  = username_input.getText().trim()+"\t"+
                                 sendChatMessage.getFinalMessage().getStringProperty("content")+"\t"+
                                 sendChatMessage.getFinalMessage().getStringProperty("createdTime");
+
+                        ArrayList<Object> result = AAEncryption.DefaultEncryptString(contentStoredUnencrypted);
+
+                        String contentStored = (String)result.get(0);
                         //消息文件的路径
                         ReadJson readJson = new ReadJson(jsonPath);
                         File overallfile = new File(readJson.getStringConfig("sourcePath"));
