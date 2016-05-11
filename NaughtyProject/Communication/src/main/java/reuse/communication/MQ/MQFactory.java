@@ -49,10 +49,18 @@ public class MQFactory {
         return messageProducer;
     }
 
-    public static MessageConsumer getSubscriber(String TopicID) throws JMSException{
-        Session tmpSession = getSession();
+    public static MessageConsumer getSubscriber(String TopicID, String connectID) throws JMSException{
+
+        ConnectionFactory factory = new ActiveMQConnectionFactory(address);
+        Connection connection = factory.createConnection();
+        connection.setClientID(connectID);
+        connection.start();
+        Session connectionSession = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+
+
+        Session tmpSession = connectionSession;
         Topic topic = tmpSession.createTopic(TopicID);
-        MessageConsumer messageConsumer = tmpSession.createConsumer(topic);
+        MessageConsumer messageConsumer = tmpSession.createDurableSubscriber(topic, connectID);
         return messageConsumer;
     }
 

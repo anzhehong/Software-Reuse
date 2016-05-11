@@ -61,13 +61,13 @@ public class Client {
                 try {
                     type = message.getIntProperty("type");
                     if (type == 1) {
-                        loginSuccessHandler(message.getStringProperty("groupId"));
+                        loginSuccessHandler(message.getStringProperty("groupId"), userName);
                         System.out.println("groupid:"+ message.getStringProperty("groupId"));
                     }else if (type == 999){
                         getReDoLogInHandler();
 
                     }else if (type == 888) {
-                        getReLogInPermittedHandler();
+                        getReLogInPermittedHandler(userName);
                     }
                     else if (type == 2) {
                         EventController.eventBus.post(new InterfaceEvent(message.getStringProperty("content")));
@@ -93,9 +93,9 @@ public class Client {
         }
     }
 
-    public void loginSuccessHandler(String topic)throws JMSException{
+    public void loginSuccessHandler(String topic, String connectUsername)throws JMSException{
         //TODO:登录成功写入文件
-        topicConenct = new MQConnect(MQFactory.getSubscriber(topic));
+        topicConenct = new MQConnect(MQFactory.getSubscriber(topic, connectUsername));
         topicListener();
         EventController.eventBus.post(new InterfaceEvent("loginSuccessfully"));
     }
@@ -112,9 +112,9 @@ public class Client {
         privateConnect.sendMessage(reloginMessage.getFinalMessage());
 
     }
-    public void getReLogInPermittedHandler() throws JMSException{
+    public void getReLogInPermittedHandler(String connectUsername) throws JMSException{
         //TODO: 『你成功重连啦！』的消息->加入topic，告诉interface可以接受。
-        topicConenct = new MQConnect(MQFactory.getSubscriber("Topic"));
+        topicConenct = new MQConnect(MQFactory.getSubscriber("Topic", connectUsername));
         topicListener();
         //将信息发出
         EventController.eventBus.post(new InterfaceEvent("LoggedAgain"));

@@ -6,6 +6,7 @@ import reuse.communication.entity.AAMessage;
 import reuse.license.MultiFrequencyRestriction;
 import reuse.license.MultiMaxNumOfMessage;
 import reuse.pm.PMManager;
+import reuse.utility.Zip;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -13,6 +14,8 @@ import javax.jms.MessageListener;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
+import static reuse.utility.Zip.Zip;
 
 /**
  * Created by MSI on 2016/3/27.
@@ -145,7 +148,7 @@ public class Server {
             String sourceFilePath = (readJson.getStringConfig("sourcePath"));
             String zipFilePath = (readJson.getStringConfig("zipDailyPath"));
 
-            boolean flag = PMManager.Zip(sourceFilePath, zipFilePath, fileName);
+            boolean flag = Zip(sourceFilePath, zipFilePath, fileName);
             if(flag){
                 System.out.println("文件打包成功!");
             }else{
@@ -162,7 +165,7 @@ public class Server {
 
         public void run(){
             //解压再压缩
-            PMManager.zipWeekly();
+            Zip.zipWeekly();
         }
 
     }
@@ -334,12 +337,12 @@ public class Server {
      * @throws JMSException
      */
     public boolean isConnectExist(MQConnect connect) throws JMSException {
-        for (int i = 0; i< mqConnects.size(); i++) {
-            if (mqConnects.get(i).getMessageProducer().getDestination().equals(connect.getMessageProducer().getDestination())) {
-                System.out.println("mqConnect i : " + mqConnects.get(i).getMessageProducer().getDestination());
-                return true;
-            }
-        }
+//        for (int i = 0; i< mqConnects.size(); i++) {
+//            if (mqConnects.get(i).getMessageProducer().getDestination().equals(connect.getMessageProducer().getDestination())) {
+//                System.out.println("mqConnect i : " + mqConnects.get(i).getMessageProducer().getDestination());
+//                return true;
+//            }
+//        }
         return false;
     }
 
