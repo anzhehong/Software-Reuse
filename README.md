@@ -30,6 +30,12 @@ In the main Directory of our Git project, you will see two main directories:
 |构件使用文档|[构件使用文档](https://github.com/anzhehong/Software-Reuse/blob/master/Documents/%E6%9E%84%E4%BB%B6%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3.md)|
 |构件选择文档|[构件选择文档](https://github.com/anzhehong/Software-Reuse/blob/master/Documents/%E6%9E%84%E4%BB%B6%E9%80%89%E6%8B%A9%E6%96%87%E6%A1%A3.md)|
 |本组构件反馈跟踪|[本组构件反馈跟踪](https://github.com/anzhehong/Software-Reuse/blob/master/Documents/%E6%9C%AC%E7%BB%84%E6%9E%84%E4%BB%B6%E5%8F%8D%E9%A6%88%E8%B7%9F%E8%B8%AA.md)|
+|保存和打包消息文件文档|[保存和打包消息文件文档](https://github.com/anzhehong/Software-Reuse/blob/master/Documents/%E4%BF%9D%E5%AD%98%E5%92%8C%E6%89%93%E5%8C%85%E6%B6%88%E6%81%AF%E6%96%87%E4%BB%B6%E6%96%87%E6%A1%A3.md)|
+|加密解密文档|[加密解密文档](https://github.com/anzhehong/Software-Reuse/blob/master/Documents/%E5%8A%A0%E5%AF%86%E8%A7%A3%E5%AF%86.md)|
+|软件复用分组发送更新文档|[软件复用分组发送更新文档](https://github.com/anzhehong/Software-Reuse/blob/master/Documents/%E8%BD%AF%E4%BB%B6%E5%A4%8D%E7%94%A8%E5%88%86%E7%BB%84%E5%8F%91%E9%80%81%E6%96%87%E6%A1%A3.md)|
+|输出文件控制+归档文件加密复用文档|[输出文件控制+归档文件加密复用文档](https://github.com/anzhehong/Software-Reuse/blob/master/Documents/%E8%BE%93%E5%87%BA%E6%96%87%E4%BB%B6%E6%8E%A7%E5%88%B6%2B%E5%BD%92%E6%A1%A3%E6%96%87%E4%BB%B6%E5%8A%A0%E5%AF%86%E5%A4%8D%E7%94%A8%E6%96%87%E6%A1%A3)|
+|持久化消息+显示同组成员列表文档|[持久化消息+显示同组成员列表文档](https://github.com/anzhehong/Software-Reuse/blob/master/Documents/%E6%8C%81%E4%B9%85%E5%8C%96%E6%B6%88%E6%81%AF%2B%E6%98%BE%E7%A4%BA%E5%90%8C%E7%BB%84%E6%88%90%E5%91%98%E5%88%97%E8%A1%A8.md)|
+
 	
 3. `Disscussion` is the direcotry for in-class discussion homework, which is finished independently.
 4. `Resources` is the directory for an example of `CM` component file. Anyone can modify a Json file by adding some properties in it and then they can use the properties by calling `ReadJson` 's functions. And `test.json` is our group's basic configuration file.
