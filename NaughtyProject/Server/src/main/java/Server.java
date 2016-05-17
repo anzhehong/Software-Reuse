@@ -74,7 +74,12 @@ public class Server {
     /**
      * 用来存收发消息的MQConnect.
      */
+
     protected ArrayList<MQConnect> mqConnects = new ArrayList<MQConnect>();
+    /**
+     * 用来存登录信息
+     */
+    public static Map<String,Integer> logInUser = new HashMap<>();
     /**
      * 用来记录每一个登录且发送过消息的client这次session的每次消息时间.
      */
@@ -141,7 +146,7 @@ public class Server {
 
         public void run(){
             //执行打包功能
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH mm ss");
             String fileName = df.format(new Date());
 
             ReadJson readJson = new ReadJson(jsonPath);
@@ -230,6 +235,18 @@ public class Server {
                 int groupId = (int) thisObject;
                 messageToSend.setStringProperty("groupId","Topic_"+ groupId);
                 connect.sendMessage(messageToSend);
+                List<String> nameList = new ArrayList<>();
+                for(Map.Entry<String,Integer> entry: logInUser.entrySet()){
+                    String username = entry.getKey();
+                    int groupId_map = entry.getValue();
+
+                    if(groupId_map == groupId){
+                        nameList.add(username);
+                    }
+                }
+                messageToSend.setObjectProperty("stateList",nameList);
+                messageToSend.setStringProperty("content","");
+                sendTopic(messageToSend, groupId);
                 mqConnects.add(connect);
 
                 multiMaxNumOfMessage.addMap(aaMessage.getFinalMessage().getStringProperty("userName"));
@@ -237,7 +254,7 @@ public class Server {
 //                connectArrayListMap.put(aaMessage.getFinalMessage().getStringProperty("userName"), new ArrayList<Date>());
                 validLoginCount += 1;
 
-                connect.addMessageHandler(new MessageListener() {
+                connect.addMessageHandler(new MessageListener(){
                     @Override
                     public void onMessage(Message message) {
                         try {
@@ -252,9 +269,9 @@ public class Server {
                                 String isMessageValidStr = isMessageValid(message, connect);
                                 if (isMessageValidStr.equals("ok")) {
                                     //TODO: hhhhhhhhhhhhhhhhailsdfjlasdfjaiosdfjoadsifjaeoirfjaeiorwf
-
+                                    System.out.println("shiyixia");
                                     sendTopic(message, groupId);
-                                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH mm ss");
                                     String DateStr = df.format(new Date());
                                     //存储的消息
                                     String contentStored  = groupId+"\t"+message.getStringProperty("userName")+"\t"+
@@ -289,7 +306,7 @@ public class Server {
                                     if(overallfilesFlag == 0){
                                         File tmp = new File(readJson.getStringConfig("sourcePath"),DateStr);
                                         tmp.mkdir();
-                                        PMManager.Write("server"+DateStr,contentStored,tmp+File.separator);
+                                        PMManager.Write("server"+DateStr+".txt",contentStored,tmp+File.separator);
                                     }
 
                                 } else {

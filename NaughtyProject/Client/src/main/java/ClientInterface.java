@@ -18,10 +18,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
+import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by MSI on 2016/3/23.
@@ -165,7 +164,7 @@ public class ClientInterface implements ActionListener {
                     try {
                         client.SendMessage(sendChatMessage);
                         //有可能新建用时间来命名的文件夹
-                        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH mm ss");
                         String DateStr = df.format(new Date());
                         //存储的消息
 
@@ -203,7 +202,7 @@ public class ClientInterface implements ActionListener {
                         if(overallfilesFlag == 0){
                             File tmp = new File(readJson.getStringConfig("sourcePath"),DateStr);
                             tmp.mkdir();
-                            PMManager.encipherWrite("client"+DateStr,contentStored,tmp+File.separator);
+                            PMManager.encipherWrite("client"+DateStr+".txt",contentStored,tmp+File.separator);
                         }
 
                     } catch (JMSException e1) {
@@ -213,18 +212,30 @@ public class ClientInterface implements ActionListener {
             });
         }else if(interfaceEvent.getStr().toString().equals("MessageReceived"))   //收到有信息收到的消息，更新聊天界面
         {
+            System.out.println("收到topic消息");
             Message message = interfaceEvent.getMessage();
             try {
-                String dateStr = message.getStringProperty("createdTime");
+                String messageToShow = message.getStringProperty("content");
+                if(!messageToShow.equals("")) {
+                    String dateStr = message.getStringProperty("createdTime");
+                    messageToShow = dateStr + " : " + messageToShow;
+                    System.out.println("messagetoshow:"+messageToShow);
 //                String name = message.getStringProperty("author");
-                if (clientView.MessageShow.getText().trim().equals("")) {
-                    clientView.MessageShow.setText(clientView.MessageShow.getText().trim()
-                            + dateStr   + " : " + message.getStringProperty("content"));
-                }else {
-                    clientView.MessageShow.setText(clientView.MessageShow.getText().trim()
-                            + "\n" + dateStr   + " : " + message.getStringProperty("content"));
+                    if (clientView.MessageShow.getText().trim().equals("")) {
+                        clientView.MessageShow.setText(clientView.MessageShow.getText().trim()
+                                + messageToShow);
+                    } else {
+                        clientView.MessageShow.setText(clientView.MessageShow.getText().trim()
+                                + "\n" + messageToShow);
+                    }
+                    receivedMessageCount += 1;
+                }else{
+                    List<String> nameList = (ArrayList<String>)message.getObjectProperty("stateList");
+                    for(int i=0;i<nameList.size();i++) {
+                        clientView.friendState.setText(clientView.friendState.getText().trim()
+                                + "\n" + nameList.get(i));
+                    }
                 }
-                receivedMessageCount += 1;
             } catch (JMSException e) {
                 e.printStackTrace();
             }

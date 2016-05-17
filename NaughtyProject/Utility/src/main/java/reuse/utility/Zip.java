@@ -164,7 +164,7 @@ public class Zip {
 
     //小周期压缩
     public static void zipDaily(){
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH mm ss");
         Zip(sourcePath,zipDailyPath,df.format( new Date()));
 
     }
@@ -172,7 +172,7 @@ public class Zip {
     //大周期压缩
     public  static void zipWeekly(){
         unZip(zipDailyPath,zipDailyPath);
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH mm ss");
         Zip(zipDailyPath,zipWeeklyPath,df.format(new Date()));
 
     }

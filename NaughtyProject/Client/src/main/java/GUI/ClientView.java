@@ -11,10 +11,12 @@ public class ClientView extends JFrame {
     public JPanel contentPane;
     public JScrollPane ShowScroll;
     public JScrollPane EditScroll;
+    public JScrollPane friendScroll;
 
 
     public JTextArea MessageShow;//消息展示区
     public JTextArea MessageEdit;//消息编辑区
+    public JTextArea friendState;//好友列表
     public  JTextArea BlankArea;
     public JButton ConfirmButton; //发送键
     public JButton CloseButton;//关闭键
@@ -23,13 +25,13 @@ public class ClientView extends JFrame {
 
     public static void main(String args[] )
     {
-        ClientView clientView=new ClientView();
+        ClientView clientView = new ClientView();
     }
 
     public ClientView()
     {
         this.init();
-        this.setSize(650,600);
+        this.setSize(950,600);
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
@@ -44,13 +46,14 @@ public class ClientView extends JFrame {
         this.setContentPane(contentPane);
         EditScroll=new JScrollPane();
         ShowScroll=new JScrollPane();
+        friendScroll = new JScrollPane();
 
         layout.columnWidths = new int[]{400, 100, 100, 0};
         layout.columnWeights = new double[]{0, 0, 0, 1.0E-4};
         layout.rowHeights = new int[]{250, 1, 225, 24, 0};
         layout.rowWeights = new double[]{0, 0, 0, 0, 1.0E-4};
 
-       //MessageShow 面板
+        //MessageShow 面板
         MessageShow = new JTextArea();
         MessageShow.setEditable(false);
         ShowScroll.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -58,8 +61,8 @@ public class ClientView extends JFrame {
 
         this.add(ShowScroll,
                 new GBC(0, 0, 6, 1).
-                setFill(GBC.BOTH).
-                setWeight(1, 250));
+                        setFill(GBC.BOTH).
+                        setWeight(1, 250));
         ShowScroll.setViewportView(MessageShow);
 
         //MessageEdit
@@ -70,8 +73,8 @@ public class ClientView extends JFrame {
 
         this.add(EditScroll,
                 new GBC(0, 2, 6, 1).
-                setFill(GBC.BOTH).
-                setWeight(1, 225));
+                        setFill(GBC.BOTH).
+                        setWeight(1, 225));
         EditScroll.setViewportView(MessageEdit);
 
         //BlankArea 面板
@@ -80,21 +83,37 @@ public class ClientView extends JFrame {
         BlankArea.setBackground(new Color(235,235,235));
         this.add(BlankArea,
                 new GBC(0, 3, 1, 1).
-                setFill(GBC.BOTH).
-                setWeight(1, 24));
+                        setFill(GBC.BOTH).
+                        setWeight(1, 24));
 
         CloseButton = new JButton("exit");
         this.add(CloseButton,
                 new GBC(1, 3, 1, 1).
-                setFill(GBC.BOTH).
-                setWeight(0, 24).setInsets(10,5,5,3));
+                        setFill(GBC.BOTH).
+                        setWeight(0, 24).setInsets(10,5,5,3));
 
         ConfirmButton=new JButton("send");
         this.add(ConfirmButton,
                 new GBC(2, 3, 1, 1).
-                setFill(GBC.BOTH).
-                setWeight(0, 24).setInsets(10,3,5,5));
+                        setFill(GBC.BOTH).
+                        setWeight(0, 24).setInsets(10,3,5,5));
         this.setTitle("连接正常");
+
+        MessageShow = new JTextArea();
+        MessageShow.setEditable(false);
+        ShowScroll.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        MessageShow.setFont(new Font("Serif",Font.PLAIN,24));
+
+
+        friendState = new JTextArea();
+        friendState.setEditable(false);
+        friendScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        friendState.setFont(new Font("Serif",Font.PLAIN,24));
+        this.add(friendScroll,
+                new GBC(6,0,2,3).
+                        setFill(GBC.BOTH).
+                        setWeight(1, 250));
+        friendScroll.setViewportView(friendState);
         /*
         //SplitLine 分割线
         SplitLine = new JTextArea();
