@@ -204,6 +204,7 @@ public class Server {
             System.out.println("flag : " + flag);
             privateConnect = new MQConnect(MQFactory.getproducer("SC_" + userName), MQFactory.getConsumer("CS_" + userName));
             if (!flag) {
+                logInUser.put(userName,(int)dbResult.get("groupId"));
                 sendQueue(!flag, privateConnect, dbResult.get("groupId"));
             }else {
                 sendQueue(!flag, privateConnect, dbResult.get("errorMsg"));

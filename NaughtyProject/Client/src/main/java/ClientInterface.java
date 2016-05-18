@@ -231,9 +231,11 @@ public class ClientInterface implements ActionListener {
                     receivedMessageCount += 1;
                 }else{
                     List<String> nameList = (ArrayList<String>)message.getObjectProperty("stateList");
-                    for(int i=0;i<nameList.size();i++) {
+                    clientView.friendState.setText(nameList.get(0));
+                    for(int i=1;i<nameList.size();i++) {
                         clientView.friendState.setText(clientView.friendState.getText().trim()
                                 + "\n" + nameList.get(i));
+                        System.out.println(nameList.get(i));
                     }
                 }
             } catch (JMSException e) {
