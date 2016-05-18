@@ -6,6 +6,7 @@ import reuse.communication.entity.AAMessage;
 import reuse.license.MultiFrequencyRestriction;
 import reuse.license.MultiMaxNumOfMessage;
 import reuse.pm.PMManager;
+import reuse.utility.ClassUtil;
 import reuse.utility.Zip;
 
 import javax.jms.JMSException;
@@ -25,6 +26,11 @@ public class Server {
     static public String outPath = "../Resources/out/Log/Server/";
     static public String jsonPath = "../Resources/test.json";
 
+    private String errorOutPath = new ReadJson(jsonPath).getStringConfig("ErrorLogPath");
+    private String errorOutName = "ErrorLog.txt";
+
+    private String debugOutPath = new ReadJson(jsonPath).getStringConfig("DebugLogPath");
+    private String debugOutName = "DebugLog.txt";
 
     /**
      * 合法输入次数/minutes.
@@ -135,6 +141,8 @@ public class Server {
             start();
         } catch (JMSException e) {
             e.printStackTrace();
+            PMManager.ErrorLog(errorOutName, e.toString(), this.getClass().getName(), ClassUtil.getLineNumber()
+                    , errorOutPath);
         }
 
     }
@@ -185,7 +193,9 @@ public class Server {
                 }
             });
         } catch (JMSException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            PMManager.ErrorLog(errorOutName, e.toString(), this.getClass().getName(), ClassUtil.getLineNumber()
+                    , errorOutPath);
         }
     }
 
@@ -211,6 +221,8 @@ public class Server {
             }
         } catch (JMSException e) {
             e.printStackTrace();
+            PMManager.ErrorLog(errorOutName, e.toString(), this.getClass().getName(), ClassUtil.getLineNumber()
+                    , errorOutPath);
         }
     }
 
@@ -316,6 +328,8 @@ public class Server {
                             }
                         } catch (JMSException e) {
                             e.printStackTrace();
+                            PMManager.ErrorLog(errorOutName, e.toString(), this.getClass().getName(), ClassUtil.getLineNumber()
+                                    , errorOutPath);
                         }
                     }
                 });

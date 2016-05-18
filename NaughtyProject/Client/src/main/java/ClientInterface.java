@@ -7,6 +7,7 @@ import com.google.common.eventbus.Subscribe;
 import reuse.cm.ReadJson;
 import reuse.pm.PMManager;
 import reuse.utility.AAEncryption;
+import reuse.utility.ClassUtil;
 import reuse.utility.EventController;
 
 import javax.jms.JMSException;
@@ -49,6 +50,12 @@ public class ClientInterface implements ActionListener {
 
     static public String jsonPath = "../Resources/test.json";
     static public String outPath = "../Resources/out/Log/Client/";
+
+    private String errorOutPath = new ReadJson(jsonPath).getStringConfig("ErrorLogPath");
+    private String errorOutName = "ErrorLog.txt";
+
+    private String debugOutPath = new ReadJson(jsonPath).getStringConfig("DebugLogPath");
+    private String debugOutName = "DebugLog.txt";
 
     public void setSession(Session session) {
         this.session = session;
@@ -128,6 +135,8 @@ public class ClientInterface implements ActionListener {
                 client.Login(aaMessage);
             } catch (JMSException e1) {
                 e1.printStackTrace();
+                PMManager.ErrorLog(errorOutName, e1.toString(), this.getClass().getName(), ClassUtil.getLineNumber()
+                        , errorOutPath);
             }
         }
         if(e.getSource()==signup_btn){
@@ -137,6 +146,8 @@ public class ClientInterface implements ActionListener {
                 client.SendMessage(aaMessage);
             } catch (JMSException e1) {
                 e1.printStackTrace();
+                PMManager.ErrorLog(errorOutName, e1.toString(), this.getClass().getName(), ClassUtil.getLineNumber()
+                        , errorOutPath);
             }
         }
     }
@@ -207,6 +218,8 @@ public class ClientInterface implements ActionListener {
 
                     } catch (JMSException e1) {
                         e1.printStackTrace();
+                        PMManager.ErrorLog(errorOutName, e1.toString(), this.getClass().getName(), ClassUtil.getLineNumber()
+                                , errorOutPath);
                     }
                 }
             });
@@ -240,6 +253,8 @@ public class ClientInterface implements ActionListener {
                 }
             } catch (JMSException e) {
                 e.printStackTrace();
+                PMManager.ErrorLog(errorOutName, e.toString(), this.getClass().getName(), ClassUtil.getLineNumber()
+                        , errorOutPath);
             }
         }else if (interfaceEvent.getStr().toString().equals("inputForbidden"))       //被告知需要断开
         {

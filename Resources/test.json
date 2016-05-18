@@ -21,6 +21,10 @@
 "FirsrZipInterval":30000,
 "SecondZipInterval":100000,
 "SingleFileMaxSize":100,
-"OverallFileMaxSize":1000
+"OverallFileMaxSize":1000,
 
+"ErrorLogSwitch": true,
+"ErrorLogPath" : "../Resources/out/ErrorLog/",
+"DebugLogSwitch": true,
+"DebugLogPath" : "../Resources/out/DebugLog/"
 }

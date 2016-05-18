@@ -3,6 +3,8 @@ import reuse.communication.InterfaceEvent;
 import reuse.communication.MQ.MQConnect;
 import reuse.communication.MQ.MQFactory;
 import reuse.communication.entity.AAMessage;
+import reuse.pm.PMManager;
+import reuse.utility.ClassUtil;
 import reuse.utility.EventController;
 
 import javax.jms.JMSException;
@@ -15,6 +17,13 @@ import javax.jms.MessageListener;
 public class Client {
 
     private String jsonPath = "../Resources/test.json";
+
+    private String errorOutPath = new ReadJson(jsonPath).getStringConfig("ErrorLogPath");
+    private String errorOutName = "ErrorLog.txt";
+
+    private String debugOutPath = new ReadJson(jsonPath).getStringConfig("DebugLogPath");
+    private String debugOutName = "DebugLog.txt";
+
     /**
      * 登录请求
      */
@@ -38,6 +47,8 @@ public class Client {
             this.baseConnect = new MQConnect(MQFactory.getproducer(new ReadJson(jsonPath).getStringConfig("baseQueueDestination")));
         } catch (JMSException e) {
             e.printStackTrace();
+            PMManager.ErrorLog(errorOutName, e.toString(), this.getClass().getName(), ClassUtil.getLineNumber()
+                    , errorOutPath);
         }
     }
 
@@ -74,6 +85,8 @@ public class Client {
                     }
                 } catch (JMSException e) {
                     e.printStackTrace();
+                    PMManager.ErrorLog(errorOutName, e.toString(), this.getClass().getName(), ClassUtil.getLineNumber()
+                            , errorOutPath);
                 }
             }
         });
@@ -129,6 +142,8 @@ public class Client {
                     System.out.println(message.getStringProperty("content"));
                 } catch (JMSException e) {
                     e.printStackTrace();
+                    PMManager.ErrorLog(errorOutName, e.toString(), this.getClass().getName(), ClassUtil.getLineNumber()
+                            , errorOutPath);
                 }
             }
         });

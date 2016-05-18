@@ -1,24 +1,12 @@
 package reuse.pm;
 
-import com.sun.corba.se.spi.activation.Server;
-import com.sun.org.apache.xerces.internal.impl.xs.SchemaSymbols;
 import reuse.cm.ReadJson;
 
 import javax.swing.*;
+import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
 /**
  * Created by MSI on 2016/3/28.
  */
@@ -67,26 +55,50 @@ public class PMManager {
         }
     }
     public static void Write(String fileName, String content, String outPath) {
+        PMManager.writeLog(fileName, content, outPath);
+    }
+
+    public static void ErrorLog(String fileName, String contentMsg, String className, int lineNumber, String outPath) {
+        boolean flag = ReadJson.getBooleanConfig("ErrorLogSwitch");
+        contentMsg = className + ": " + lineNumber + "  " + contentMsg;
+        if (flag) {
+            PMManager.writeLog(fileName, contentMsg, outPath);
+        }else {
+
+        }
+    }
+
+    public static void DebugLog(String fileName, String contentMsg, String className, int lineNumber, String outPath) {
+        boolean flag = ReadJson.getBooleanConfig("DebugLogSwitch");
+        contentMsg = className + ": " + lineNumber + "  " + contentMsg;
+        if (flag) {
+            PMManager.writeLog(fileName, contentMsg, outPath);
+        }else {
+
+        }
+    }
+
+    private static void writeLog (String fileName, String content, String outPath) {
         try {
             //判断文件夹大小是否超出
             if(getDirSize(outPath) < maxSumSize){
-            // 打开一个随机访问文件流，按读写方式
-            RandomAccessFile randomFile = new RandomAccessFile(outPath + fileName, "rw");
-            // 文件长度，字节数
-            long fileLength = randomFile.length();
-            //判断文件是否超过规定大小，以kb为单位，向上取整
-            if((int)(fileLength/1024)+1 < maxSize) {
-                // 将写文件指针移到文件尾。
-                randomFile.seek(fileLength);
-                randomFile.writeBytes(content + "\r\n");
-                randomFile.close();
-            }else{
-                Write("#" + fileName ,content,outPath);
-            }}else{
-            JOptionPane.showMessageDialog(null, "文件夹大小超过限制！", null, JOptionPane.ERROR_MESSAGE);
-        }
+                // 打开一个随机访问文件流，按 读写方式
+                RandomAccessFile randomFile = new RandomAccessFile(outPath + fileName, "rw");
+                // 文件长度，字节数
+                long fileLength = randomFile.length();
+                //判断文件是否超过规定大小，以kb为单位，向上取整
+                if((int)(fileLength/1024)+1 < maxSize) {
+                    // 将写文件指针移到文件尾。
+                    randomFile.seek(fileLength);
+                    randomFile.writeBytes(content + "\r\n");
+                    randomFile.close();
+                }else{
+                    Write("#" + fileName ,content,outPath);
+                }}else{
+                JOptionPane.showMessageDialog(null, "文件夹大小超过限制！", null, JOptionPane.ERROR_MESSAGE);
+            }
 
-    } catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -114,7 +126,6 @@ public class PMManager {
             }}else{
                 JOptionPane.showMessageDialog(null, "文件夹大小超过限制！", null, JOptionPane.ERROR_MESSAGE);
             }
-
         }
         catch (IOException e) {
             e.printStackTrace();

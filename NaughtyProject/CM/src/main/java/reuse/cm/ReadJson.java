@@ -13,6 +13,8 @@ import java.util.Map;
 
 public class ReadJson{
 
+    private String errorOutPath = "../Resources/out/ErrorLog";
+    private String errorOutName = "ErrorLog.txt";
     static  Map<String,Object> configmap;
 
     public ReadJson(String str) {
@@ -113,6 +115,7 @@ public class ReadJson{
 
 
     public static void main(String[] args){
-        System.out.println(new ReadJson("../Resources/test.json").getStringConfig("mqHost"));
+//        System.out.println(new ReadJson("../Resources/test.json").getStringConfig("mqHost"));
+        System.out.println(new ReadJson("../Resources/test2.json").getStringConfig("mqHost"));
     }
 }
