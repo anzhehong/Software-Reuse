@@ -56,7 +56,7 @@ public class ClientView extends JFrame {
         //MessageShow 面板
         MessageShow = new JTextArea();
         MessageShow.setEditable(false);
-        ShowScroll.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        ShowScroll.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         MessageShow.setFont(new Font("Serif",Font.PLAIN,24));
 
         this.add(ShowScroll,
@@ -99,11 +99,6 @@ public class ClientView extends JFrame {
                         setWeight(0, 24).setInsets(10,3,5,5));
         this.setTitle("连接正常");
 
-        MessageShow = new JTextArea();
-        MessageShow.setEditable(false);
-        ShowScroll.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        MessageShow.setFont(new Font("Serif",Font.PLAIN,24));
-
 
         friendState = new JTextArea();
         friendState.setEditable(false);
@@ -114,6 +109,7 @@ public class ClientView extends JFrame {
                         setFill(GBC.BOTH).
                         setWeight(1, 250));
         friendScroll.setViewportView(friendState);
+        MessageShow.setText("sdfdsf");
         /*
         //SplitLine 分割线
         SplitLine = new JTextArea();
