@@ -109,7 +109,7 @@ public class ClientView extends JFrame {
                         setFill(GBC.BOTH).
                         setWeight(1, 250));
         friendScroll.setViewportView(friendState);
-        MessageShow.setText("sdfdsf");
+
         /*
         //SplitLine 分割线
         SplitLine = new JTextArea();
