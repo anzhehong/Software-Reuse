@@ -59,7 +59,7 @@ public class Client {
      */
     public void Login(final AAMessage aaMessage) throws JMSException {
         String userName = aaMessage.getUser().getUserName();
-
+        PMManager.DebugLog(debugOutName,"send login message to server",this.getClass().getName(),ClassUtil.getLineNumber(),debugOutPath);
         baseConnect.sendMessage(aaMessage.getFinalMessage());
         privateConnect = new MQConnect(MQFactory.getproducer("CS_" + userName),
                 MQFactory.getConsumer("SC_" +userName));
@@ -108,6 +108,7 @@ public class Client {
 
     public void loginSuccessHandler(String topic, String connectUsername)throws JMSException{
         //TODO:登录成功写入文件
+        PMManager.DebugLog(debugOutName,"receive log in success message",this.getClass().getName(),ClassUtil.getLineNumber(),debugOutPath);
         topicConenct = new MQConnect(MQFactory.getSubscriber(topic, connectUsername));
         topicListener();
         EventController.eventBus.post(new InterfaceEvent("loginSuccessfully"));
@@ -118,6 +119,7 @@ public class Client {
         //TODO: 发送给server ：请求重连
         //TODO: 关闭topic，保证不会继续接受后面其它client 发送的消息
         //TODO: 继续监听，直到拿到server发给我的『你成功重连啦！』的消息->加入topic，告诉interface可以接受。
+        PMManager.DebugLog(debugOutName,"relogin",this.getClass().getName(),ClassUtil.getLineNumber(),debugOutPath);
         EventController.eventBus.post(new InterfaceEvent("inputForbidden"));
         topicConenct.getMessageConsumer().close();
 
@@ -127,6 +129,7 @@ public class Client {
     }
     public void getReLogInPermittedHandler(String connectUsername) throws JMSException{
         //TODO: 『你成功重连啦！』的消息->加入topic，告诉interface可以接受。
+        PMManager.DebugLog(debugOutName,"relogin permitted",this.getClass().getName(),ClassUtil.getLineNumber(),debugOutPath);
         topicConenct = new MQConnect(MQFactory.getSubscriber("Topic", connectUsername));
         topicListener();
         //将信息发出
@@ -138,6 +141,7 @@ public class Client {
             @Override
             public void onMessage(Message message) {
                 try {
+                    PMManager.DebugLog(debugOutName,"receive message via topic",this.getClass().getName(),ClassUtil.getLineNumber(),debugOutPath);
                     EventController.eventBus.post(new InterfaceEvent("MessageReceived",message));
                     System.out.println(message.getStringProperty("content"));
                 } catch (JMSException e) {

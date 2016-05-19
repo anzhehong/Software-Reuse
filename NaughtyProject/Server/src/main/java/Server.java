@@ -205,6 +205,7 @@ public class Server {
      */
     public void receiveQueue(Message message) {
         try {
+            PMManager.DebugLog(debugOutName,"receive login message",this.getClass().getName(),ClassUtil.getLineNumber(),debugOutPath);
             System.out.println("receiveQueue");
             String userName = message.getStringProperty("userName");
             String userPassword = message.getStringProperty("userPassword");
@@ -214,9 +215,11 @@ public class Server {
             System.out.println("flag : " + flag);
             privateConnect = new MQConnect(MQFactory.getproducer("SC_" + userName), MQFactory.getConsumer("CS_" + userName));
             if (!flag) {
+                PMManager.DebugLog(debugOutName,"send login success message",this.getClass().getName(),ClassUtil.getLineNumber(),debugOutPath);
                 logInUser.put(userName,(int)dbResult.get("groupId"));
                 sendQueue(!flag, privateConnect, dbResult.get("groupId"));
             }else {
+                PMManager.DebugLog(debugOutName,"send login failed message",this.getClass().getName(),ClassUtil.getLineNumber(),debugOutPath);
                 sendQueue(!flag, privateConnect, dbResult.get("errorMsg"));
             }
         } catch (JMSException e) {
@@ -273,6 +276,7 @@ public class Server {
                         try {
                             int type = message.getIntProperty("type");
                             if (type == 777) {
+                                PMManager.DebugLog(debugOutName,"relogin message received",this.getClass().getName(),ClassUtil.getLineNumber(),debugOutPath);
                                 System.out.println("aaa777777777");
                                 //TODO: 请求重连，回复888，并且不再ignore
                                 AAMessage reloginPermitMessage = new AAMessage(888, "Relogin Successfully");
@@ -350,6 +354,7 @@ public class Server {
      * @throws JMSException
      */
      public void sendTopic(Message message, int groupId) throws JMSException {
+         PMManager.DebugLog(debugOutName,"send message via topic",this.getClass().getName(),ClassUtil.getLineNumber(),debugOutPath);
          MQConnect thisConnect;
          if (topicConnects.containsKey(groupId)) {
              thisConnect = topicConnects.get(groupId);
@@ -398,7 +403,7 @@ public class Server {
                 connect.sendMessage(aaMessage.getFinalMessage());
                 return "ignore";
             }else {
-
+                PMManager.DebugLog(debugOutName,"message is valid",this.getClass().getName(),ClassUtil.getLineNumber(),debugOutPath);
                 return "ok";
             }
         }

@@ -171,6 +171,7 @@ public class ClientInterface implements ActionListener {
                     /**
                      * 发送聊天信息，让server去通过Topic 转发
                      */
+                    PMManager.DebugLog(debugOutName,"client send message to server",this.getClass().getName(),ClassUtil.getLineNumber(),debugOutPath);
                     AAMessage sendChatMessage = new AAMessage(5, clientView.MessageEdit.getText().trim());
                     try {
                         client.SendMessage(sendChatMessage);
@@ -226,6 +227,7 @@ public class ClientInterface implements ActionListener {
         }else if(interfaceEvent.getStr().toString().equals("MessageReceived"))   //收到有信息收到的消息，更新聊天界面
         {
             System.out.println("收到topic消息");
+            PMManager.DebugLog(debugOutName,"receive message via topic,refresh UI",this.getClass().getName(),ClassUtil.getLineNumber(),debugOutPath);
             Message message = interfaceEvent.getMessage();
             try {
                 String messageToShow = message.getStringProperty("content");
@@ -258,13 +260,15 @@ public class ClientInterface implements ActionListener {
             }
         }else if (interfaceEvent.getStr().toString().equals("inputForbidden"))       //被告知需要断开
         {
+            PMManager.DebugLog(debugOutName,"inputForbidden",this.getClass().getName(),ClassUtil.getLineNumber(),debugOutPath);
             clientView.ConfirmButton.setVisible(false);
             clientView.setTitle("连接断开，正在重连。。。");
         }else if (interfaceEvent.getStr().toString().equals("LoggedAgain")) {
-
+            PMManager.DebugLog(debugOutName,"LoggedAgain",this.getClass().getName(),ClassUtil.getLineNumber(),debugOutPath);
             clientView.ConfirmButton.setVisible(true);
             clientView.setTitle("连接正常");
         } else {
+            PMManager.DebugLog(debugOutName,"login failed",this.getClass().getName(),ClassUtil.getLineNumber(),debugOutPath);
             inValidLoginCount += 1;
             String errorMsg = interfaceEvent.getStr().toString();
 
