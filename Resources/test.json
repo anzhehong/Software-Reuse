@@ -24,7 +24,17 @@
 "OverallFileMaxSize":1000,
 
 "ErrorLogSwitch": true,
-"ErrorLogPath" : "../Resources/out/ErrorLog/",
+"ErrorLogPath" : "../Resources/out/ErrorLog",
 "DebugLogSwitch": true,
-"DebugLogPath" : "../Resources/out/DebugLog/"
+"DebugLogPath" : "../Resources/out/DebugLog",
+"NormalLogPath":"../Resources/out/Log",
+
+"FirsrLogZipInterval":30000,
+"SecondLogZipInterval":100000,
+"FirstZipErrorLogPath":"../Resources/out/FirstZipErrorLogPath",
+"SecondZipErrorLogPath":"../Resources/out/SecondZipErrorLogPath",
+"FirsrZipDebugLogPath":"../Resources/out/FirsrZipDebugLogPath",
+"SecondZipDebugLogPath":"../Resources/out/SecondZipDebugLogPath",
+"FirstZipNormalLogPath":"../Resources/out/FirstZipNormalLogPath",
+"SecondZipNormalLogPath":"../Resources/out/SecondZipNormalLogPath"
 }

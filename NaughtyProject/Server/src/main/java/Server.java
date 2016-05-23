@@ -26,10 +26,10 @@ public class Server {
     static public String outPath = "../Resources/out/Log/Server/";
     static public String jsonPath = "../Resources/test.json";
 
-    private String errorOutPath = new ReadJson(jsonPath).getStringConfig("ErrorLogPath");
+    private String errorOutPath = new ReadJson(jsonPath).getStringConfig("ErrorLogPath")+File.separator;
     private String errorOutName = "ErrorLog.txt";
 
-    private String debugOutPath = new ReadJson(jsonPath).getStringConfig("DebugLogPath");
+    private String debugOutPath = new ReadJson(jsonPath).getStringConfig("DebugLogPath")+File.separator;
     private String debugOutName = "DebugLog.txt";
 
     /**
@@ -133,11 +133,17 @@ public class Server {
             Date executeDate =  new Date();
             Server.TaskDaily taskDaily = new TaskDaily();
             Server.TaskWeekly taskWeekly = new TaskWeekly();
+            Server.LogDaily logDaily = new LogDaily();
+            Server.LogWeekly logWeekly = new LogWeekly();
             Timer timerDaily  = new Timer();
             Timer timerWeekly  = new Timer();
+            Timer FirsrLogZipInterval = new Timer();
+            Timer SecondLogZipInterval = new Timer();
 
             timerDaily.schedule(taskDaily,executeDate,new ReadJson(jsonPath).getIntConfig("FirsrZipInterval"));
             timerWeekly.schedule(taskWeekly,executeDate,new ReadJson(jsonPath).getIntConfig("SecondZipInterval"));
+            FirsrLogZipInterval.schedule(logDaily,executeDate,new ReadJson(jsonPath).getIntConfig("FirsrLogZipInterval"));
+            SecondLogZipInterval.schedule(logWeekly,executeDate,new ReadJson(jsonPath).getIntConfig("SecondLogZipInterval"));
             start();
         } catch (JMSException e) {
             e.printStackTrace();
@@ -182,6 +188,30 @@ public class Server {
         }
 
     }
+    private  class LogDaily extends  TimerTask{
+        private  LogDaily(){
+
+        }
+
+        public void run(){
+            //解压再压缩
+            Zip.LogDaily();
+        }
+
+    }
+
+    private  class LogWeekly extends  TimerTask{
+        private  LogWeekly(){
+
+        }
+
+        public void run(){
+            //解压再压缩
+            Zip.LogWeekly();
+        }
+
+    }
+
 
     public void start() {
         try {

@@ -51,10 +51,10 @@ public class ClientInterface implements ActionListener {
     static public String jsonPath = "../Resources/test.json";
     static public String outPath = "../Resources/out/Log/Client/";
 
-    private String errorOutPath = new ReadJson(jsonPath).getStringConfig("ErrorLogPath");
+    private String errorOutPath = new ReadJson(jsonPath).getStringConfig("ErrorLogPath")+File.separator;
     private String errorOutName = "ErrorLog.txt";
 
-    private String debugOutPath = new ReadJson(jsonPath).getStringConfig("DebugLogPath");
+    private String debugOutPath = new ReadJson(jsonPath).getStringConfig("DebugLogPath")+File.separator;
     private String debugOutName = "DebugLog.txt";
 
     public void setSession(Session session) {

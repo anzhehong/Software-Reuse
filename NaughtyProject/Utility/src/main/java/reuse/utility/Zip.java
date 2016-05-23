@@ -17,9 +17,22 @@ public class Zip {
 
     static public String jsonPath = "../Resources/test.json";
     static public ReadJson readJson = new ReadJson(jsonPath);
+
     static public String sourcePath = readJson.getStringConfig("sourcePath");
-    static public String zipDailyPath = readJson.getStringConfig("zipDailyPath");
     static public String zipWeeklyPath = readJson.getStringConfig("zipWeeklyPath");
+    static public String zipDailyPath = readJson.getStringConfig("zipDailyPath");
+
+    static public String ErrorLogPath = readJson.getStringConfig("ErrorLogPath");
+    static public String DebugLogPath = readJson.getStringConfig("DebugLogPath");
+    static public String NormalLogPath = readJson.getStringConfig("NormalLogPath");
+
+    static public String FirstZipErrorLogPath = readJson.getStringConfig("FirstZipErrorLogPath");
+    static public String SecondZipErrorLogPath = readJson.getStringConfig("SecondZipErrorLogPath");
+    static public String FirsrZipDebugLogPath = readJson.getStringConfig("FirsrZipDebugLogPath");
+    static public String SecondZipDebugLogPath = readJson.getStringConfig("SecondZipDebugLogPath");
+    static public String FirstZipNormalLogPath = readJson.getStringConfig("FirstZipNormalLogPath");
+    static public String SecondZipNormalLogPath = readJson.getStringConfig("SecondZipNormalLogPath");
+
 
     /**将client和server端输出的文件夹里所有没有被压缩过的文件压缩
      @param sourceFilePath client和server端输出的文件夹
@@ -169,13 +182,38 @@ public class Zip {
 
     }
 
+    //小周期压缩
+    public static void LogDaily(){
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH mm ss");
+        Zip(ErrorLogPath,FirstZipErrorLogPath,df.format( new Date()));
+        Zip(DebugLogPath,FirsrZipDebugLogPath,df.format( new Date()));
+        Zip(NormalLogPath,FirstZipNormalLogPath,df.format( new Date()));
+
+    }
+
     //大周期压缩
+    public  static void LogWeekly(){
+        unZip(FirstZipErrorLogPath,FirstZipErrorLogPath);
+        unZip(FirsrZipDebugLogPath,FirsrZipDebugLogPath);
+        unZip(FirstZipNormalLogPath,FirstZipNormalLogPath);
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH mm ss");
+        Zip(FirstZipErrorLogPath,SecondZipErrorLogPath,df.format(new Date()));
+        Zip(FirsrZipDebugLogPath,SecondZipDebugLogPath,df.format(new Date()));
+        Zip(FirstZipNormalLogPath,SecondZipNormalLogPath,df.format(new Date()));
+
+    }
+
     public  static void zipWeekly(){
         unZip(zipDailyPath,zipDailyPath);
+
+
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH mm ss");
         Zip(zipDailyPath,zipWeeklyPath,df.format(new Date()));
 
+
     }
+
 
     public static long getFileLength(String filename){
         File file = new File(filename);
