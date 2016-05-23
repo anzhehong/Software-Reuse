@@ -86,3 +86,48 @@
 "DebugLogSwitch": true,
 "DebugLogPath" : "../Resources/out/DebugLog/"
 ```
+## 短周期打包功能
+
+###关键代码
+
+```java
+   
+    public static void LogDaily(){
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH mm ss");
+        Zip(ErrorLogPath,FirstZipErrorLogPath,df.format( new Date()));
+        Zip(DebugLogPath,FirsrZipDebugLogPath,df.format( new Date()));
+        Zip(NormalLogPath,FirstZipNormalLogPath,df.format( new Date()));
+
+    }
+```
+
+
+###使用示例
+```java
+     Zip.LogDaily();
+```
+
+## 长周期打包功能
+
+###关键代码
+
+```java
+   
+     public  static void LogWeekly(){
+        unZip(FirstZipErrorLogPath,FirstZipErrorLogPath);
+        unZip(FirsrZipDebugLogPath,FirsrZipDebugLogPath);
+        unZip(FirstZipNormalLogPath,FirstZipNormalLogPath);
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH mm ss");
+        Zip(FirstZipErrorLogPath,SecondZipErrorLogPath,df.format(new Date()));
+        Zip(FirsrZipDebugLogPath,SecondZipDebugLogPath,df.format(new Date()));
+        Zip(FirstZipNormalLogPath,SecondZipNormalLogPath,df.format(new Date()));
+
+    }
+```
+
+
+###使用示例
+```java
+     Zip.LogWeekly();
+```
