@@ -187,35 +187,11 @@ public class ClientInterface implements ActionListener {
                         ArrayList<Object> result = AAEncryption.DefaultEncryptString(contentStoredUnencrypted);
 
                         String contentStored = (String)result.get(0);
-                        //消息文件的路径
                         ReadJson readJson = new ReadJson(jsonPath);
-                        File overallfile = new File(readJson.getStringConfig("sourcePath"));
-                        File[] overallfiles = overallfile.listFiles();
-                        int overallfilesFlag = 0;
-                        for(int k = 0;k< overallfiles.length;k++){
+                        String filename = readJson.getStringConfig("sourcePath");
+                        PMManager.WriteMsg(filename,contentStored,DateStr,"Client");
 
-                            if(overallfiles[k].length() + contentStored.getBytes().length <= readJson.getLongConfig("OverallFileMaxSize") ){
-                                File[] singlefiles = overallfiles[k].listFiles();
-                                int singlefilesFlag = 0;
-                                for(int i = 0; i < singlefiles.length;i++){
-                                    if(singlefiles[i].getName().substring(0,6).equals("client")&&singlefiles[i].length()+contentStored.getBytes().length <= readJson.getLongConfig("SingleFileMaxSize")){
-                                        PMManager.encipherWrite(singlefiles[i].getName(), contentStored, readJson.getStringConfig("sourcePath") + File.separator + overallfiles[k].getName() + File.separator);
-                                        singlefilesFlag = 1;
-                                        break;
-                                    }
-                                }
-                                if(singlefilesFlag == 0){
-                                    PMManager.encipherWrite("client" + DateStr, contentStored, readJson.getStringConfig("sourcePath") + File.separator + overallfiles[k].getName() + File.separator);
-                                }
-                            }
-                            overallfilesFlag = 1;
-                            break;
-                        }
-                        if(overallfilesFlag == 0){
-                            File tmp = new File(readJson.getStringConfig("sourcePath"),DateStr);
-                            tmp.mkdir();
-                            PMManager.encipherWrite("client"+DateStr+".txt",contentStored,tmp+File.separator);
-                        }
+
 
                     } catch (JMSException e1) {
                         e1.printStackTrace();

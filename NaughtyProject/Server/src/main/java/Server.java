@@ -315,8 +315,7 @@ public class Server {
                                 //TODO: 做次数检测
                                 String isMessageValidStr = isMessageValid(message, connect);
                                 if (isMessageValidStr.equals("ok")) {
-                                    //TODO: hhhhhhhhhhhhhhhhailsdfjlasdfjaiosdfjoadsifjaeoirfjaeiorwf
-                                    System.out.println("shiyixia");
+                                    //TODO:
                                     sendTopic(message, groupId);
                                     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH mm ss");
                                     String DateStr = df.format(new Date());
@@ -326,35 +325,8 @@ public class Server {
                                             message.getStringProperty("createdTime");
                                     //消息文件的路径
                                     ReadJson readJson = new ReadJson(jsonPath);
-
-                                    //zhunbei
-                                    File overallfile = new File(readJson.getStringConfig("sourcePath"));
-                                    File[] overallfiles = overallfile.listFiles();
-                                    int overallfilesFlag = 0;
-                                    for(int k = 0;k< overallfiles.length;k++){
-
-                                        if(overallfiles[k].length() + contentStored.getBytes().length <= readJson.getLongConfig("OverallFileMaxSize") ){
-                                            File[] singlefiles = overallfiles[k].listFiles();
-                                            int singlefilesFlag = 0;
-                                            for(int i = 0; i < singlefiles.length;i++){
-                                                if(singlefiles[i].getName().substring(0,6).equals("server")&&singlefiles[i].length()+contentStored.getBytes().length <= readJson.getLongConfig("SingleFileMaxSize")){
-                                                    PMManager.Write(singlefiles[i].getName(),contentStored,readJson.getStringConfig("sourcePath")+File.separator+overallfiles[k].getName()+File.separator);
-                                                    singlefilesFlag = 1;
-                                                    break;
-                                                }
-                                            }
-                                            if(singlefilesFlag == 0){
-                                                PMManager.Write("server"+DateStr,contentStored,readJson.getStringConfig("sourcePath")+File.separator+overallfiles[k].getName()+File.separator);
-                                            }
-                                        }
-                                        overallfilesFlag = 1;
-                                        break;
-                                    }
-                                    if(overallfilesFlag == 0){
-                                        File tmp = new File(readJson.getStringConfig("sourcePath"),DateStr);
-                                        tmp.mkdir();
-                                        PMManager.Write("server"+DateStr+".txt",contentStored,tmp+File.separator);
-                                    }
+                                    String filename = readJson.getStringConfig("sourcePath");
+                                    PMManager.WriteMsg(filename,contentStored,DateStr,"Server");
 
                                 } else {
                                     //TODO: invalidMessage +1

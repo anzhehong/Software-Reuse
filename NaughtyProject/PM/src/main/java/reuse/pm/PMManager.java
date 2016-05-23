@@ -17,7 +17,12 @@ public class PMManager {
      * @param content  内容
      */
     private static int maxSize = 2;
+
     private static double maxSumSize = 10;
+
+    private static String jsonPath =  "../Resources/test.json";
+
+    private static ReadJson readJson = new ReadJson(jsonPath);
 
     public static void setMaxSize(int maxSize) {
         PMManager.maxSize = maxSize;
@@ -56,6 +61,56 @@ public class PMManager {
     }
     public static void Write(String fileName, String content, String outPath) {
         PMManager.writeLog(fileName, content, outPath);
+    }
+
+    //普通的写消息
+    public static void WriteMsg(String fileName, String content, String outPath) {
+        try {
+            // 打开一个随机访问文件流，按读写方式
+            RandomAccessFile randomFile = new RandomAccessFile(outPath + fileName, "rw");
+            // 文件长度，字节数
+            long fileLength = randomFile.length();
+            // 将写文件指针移到文件尾。
+            randomFile.seek(fileLength);
+            randomFile.writeBytes(content+"\r\n");
+            randomFile.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //加入控制文件和文件夹大小的写消息,分辨是server还是client端
+    public static void WriteMsg(String filename,String contentStored,String DateStr,String type){
+
+        File overallfile = new File(filename);
+        File[] overallfiles = overallfile.listFiles();
+        int overallfilesFlag = 0;
+
+        for(int k = 0;k< overallfiles.length;k++){
+
+            if(overallfiles[k].length() + contentStored.getBytes().length <= readJson.getLongConfig("OverallFileMaxSize") ){
+                File[] singlefiles = overallfiles[k].listFiles();
+                int singlefilesFlag = 0;
+                for(int i = 0; i < singlefiles.length;i++){
+                    if(singlefiles[i].getName().substring(0,6).equals(type)&&singlefiles[i].length()+contentStored.getBytes().length <= readJson.getLongConfig("SingleFileMaxSize")){
+                        PMManager.WriteMsg(singlefiles[i].getName(),contentStored,readJson.getStringConfig("sourcePath")+File.separator+overallfiles[k].getName()+File.separator);
+                        singlefilesFlag = 1;
+                        break;
+                    }
+                }
+                if(singlefilesFlag == 0){
+                    PMManager.WriteMsg(type+DateStr,contentStored,readJson.getStringConfig("sourcePath")+File.separator+overallfiles[k].getName()+File.separator);
+                }
+            }
+            overallfilesFlag = 1;
+            break;
+        }
+
+        if(overallfilesFlag == 0){
+            File tmp = new File(readJson.getStringConfig("sourcePath"),DateStr);
+            tmp.mkdir();
+            PMManager.Write(type+DateStr+".txt",contentStored,tmp+File.separator);
+        }
     }
 
     public static void ErrorLog(String fileName, String contentMsg, String className, int lineNumber, String outPath) {

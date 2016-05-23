@@ -222,18 +222,7 @@ public class Zip {
 
     public static void main(String[] args) {
         // TODO Auto-generated method stub
-        // zipDaily(); unZip1(zipDailyPath,zipDailyPath);
-//        Zip(zipDailyPath,zipWeeklyPath,"h");
-        // zipWeekly();
-        //  unzipAndzipWeekly();
-//        ReadJson readJson = new ReadJson("../Resources/test.json");
-//        String path = readJson.getStringConfig("sourcePath");
-//        File f = new File(path,"ha");
-//        f.mkdir();
-//        PMManager.Write("client","ji",(f+File.separator));
 
-        // System.out.println(tef.getBytes().length);
-        // System.out.println(getFileLength(str));
     }
 
 }
