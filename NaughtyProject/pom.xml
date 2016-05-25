@@ -32,6 +32,9 @@
         <module>Server</module>
         <module>PM</module>
         <module>License</module>
+        <module>AuthServer</module>
+        <module>PersistServer</module>
+        <module>ForwardServer</module>
     </modules>
 
 </project>

@@ -23,12 +23,15 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
+        <module name="AuthServer" />
         <module name="Client" />
         <module name="CM" />
         <module name="Communication" />
         <module name="Database" />
+        <module name="ForwardServer" />
         <module name="License" />
         <module name="NaughtyProject (1)" />
+        <module name="PersistServer" />
         <module name="PM" />
         <module name="Restriction" />
         <module name="Server" />
@@ -36,13 +39,16 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="AuthServer" target="1.8" />
       <module name="Client" target="1.8" />
       <module name="CM" target="1.8" />
       <module name="Communication" target="1.8" />
       <module name="Database" target="1.8" />
+      <module name="ForwardServer" target="1.8" />
       <module name="License" target="1.8" />
       <module name="NaughtyProject" target="1.8" />
       <module name="NaughtyProject (1)" target="1.8" />
+      <module name="PersistServer" target="1.8" />
       <module name="PM" target="1.8" />
       <module name="Restriction" target="1.8" />
       <module name="Server" target="1.8" />
