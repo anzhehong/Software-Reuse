@@ -1,25 +1,25 @@
+Client$2: 144  receive message via topic
+Client$2: 144  receive message via topic
+Client$2: 144  receive message via topic
+Client$2: 144  receive message via topic
+Client$2: 144  receive message via topic
+Client$2: 144  receive message via topic
+Client$2: 144  receive message via topic
+Client$2: 144  receive message via topic
+Client$2: 144  receive message via topic
+Client$2: 144  receive message via topic
+Client$2: 144  receive message via topic
+Client$2: 144  receive message via topic
+Client$2: 144  receive message via topic
+Client$2: 144  receive message via topic
+Client$2: 144  receive message via topic
 Client: 62  send login message to server
+Client$2: 144  receive message via topic
+Client$2: 144  receive message via topic
 Client: 111  receive log in success message
 Client$2: 144  receive message via topic
 Client$2: 144  receive message via topic
 Client$2: 144  receive message via topic
 Client$2: 144  receive message via topic
-Client: 62  send login message to server
-Client$2: 144  receive message via topic
-Client: 111  receive log in success message
 Client$2: 144  receive message via topic
 Client$2: 144  receive message via topic
-Client$2: 144  receive message via topic
-Client$2: 144  receive message via topic
-Client$2: 144  receive message via topic
-Client: 62  send login message to server
-Client: 62  send login message to server
-Client: 62  send login message to server
-Client: 62  send login message to server
-Client: 62  send login message to server
-Client: 111  receive log in success message
-Client$2: 144  receive message via topic
-Client: 62  send login message to server
-Client: 62  send login message to server
-Client: 62  send login message to server
-Client: 62  send login message to server

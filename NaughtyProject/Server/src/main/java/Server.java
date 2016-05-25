@@ -146,8 +146,12 @@ public class Server {
 
             this.authConnect = new MQConnect(MQFactory.getproducer("Center_Auth"+new ReadJson(jsonPath).getStringConfig("authServerDestination")),
                     MQFactory.getConsumer("Auth_Center"+new ReadJson(jsonPath).getStringConfig("authServerDestination")));
-//            this.persistConnect = new MQConnect(MQFactory.getConsumer(new ReadJson(jsonPath).getStringConfig("persistServerDestination")));
-//            this.forwardConnect = new MQConnect(MQFactory.getConsumer(new ReadJson(jsonPath).getStringConfig("forwardServerDestination")));
+
+            this.persistConnect = new MQConnect(MQFactory.getproducer("Center_Persist"+new ReadJson(jsonPath).getStringConfig("persistServerDestination")),
+                    MQFactory.getConsumer("Persist_Center"+new ReadJson(jsonPath).getStringConfig("persistServerDestination")));
+
+            this.forwardConnect = new MQConnect(MQFactory.getproducer("Center_Forward"+new ReadJson(jsonPath).getStringConfig("forwardServerDestination")),
+                    MQFactory.getConsumer("Forward_Center"+new ReadJson(jsonPath).getStringConfig("forwardServerDestination")));
 
             this.multiFrequencyRestriction = new MultiFrequencyRestriction(Integer.parseInt(new ReadJson(jsonPath).getStringConfig("CSMessage")));
             this.multiMaxNumOfMessage = new MultiMaxNumOfMessage((new ReadJson(jsonPath).getIntConfig("CSSession")));
@@ -244,12 +248,7 @@ public class Server {
                     receiveQueue(message);
                 }
             });
-            authConnect.addMessageHandler(new MessageListener() {
-                @Override
-                public void onMessage(Message message) {
-                    System.out.println("received a message from auth server");
-                }
-            });
+
         } catch (JMSException e) {
 //            e.printStackTrace();
             PMManager.ErrorLog(errorOutName, e.toString(), this.getClass().getName(), ClassUtil.getLineNumber()
@@ -265,21 +264,36 @@ public class Server {
         try {
             PMManager.DebugLog(debugOutName,"receive login message",this.getClass().getName(),ClassUtil.getLineNumber(),debugOutPath);
             System.out.println("receiveQueue");
-            String userName = message.getStringProperty("userName");
+            String userName = null;
+            userName = message.getStringProperty("userName");
             String userPassword = message.getStringProperty("userPassword");
-
             Map<String, Object> dbResult = DBAPI.checkPasswordAndGetGroup(userName, userPassword);
-            boolean flag = ((Boolean)dbResult.get("error")).booleanValue();
-            System.out.println("flag : " + flag);
-            privateConnect = new MQConnect(MQFactory.getproducer("SC_" + userName), MQFactory.getConsumer("CS_" + userName));
-            if (!flag) {
-                PMManager.DebugLog(debugOutName,"send login success message",this.getClass().getName(),ClassUtil.getLineNumber(),debugOutPath);
-                logInUser.put(userName,(int)dbResult.get("groupId"));
-                sendQueue(!flag, privateConnect, dbResult.get("groupId"));
-            }else {
-                PMManager.DebugLog(debugOutName,"send login failed message",this.getClass().getName(),ClassUtil.getLineNumber(),debugOutPath);
-                sendQueue(!flag, privateConnect, dbResult.get("errorMsg"));
-            }
+
+            authConnect.sendMessage(message);
+            String finalUserName = userName;
+            authConnect.addMessageHandler(new MessageListener() {
+                @Override
+                public void onMessage(Message message) {
+                    System.out.println("received a reply from auth server");
+                    try {
+//                        boolean flag = ((Boolean)dbResult.get("error")).booleanValue();
+                        boolean flag = message.getBooleanProperty("loginPermit");
+                        System.out.println("flag : " + flag);
+
+                        privateConnect = new MQConnect(MQFactory.getproducer("SC_" + finalUserName), MQFactory.getConsumer("CS_" + finalUserName));
+                        if (!flag) {
+                            PMManager.DebugLog(debugOutName,"send login success message",this.getClass().getName(),ClassUtil.getLineNumber(),debugOutPath);
+                            logInUser.put(finalUserName,(int)dbResult.get("groupId"));
+                            sendQueue(!flag, privateConnect, dbResult.get("groupId"));
+                        }else {
+                            PMManager.DebugLog(debugOutName,"send login failed message",this.getClass().getName(),ClassUtil.getLineNumber(),debugOutPath);
+                            sendQueue(!flag, privateConnect, dbResult.get("errorMsg"));
+                        }
+                    } catch (JMSException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         } catch (JMSException e) {
             e.printStackTrace();
             PMManager.ErrorLog(errorOutName, e.toString(), this.getClass().getName(), ClassUtil.getLineNumber()

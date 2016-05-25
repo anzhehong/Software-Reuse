@@ -1,0 +1,24 @@
+ClientInterface$1: 174  client send message to server
+ClientInterface$1: 174  client send message to server
+ClientInterface$1: 174  client send message to server
+ClientInterface$1: 174  client send message to server
+Server: 261  receive login message
+Server: 261  receive login message
+Server: 261  receive login message
+Server$2: 286  send login success message
+Server: 413  send message via topic
+Server: 462  message is valid
+Server: 413  send message via topic
+Server: 462  message is valid
+Server: 413  send message via topic
+Server: 462  message is valid
+Server: 413  send message via topic
+Server: 462  message is valid
+Server: 413  send message via topic
+Server: 462  message is valid
+Server: 413  send message via topic
+ClientInterface: 206  receive message via topic,refresh UI
+ClientInterface: 206  receive message via topic,refresh UI
+ClientInterface: 206  receive message via topic,refresh UI
+ClientInterface: 206  receive message via topic,refresh UI
+ClientInterface: 206  receive message via topic,refresh UI
