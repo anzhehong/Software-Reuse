@@ -1,0 +1,12 @@
+Thu May 26 00:38:17 CST 2016	Valid Login Count: 0	Invalid Login Count: 0
+Thu May 26 00:38:22 CST 2016	Valid Login Count: 0	Invalid Login Count: 0
+Thu May 26 00:38:27 CST 2016	Valid Login Count: 0	Invalid Login Count: 0
+Thu May 26 00:38:32 CST 2016	Valid Login Count: 0	Invalid Login Count: 0
+Thu May 26 00:38:37 CST 2016	Valid Login Count: 0	Invalid Login Count: 0
+Thu May 26 00:38:42 CST 2016	Valid Login Count: 0	Invalid Login Count: 0
+Thu May 26 00:38:47 CST 2016	Valid Login Count: 0	Invalid Login Count: 0
+Thu May 26 00:38:52 CST 2016	Valid Login Count: 0	Invalid Login Count: 0
+Thu May 26 00:38:57 CST 2016	Valid Login Count: 0	Invalid Login Count: 0
+Thu May 26 00:39:02 CST 2016	Valid Login Count: 0	Invalid Login Count: 0
+Thu May 26 00:39:07 CST 2016	Valid Login Count: 0	Invalid Login Count: 0
+Thu May 26 00:39:12 CST 2016	Valid Login Count: 0	Invalid Login Count: 0

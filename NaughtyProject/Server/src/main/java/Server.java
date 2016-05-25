@@ -70,6 +70,22 @@ public class Server {
      * (except login register request)
      */
     public MQConnect privateConnect;
+
+    /**
+     * 私用,用来转发验证请求给Auth Server
+     */
+    public MQConnect authConnect;
+
+    /**
+     * 私用,用来转发验证请求给Auth Server
+     */
+    public MQConnect persistConnect;
+
+    /**
+     * 私用,用来转发验证请求给Auth Server
+     */
+    public MQConnect forwardConnect;
+
     /**
      * 公用topic连接.
      */
@@ -127,6 +143,12 @@ public class Server {
         try {
             this.baseConnect = new MQConnect(MQFactory.getConsumer(new ReadJson(jsonPath).getStringConfig("baseQueueDestination")));
 //            this.topicConnect = new MQConnect(MQFactory.getpublisher("Topic"));
+
+            this.authConnect = new MQConnect(MQFactory.getproducer("Center_Auth"+new ReadJson(jsonPath).getStringConfig("authServerDestination")),
+                    MQFactory.getConsumer("Auth_Center"+new ReadJson(jsonPath).getStringConfig("authServerDestination")));
+//            this.persistConnect = new MQConnect(MQFactory.getConsumer(new ReadJson(jsonPath).getStringConfig("persistServerDestination")));
+//            this.forwardConnect = new MQConnect(MQFactory.getConsumer(new ReadJson(jsonPath).getStringConfig("forwardServerDestination")));
+
             this.multiFrequencyRestriction = new MultiFrequencyRestriction(Integer.parseInt(new ReadJson(jsonPath).getStringConfig("CSMessage")));
             this.multiMaxNumOfMessage = new MultiMaxNumOfMessage((new ReadJson(jsonPath).getIntConfig("CSSession")));
 
@@ -220,6 +242,12 @@ public class Server {
                 public void onMessage(Message message) {
                     System.out.println("start");
                     receiveQueue(message);
+                }
+            });
+            authConnect.addMessageHandler(new MessageListener() {
+                @Override
+                public void onMessage(Message message) {
+                    System.out.println("received a message from auth server");
                 }
             });
         } catch (JMSException e) {

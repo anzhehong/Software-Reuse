@@ -3,15 +3,17 @@ package reuse.pm;
 import org.junit.Test;
 import reuse.cm.ReadJson;
 
-import java.io.*;
-
-import static org.junit.Assert.*;
-import static reuse.pm.PMManager.jsonPath;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 
 /**
  * Created by acer88 on 2016/5/25.
  */
 public class PMManagerTest {
+
+    private static String jsonPath =  "../Resources/test.json";
 
     @Test
     public void errorLog() throws Exception {

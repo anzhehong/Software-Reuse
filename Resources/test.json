@@ -2,6 +2,10 @@
   "mqHost": "tcp://localhost:61616",
 "baseQueueDestination": "testQueue",
 
+"authServerDestination": "authServerDestination",
+"persistServerDestination": "persistServerDestination",
+"forwardServerDestination": "forwardServerDestination",
+
 "requestLogin":"0",
 "loginPermitted":"1",
 "loginRefused":"2",
