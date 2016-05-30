@@ -92,7 +92,7 @@ public class Server {
 //    public MQConnect topicConnect;
 //    public ArrayList<Integer> topicGroups;
 //    public ArrayList<MQConnect> topicConnects;
-    public Map<Integer, MQConnect> topicConnects = new HashMap<Integer, MQConnect>();
+
     /**
      * 用来存收发消息的MQConnect.
      */
@@ -358,7 +358,8 @@ public class Server {
                                 String isMessageValidStr = isMessageValid(message, connect);
                                 if (isMessageValidStr.equals("ok")) {
                                     //TODO:
-                                    sendTopic(message, groupId);
+                                    System.out.println("send_topic and groupid:" + groupId);
+                                    send_Topic(message, groupId);
                                     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH mm ss");
                                     String DateStr = df.format(new Date());
                                     //存储的消息
@@ -398,17 +399,23 @@ public class Server {
      * @throws JMSException
      */
      public void sendTopic(Message message, int groupId) throws JMSException {
-         PMManager.DebugLog(debugOutName,"send message via topic",this.getClass().getName(),ClassUtil.getLineNumber(),debugOutPath);
-         MQConnect thisConnect;
-         if (topicConnects.containsKey(groupId)) {
-             thisConnect = topicConnects.get(groupId);
-         }else {
-             thisConnect = new MQConnect((MQFactory.getpublisher("Topic_" + groupId)));
-             topicConnects.put(groupId, thisConnect);
-         }
-        thisConnect.sendMessage(message);
-        forwardedMessageCount += mqConnects.size();
+         Message message1 = message;
+         message1.setIntProperty("group_Id", groupId);
+         forwardConnect.sendMessage(message1);
+         forwardedMessageCount += mqConnects.size();
+
      }
+
+
+    public void send_Topic(Message message, int groupId) throws JMSException{
+        String content = message.getStringProperty("content");
+        System.out.println("content:" + content);
+        AAMessage aaMessage = new AAMessage(123,content);
+        Message message1 = aaMessage.getFinalMessage();
+        message1.setIntProperty("group_Id", groupId);
+        forwardConnect.sendMessage(message1);
+        forwardedMessageCount += mqConnects.size();
+    }
 
 
     /**
