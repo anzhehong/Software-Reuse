@@ -157,19 +157,9 @@ public class Server {
             this.multiMaxNumOfMessage = new MultiMaxNumOfMessage((new ReadJson(jsonPath).getIntConfig("CSSession")));
 
             Date executeDate =  new Date();
-            Server.TaskDaily taskDaily = new TaskDaily();
-            Server.TaskWeekly taskWeekly = new TaskWeekly();
-            Server.LogDaily logDaily = new LogDaily();
-            Server.LogWeekly logWeekly = new LogWeekly();
-            Timer timerDaily  = new Timer();
-            Timer timerWeekly  = new Timer();
-            Timer FirsrLogZipInterval = new Timer();
-            Timer SecondLogZipInterval = new Timer();
 
-            timerDaily.schedule(taskDaily,executeDate,new ReadJson(jsonPath).getIntConfig("FirsrZipInterval"));
-            timerWeekly.schedule(taskWeekly,executeDate,new ReadJson(jsonPath).getIntConfig("SecondZipInterval"));
-            FirsrLogZipInterval.schedule(logDaily,executeDate,new ReadJson(jsonPath).getIntConfig("FirsrLogZipInterval"));
-            SecondLogZipInterval.schedule(logWeekly,executeDate,new ReadJson(jsonPath).getIntConfig("SecondLogZipInterval"));
+
+
             start();
         } catch (JMSException e) {
             e.printStackTrace();
@@ -179,64 +169,6 @@ public class Server {
 
     }
 
-    private  class TaskDaily extends  TimerTask{
-        private  TaskDaily(){
-
-        }
-
-        public void run(){
-            //执行打包功能
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH mm ss");
-            String fileName = df.format(new Date());
-
-            ReadJson readJson = new ReadJson(jsonPath);
-            String sourceFilePath = (readJson.getStringConfig("sourcePath"));
-            String zipFilePath = (readJson.getStringConfig("zipDailyPath"));
-
-            boolean flag = Zip(sourceFilePath, zipFilePath, fileName);
-            if(flag){
-                System.out.println("文件打包成功!");
-            }else{
-                System.out.println("文件打包失败!");
-            }
-
-        }
-
-    }
-    private  class TaskWeekly extends  TimerTask{
-        private  TaskWeekly(){
-
-        }
-
-        public void run(){
-            //解压再压缩
-            Zip.zipWeekly();
-        }
-
-    }
-    private  class LogDaily extends  TimerTask{
-        private  LogDaily(){
-
-        }
-
-        public void run(){
-            //解压再压缩
-            Zip.LogDaily();
-        }
-
-    }
-
-    private  class LogWeekly extends  TimerTask{
-        private  LogWeekly(){
-
-        }
-
-        public void run(){
-            //解压再压缩
-            Zip.LogWeekly();
-        }
-
-    }
 
 
     public void start() {
@@ -270,6 +202,7 @@ public class Server {
             Map<String, Object> dbResult = DBAPI.checkPasswordAndGetGroup(userName, userPassword);
 
             authConnect.sendMessage(message);
+
             String finalUserName = userName;
             authConnect.addMessageHandler(new MessageListener() {
                 @Override
@@ -360,17 +293,6 @@ public class Server {
                                     //TODO:
                                     System.out.println("send_topic and groupid:" + groupId);
                                     send_Topic(message, groupId);
-                                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH mm ss");
-                                    String DateStr = df.format(new Date());
-                                    //存储的消息
-                                    String contentStored  = groupId+"\t"+message.getStringProperty("userName")+"\t"+
-                                            message.getStringProperty("content")+"\t"+
-                                            message.getStringProperty("createdTime");
-                                    //消息文件的路径
-                                    ReadJson readJson = new ReadJson(jsonPath);
-                                    String filename = readJson.getStringConfig("sourcePath");
-                                    PMManager.WriteMsg(filename,contentStored,DateStr,"Server");
-
                                 } else {
                                     //TODO: invalidMessage +1
                                 }
@@ -403,6 +325,9 @@ public class Server {
          message1.setIntProperty("group_Id", groupId);
          forwardConnect.sendMessage(message1);
          forwardedMessageCount += mqConnects.size();
+//         persistConnect.sendMessage(message1);
+         System.out.println("written a msg...");
+
 
      }
 
@@ -415,6 +340,8 @@ public class Server {
         message1.setIntProperty("group_Id", groupId);
         forwardConnect.sendMessage(message1);
         forwardedMessageCount += mqConnects.size();
+        persistConnect.sendMessage(message1);
+
     }
 
 
