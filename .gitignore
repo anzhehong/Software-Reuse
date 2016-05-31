@@ -97,3 +97,8 @@ Restriction/src/main/java/MultiFrequencyRestriction.java
 Restriction/src/main/java/MultiMaxNumOfMessage.java
 Restriction/src/test/java/FrequencyRestrictionTest.java
 Restriction/target/MANIFEST.MF
+Resources/out/DebugLog####DebugLog.txt
+Resources/out/DebugLog/#########DebugLog.txt
+Resources/out/Log/Server
+Resources/out/Log/Client
+Resources/zipWeeklyPath
