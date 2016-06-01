@@ -37,7 +37,7 @@ AuthServer：登录时,验证用户信息，并将结果反馈给Server。
 
 ForwardServer：将接收到的消息转发给同组在线成员。
 
-PersistServer：
+PersistServer：存储消息
 
 ##Server
 ###核心代码
